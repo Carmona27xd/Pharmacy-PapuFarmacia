@@ -1,18 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CancelAccept } from './cancel-accept';
+import { ComponentCancelAcceptButtons } from './cancel-accept';
 
-describe('CancelAccept', () => {
-  let component: CancelAccept;
-  let fixture: ComponentFixture<CancelAccept>;
+describe('ComponentCancelAcceptButtons', () => {
+  let component: ComponentCancelAcceptButtons;
+  let fixture: ComponentFixture<ComponentCancelAcceptButtons>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CancelAccept]
-    })
-    .compileComponents();
+      imports: [ComponentCancelAcceptButtons],
+    }).compileComponents();
 
-    fixture = TestBed.createComponent(CancelAccept);
+    fixture = TestBed.createComponent(ComponentCancelAcceptButtons);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

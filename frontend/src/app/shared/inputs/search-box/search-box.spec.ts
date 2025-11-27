@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ComponentSearchBox } from './search-box';
 
-describe('SearchBox', () => {
+describe('ComponentSearchBox', () => {
   let component: ComponentSearchBox;
   let fixture: ComponentFixture<ComponentSearchBox>;
 

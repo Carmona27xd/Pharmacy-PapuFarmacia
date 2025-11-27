@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Config } from '../config';
+import { catchError, Observable, tap } from 'rxjs';
+import { ServicesConfig } from '../config';
+import { environment } from '../../../environments/environment.development';
 
 export interface UserTemplate {
   id?: number;
@@ -20,15 +22,34 @@ export interface LoginTemplate {
 @Injectable({
   providedIn: 'root',
 })
-export class Auth {
+export class ServiceAuth {
   private baseUrl: string = '';
 
-  constructor(private httpClient: HttpClient, private config: Config) {
-    this.baseUrl = `${this.config.getApiUrl()}`;
+  constructor(private httpClient: HttpClient, private config: ServicesConfig) {
+    this.baseUrl = environment.authService;
   }
 
-  login(identifier: string, password: string) {
-    return this.httpClient.post<LoginTemplate>(`${this.baseUrl}/login`, { identifier, password });
+  login(identifier: string, password: string): Observable<any> {
+    return this.httpClient.post<any>(`${this.baseUrl}/login`, { identifier, password }).pipe(
+      tap((res: any) => {
+        if (res?.token) {
+          localStorage.setItem('auth_token', res.token);
+        }
+      }),
+      catchError(this.config.handleError)
+    );
+  }
+
+  logout() {
+    localStorage.removeItem('auth_token');
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem('auth_token');
+  }
+
+  isAuthenticated(): boolean {
+    return !!localStorage.getItem('auth_token');
   }
 
   postUser(user: UserTemplate) {

@@ -4,7 +4,7 @@ import { NavigationEnd, RouterLink, Router } from '@angular/router';
 import { ComponentSearchBox } from '../../inputs/search-box/search-box';
 
 @Component({
-  selector: 'navbar',
+  selector: 'app-navbar',
   standalone: true,
   imports: [RouterLink, NgClass, ComponentSearchBox],
   templateUrl: './nav-bar.html',

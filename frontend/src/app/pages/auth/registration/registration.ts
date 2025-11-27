@@ -3,18 +3,12 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { CommonModule } from '@angular/common';
 
 import { ComponentInputField } from '../../../shared/inputs/input-field/input-field';
-import { ComponentCancelAccept } from '../../../shared/buttons/cancel-accept/cancel-accept';
+import { ComponentCancelAcceptButtons } from '../../../shared/buttons/cancel-accept/cancel-accept';
 
 @Component({
   selector: 'registration',
   standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    ComponentInputField,
-    ComponentInputField,
-    ComponentCancelAccept,
-  ],
+  imports: [CommonModule, ReactiveFormsModule, ComponentInputField, ComponentCancelAcceptButtons],
   templateUrl: './registration.html',
 })
 export class PageRegistration {

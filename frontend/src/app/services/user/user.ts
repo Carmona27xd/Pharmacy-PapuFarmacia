@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Config } from '../config';
+import { ServicesConfig } from '../config';
+import { environment } from '../../../environments/environment.development';
 
 // TODO Validate data attributes from backend
 export interface UserTemplate {
@@ -21,11 +22,11 @@ export interface LoginTemplate {
 @Injectable({
   providedIn: 'root',
 })
-export class User {
+export class ServiceUser {
   private baseUrl: string = '';
 
-  constructor(private httpClient: HttpClient, private config: Config) {
-    this.baseUrl = `${this.config.getApiUrl()}/profiles`;
+  constructor(private httpClient: HttpClient, private config: ServicesConfig) {
+    this.baseUrl = `${environment.userService}/profiles`;
   }
 
   getData(idUser: number) {

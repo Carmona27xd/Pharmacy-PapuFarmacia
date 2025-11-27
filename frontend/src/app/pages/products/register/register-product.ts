@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { CommonModule } from '@angular/common';
 import { ComponentInputField } from '../../../shared/inputs/input-field/input-field';
 import { ComponentImageUploader } from '../../../shared/inputs/image-uploader/image-uploader';
-import { ComponentCancelAccept } from '../../../shared/buttons/cancel-accept/cancel-accept';
+import { ComponentCancelAcceptButtons } from '../../../shared/buttons/cancel-accept/cancel-accept';
 
 @Component({
   selector: 'register-product',
@@ -13,7 +13,7 @@ import { ComponentCancelAccept } from '../../../shared/buttons/cancel-accept/can
     ReactiveFormsModule,
     ComponentInputField,
     ComponentImageUploader,
-    ComponentCancelAccept,
+    ComponentCancelAcceptButtons,
   ],
   templateUrl: './register-product.html',
 })

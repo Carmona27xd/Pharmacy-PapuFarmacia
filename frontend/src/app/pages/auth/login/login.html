@@ -25,26 +25,26 @@
         class="flex flex-col gap-4 p-6 border border-gray-300 rounded-lg shadow-lg bg-white"
       >
         <div>
-          <input-field
+          <app-input-field
             label="Correo electrónico o Usuario:"
             type="text"
             placeholder="example@example.com / User123"
-            formControlName="user"
+            formControlName="identifier"
             autoComplete="username"
-          ></input-field>
+          ></app-input-field>
           @if(loginForm.get("user")?.touched && loginForm.get("user")?.invalid){
           <p class="label-form-error">Ingrese correo o nombre de usuario.</p>
           }
         </div>
 
         <div>
-          <input-field
+          <app-input-field
             label="Contraseña:"
-            type="text"
+            type="password"
             placeholder="Ingrese su correo electrónico"
             formControlName="password"
             autoComplete="currentPassword"
-          ></input-field>
+          ></app-input-field>
           @if(loginForm.get("password")?.touched && loginForm.get("password")?.invalid){
           <p class="label-form-error">La contraseña es requerida.</p>
           }

@@ -2,7 +2,7 @@ import { Component, Input, forwardRef, ChangeDetectorRef } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 
 @Component({
-  selector: 'image-uploader',
+  selector: 'app-image-uploader',
   standalone: true,
   providers: [
     {

@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'cancel-accept',
+  selector: 'app-cancel-accept-buttons',
   imports: [],
   templateUrl: './cancel-accept.html',
 })
-export class ComponentCancelAccept {
+export class ComponentCancelAcceptButtons {
   buttonCancelText = 'Cancelar';
   buttonAcceptText = 'Aceptar';
 

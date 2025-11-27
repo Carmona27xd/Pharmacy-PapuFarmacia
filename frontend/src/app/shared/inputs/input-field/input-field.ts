@@ -2,7 +2,7 @@ import { Component, Input, forwardRef, ChangeDetectorRef, input } from '@angular
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 
 @Component({
-  selector: 'input-field',
+  selector: 'app-input-field',
   standalone: true,
   providers: [
     {
@@ -21,7 +21,7 @@ export class ComponentInputField {
   @Input() autoComplete: string = 'off';
 
   // Estado interno
-  value: string = '';
+  value: string | null = '';
 
   private onChange: (v: any) => void = () => {};
   private onTouched: () => void = () => {};

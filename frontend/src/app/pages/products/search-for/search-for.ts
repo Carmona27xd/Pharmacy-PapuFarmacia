@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'search-for',
+  selector: 'page-search-for',
   standalone: true,
   imports: [],
   templateUrl: './search-for.html',
 })
-export class PageSearchFor {
+export class PageSearchForProducts {
   results: any[] = [];
   searchQuery: string = '';
 

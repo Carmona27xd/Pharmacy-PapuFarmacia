@@ -33,12 +33,12 @@
 
         <!-- ChemicalName -->
         <div>
-          <input-field
+          <app-input-field
             label="Nombre químico del producto:"
             type="text"
             placeholder="Ácido acetilsalicílico 100mg"
             formControlName="chemicalName"
-          ></input-field>
+          ></app-input-field>
           @if (medicineForm.get("chemicalName")?.touched &&
           medicineForm.get('chemicalName')?.invalid) {
           <p class="label-form-error">El nombre es obligatorio (mínimo 3 caracteres).</p>
@@ -47,12 +47,12 @@
 
         <!-- ComercialName -->
         <div>
-          <input-field
+          <app-input-field
             label="Nombre comercial del producto:"
             type="text"
             placeholder="Aspirina"
             formControlName="comercialName"
-          ></input-field>
+          ></app-input-field>
           @if (medicineForm.get("comercialName")?.touched &&
           medicineForm.get('comercialName')?.invalid) {
           <p class="label-form-error">El nombre es obligatorio (mínimo 3 caracteres).</p>
@@ -61,7 +61,10 @@
 
         <!-- ImageUploader -->
         <div>
-          <image-uploader label="Foto del producto" formControlName="imageProduct"></image-uploader>
+          <app-image-uploader
+            label="Foto del producto"
+            formControlName="imageProduct"
+          ></app-image-uploader>
           @if (medicineForm.get("imageProduct")?.touched &&
           medicineForm.get('imageProduct')?.invalid) {
           <p class="label-form-error">La foto del producto es requerida.</p>
@@ -91,12 +94,12 @@
         <h2>Datos de venta</h2>
         <!-- Precio -->
         <div>
-          <input-field
+          <app-input-field
             label="Precio:"
             type="number"
             placeholder="150.00"
             formControlName="price"
-          ></input-field>
+          ></app-input-field>
           @if (medicineForm.get('price')?.touched && medicineForm.get('price')?.invalid) {
           <p class="label-form-error">El precio es obligatorio.</p>
           }
@@ -104,12 +107,12 @@
 
         <!-- Expiration -->
         <div>
-          <input-field
+          <app-input-field
             label="Fecha de caducidad:"
             type="date"
             placeholder="dd/mm/aaaa"
             formControlName="expirationDate"
-          ></input-field>
+          ></app-input-field>
           @if (medicineForm.get('expirationDate')?.touched &&
           medicineForm.get('expirationDate')?.invalid) {
           <p class="label-form-error">La fecha de caducidad es obligatoria.</p>
@@ -118,12 +121,12 @@
 
         <!-- Stock -->
         <div>
-          <input-field
+          <app-input-field
             label="Stock disponible:"
             type="number"
             placeholder="50"
             formControlName="stockAvailable"
-          ></input-field>
+          ></app-input-field>
           @if (medicineForm.get('stockAvailable')?.touched &&
           medicineForm.get('stockAvailable')?.invalid) {
           <p class="label-form-error">Ingrese un stock válido.</p>
@@ -132,12 +135,12 @@
 
         <!-- Lote -->
         <div>
-          <input-field
+          <app-input-field
             label="Lote"
             type="text"
             placeholder="2F342S"
             formControlName="batch"
-          ></input-field>
+          ></app-input-field>
           @if (medicineForm.get('batch')?.touched && medicineForm.get('batch')?.invalid) {
           <p class="label-form-error">Ingrese un lote válido.</p>
           }
@@ -145,13 +148,13 @@
 
         <!-- Supplier -->
         <div>
-          <input-field
+          <app-input-field
             label="Proveedor"
             type="text"
             placeholder="Farmacéutica XYZ"
             formControlName="supplier"
             autoComplete="organization"
-          ></input-field>
+          ></app-input-field>
           @if (medicineForm.get('supplier')?.touched && medicineForm.get('supplier')?.invalid) {
           <p class="label-form-error">El proveedor es obligatorio.</p>
           }
@@ -159,13 +162,13 @@
 
         <!-- Pharmaceutical -->
         <div>
-          <input-field
+          <app-input-field
             label="Farmacéutica"
             type="text"
             placeholder="Farmacéutica XYZ"
             formControlName="pharmaceutical"
             autoComplete="organization"
-          ></input-field>
+          ></app-input-field>
           @if (medicineForm.get('pharmaceutical')?.touched &&
           medicineForm.get('pharmaceutical')?.invalid) {
           <p class="label-form-error">La farmacéutica es obligatorio.</p>
@@ -174,5 +177,5 @@
       </div>
     </section>
   </main>
-  <cancel-accept></cancel-accept>
+  <app-cancel-accept-buttons></app-cancel-accept-buttons>
 </form>
