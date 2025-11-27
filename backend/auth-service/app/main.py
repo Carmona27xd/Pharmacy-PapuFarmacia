@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Depends, HTTPException, status
-from fastapi.staticfiles import StaticFiles
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles 
 
 from app import schemas
 from app.database import get_db
@@ -10,6 +11,14 @@ from sqlalchemy.exc import IntegrityError
 #yet to add pwd recovery
 
 app = FastAPI(title="Auth service")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:4200"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 # --- API Endpoints ---
 @app.post("/register", response_model=schemas.User)
