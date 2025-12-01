@@ -64,7 +64,7 @@ services:
       test:
         [
           "CMD-SHELL",
-          "python - << 'EOF'\nimport requests\nprint(requests.get('http://auth_service:8080/health').status_code)\nEOF",
+          "python - << 'EOF'\nimport requests\nprint(requests.get('http://auth_service:8080/api/auth/health').status_code)\nEOF",
         ]
       interval: 10s
       timeout: 5s
@@ -121,7 +121,7 @@ services:
       test:
         [
           "CMD-SHELL",
-          "python - << 'EOF'\nimport requests\nprint(requests.get('http://user_service:8080/health').status_code)\nEOF",
+          "python - << 'EOF'\nimport requests\nprint(requests.get('http://user_service:8080/api/user/health').status_code)\nEOF",
         ]
       interval: 10s
       timeout: 5s
@@ -182,7 +182,7 @@ services:
       test:
         [
           "CMD-SHELL",
-          "python - << 'EOF'\nimport requests\nprint(requests.get('http://product_service:8080/health').status_code)\nEOF",
+          "python - << 'EOF'\nimport requests\nprint(requests.get('http://product_service:8080/api/product/health').status_code)\nEOF",
         ]
       interval: 10s
       timeout: 5s
