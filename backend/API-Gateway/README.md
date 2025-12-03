@@ -14,10 +14,10 @@
     |---api_json_errors.conf
     |---api_keys.conf
     |---/api_conf.d/
-    |---|---/services/
-    |---|---|---auth_api.conf
-    |---|---|---product_api.conf
-    |---|---|---user_api.conf
+    |   |---/services/
+    |       |---auth_api.conf
+    |       |---product_api.conf
+    |       |---user_api.conf
     /var/log/nginx
     |---nginx_access.log
     |---auth_api.log
