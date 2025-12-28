@@ -1,12 +1,11 @@
 name: papufarmacia
-#backend/docker-compose up --build -d after any modifications
+
 services:
-  #auth postgresDB
+  # Base de Datos para Autenticación (PostgreSQL)
   pharma_auth_db:
     image: postgres:15-alpine
     container_name: pharma_auth_db
-    env_file:
-      - .env
+    env_file: .env
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
@@ -18,38 +17,36 @@ services:
     networks:
       - papufarmacia_network
     healthcheck: 
-      test: ["CMD-SHELL", "pg_isready -h ${POSTGRES_HOST} -U ${POSTGRES_USER}"]
+      test: ["CMD-SHELL", "pg_isready -h localhost -U ${POSTGRES_USER}"]
       interval: 5s
       timeout: 5s
       retries: 5
 
-#authentication service
+  # Servicio de Autenticación
   auth_service:
     build: ./auth-service
     container_name: pharma_auth_service
-    env_file:
-      - .env
+    env_file: .env
     environment:
-      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:5432/${POSTGRES_DB}
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@pharma_auth_db:5432/${POSTGRES_DB}
       - SECRET_KEY=${SECRET_KEY}
       - USER_SERVICE_URL=${USER_URL}
     ports:
       - "8081:8081"
     command: >
       sh -c "
-        until pg_isready -h ${POSTGRES_HOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB}; do
+        until pg_isready -h pharma_auth_db -U ${POSTGRES_USER} -d ${POSTGRES_DB}; do
           echo 'Esperando a PostgreSQL...';
           sleep 2;
         done;
-        echo 'Base de datos lista. Ejecutando migraciones...';
         alembic upgrade head;
-        echo 'Migraciones completadas. Seed roles...';
         python /app/seed_data.py;
-        echo 'Seed complete. Iniciando servidor...';
         uvicorn app.main:app --host 0.0.0.0 --port 8081"
     depends_on:
-      - pharma_auth_db
-      - user_service
+      pharma_auth_db:
+        condition: service_healthy
+      user_service:
+        condition: service_healthy
     networks:
       - papufarmacia_network
     healthcheck:
@@ -58,12 +55,11 @@ services:
       timeout: 3s
       retries: 5
 
-# user MongoDB
+  # Base de Datos para Usuarios y Productos (MongoDB)
   pharma_user_db:
     image: mongo:6-jammy
     container_name: pharma_user_db
-    env_file:
-      - .env
+    env_file: .env
     environment:
       - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
@@ -75,18 +71,17 @@ services:
     networks:
       - papufarmacia_network
     healthcheck:
-      test: mongosh --username ${MONGO_INITDB_ROOT_USERNAME} --password ${MONGO_INITDB_ROOT_PASSWORD} --eval "db.adminCommand('ping')"
+      test: ["CMD", "mongosh", "--username", "${MONGO_INITDB_ROOT_USERNAME}", "--password", "${MONGO_INITDB_ROOT_PASSWORD}", "--eval", "db.adminCommand('ping')"]
       interval: 5s
       timeout: 5s
       retries: 5
       start_period: 10s
 
-  #user service
+  # Servicio de Usuarios
   user_service:
     build: ./user-service
     container_name: pharma_user_service
-    env_file:
-      - .env
+    env_file: .env
     environment:
       - DATABASE_URL=mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@pharma_user_db:27017/${MONGO_USER_DB}?authSource=admin
     ports:
@@ -97,16 +92,49 @@ services:
         condition: service_healthy
     networks:
       - papufarmacia_network
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8082/health')"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
 
-  #API Gateway
+  # --- NUEVO: Servicio de Productos de Farmacia ---
+  product_service:
+    build: ./product-service
+    container_name: pharma_product_service
+    env_file: .env
+    environment:
+      - DATABASE_URL=mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@pharma_user_db:27017/pharma_inventory?authSource=admin
+      # También puedes forzar el PYTHONPATH aquí por si acaso
+      - PYTHONPATH=/usr/src
+    ports:
+      - "8083:8083"
+    # El comando debe ser idéntico al del Dockerfile
+    command: "uvicorn app.main:app --host 0.0.0.0 --port 8083"
+    depends_on:
+      pharma_user_db:
+        condition: service_healthy
+    networks:
+      - papufarmacia_network
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8083/health')"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # API Gateway (Nginx)
   api_gateway:
     build: ./API-Gateway
     container_name: papufarmacia_gateway
     ports:
       - "8080:80"
     depends_on:
-      - auth_service
-      - user_service
+      auth_service:
+        condition: service_healthy
+      user_service:
+        condition: service_healthy
+      product_service:
+        condition: service_healthy # Ahora también espera a productos
     networks:
       - papufarmacia_network
 
