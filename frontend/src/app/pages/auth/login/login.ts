@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 
 import { ComponentInputField } from '../../../shared/inputs/input-field/input-field';
 import { ServiceAuth } from '../../../services/auth/auth';

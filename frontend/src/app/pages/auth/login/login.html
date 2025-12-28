@@ -28,11 +28,11 @@
           <app-input-field
             label="Correo electrónico o Usuario:"
             type="text"
-            placeholder="example@example.com / User123"
+            placeholder="Correo / Usuario"
             formControlName="identifier"
             autoComplete="username"
           ></app-input-field>
-          @if(loginForm.get("user")?.touched && loginForm.get("user")?.invalid){
+          @if(loginForm.get("identifier")?.touched && loginForm.get("identifier")?.invalid){
           <p class="label-form-error">Ingrese correo o nombre de usuario.</p>
           }
         </div>

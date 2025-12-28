@@ -1,13 +1,11 @@
-<header class="flex flex-col items-center justify-center gap-4 mb-5">
-  <h1>Pharmacy system</h1>
-  <h2>Registro de usuario</h2>
-</header>
+<h1 class="flex flex-col items-center justify-center gap-4 my-5">Pharmacy system</h1>
 
 <form
   [formGroup]="registrationForm"
   (ngSubmit)="onSubmit()"
   class="flex flex-col p-6 mx-7 mb-7 border border-gray-300 rounded-lg shadow-lg bg-white"
 >
+  <h2 class="flex flex-col mb-2">Registro de usuario</h2>
   <main class="flex flex-col gap-8 md:flex-row p-0">
     <section class="flex flex-col items-center justify-center w-full md:w-1/2 bg-white">
       <div class="w-full max-w-sm">

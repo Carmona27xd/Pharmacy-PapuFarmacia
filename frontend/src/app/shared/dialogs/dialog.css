@@ -1,0 +1,52 @@
+@import 'tailwindcss/index.css';
+
+.dialog-container {
+  width: 380px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+}
+
+.dialog-header {
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dialog-icon {
+  color: white;
+  font-size: 38px;
+  width: auto;
+  height: auto;
+}
+
+.dialog-body {
+  padding: 20px;
+  text-align: center;
+}
+
+.title {
+  margin: 0 0 10px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.message {
+  margin: 0;
+  color: #555;
+  font-size: 15px;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 16px;
+  gap: 12px;
+}
+
+.dialog-actions > button {
+  @apply p-3 bg-gray-300 rounded-4xl outline-gray-400 border-0 hover:bg-gray-400 outline-2 transition-all duration-100;
+}

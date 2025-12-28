@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-cancel-accept-buttons',
@@ -10,9 +10,10 @@ export class ComponentCancelAcceptButtons {
   buttonAcceptText = 'Aceptar';
 
   onClickCancel() {
-    console.log('Cancel button clicked');
+    this.cancel.emit();
   }
+
   onClickAccept() {
-    console.log('Accept button clicked');
+    this.accept.emit();
   }
 }

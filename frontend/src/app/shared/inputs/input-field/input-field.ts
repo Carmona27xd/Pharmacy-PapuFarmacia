@@ -1,5 +1,5 @@
 import { Component, Input, forwardRef, ChangeDetectorRef, input } from '@angular/core';
-import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
+import { NG_VALUE_ACCESSOR, ControlValueAccessor, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-input-field',

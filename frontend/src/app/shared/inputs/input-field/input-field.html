@@ -6,9 +6,9 @@
     [placeholder]="placeholder"
     [disabled]="disabled"
     [value]="value ?? ''"
+    [autocomplete]="autoComplete"
     (input)="onInput($event.target.value)"
     (blur)="onBlur()"
-    [autocomplete]="autoComplete"
     class="rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-gray-400"
   />
 </div>

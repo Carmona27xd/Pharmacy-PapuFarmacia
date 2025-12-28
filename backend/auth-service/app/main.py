@@ -1,14 +1,30 @@
+<<<<<<< HEAD
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles 
+=======
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from app.routers import router
+>>>>>>> origin/frontend
 
-from app import schemas
-from app.database import get_db
-from app.dependencies.dependencies import get_current_user, oauth2_scheme
-from app.services.auth_service import AuthService, get_auth_service
-from sqlalchemy.exc import IntegrityError
+app = FastAPI(
+    title="Auth service",
+    description="Handles user authentication and authorization",
+    version="1.0.0",
+    root_path="/api/auth",
+    docs_url="/docs",
+    openapi_url="/openapi.json"
+)
 
-#yet to add pwd recovery
+app.add_middleware(
+    CORSMiddleware,
+    # TODO Cors
+    allow_origins=["*"],
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app = FastAPI(title="Auth service")
 app.add_middleware(

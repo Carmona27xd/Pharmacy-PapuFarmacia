@@ -7,20 +7,21 @@ services:
     container_name: pharma_auth_db
     env_file: .env
     environment:
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB}
-    ports:
-      - "5432:5432"
-    volumes: 
-      - postgres_data:/var/lib/postgresql/data
+      POSTGRES_USER: ${POSTGRES_AUTH_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_AUTH_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_AUTH_DB}
+      POSTGRES_HOST: ${POSTGRES_AUTH_HOST}
+    expose:
+      - "5432"
+    volumes:
+      - auth_vol_postgres:/var/lib/postgresql/data
     networks:
       - papufarmacia_network
     healthcheck: 
       test: ["CMD-SHELL", "pg_isready -h localhost -U ${POSTGRES_USER}"]
       interval: 5s
       timeout: 5s
-      retries: 5
+      retries: 10
 
   # Servicio de Autenticación
   auth_service:
@@ -125,9 +126,9 @@ services:
   # API Gateway (Nginx)
   api_gateway:
     build: ./API-Gateway
-    container_name: papufarmacia_gateway
+    container_name: api_gateway
     ports:
-      - "8080:80"
+      - "8080:8080"
     depends_on:
       auth_service:
         condition: service_healthy
@@ -136,12 +137,23 @@ services:
       product_service:
         condition: service_healthy # Ahora también espera a productos
     networks:
-      - papufarmacia_network
+      - internal_network
+      - external_network
 
+# --------------------------------------------------------------------------------------
+# VOLUMES
+# --------------------------------------------------------------------------------------
 volumes:
-  postgres_data:
-  mongo_user_data:
+  auth_vol_postgres:
+  user_vol_mongo:
+  product_vol_postgres:
 
-networks: 
-  papufarmacia_network:
+# --------------------------------------------------------------------------------------
+# NETWORKS
+# --------------------------------------------------------------------------------------
+networks:
+  internal_network:
+    driver: bridge
+    internal: true
+  external_network:
     driver: bridge

@@ -14,8 +14,8 @@ COPY ./alembic ./alembic
 COPY ./app/seed_data.py /app/seed_data.py
 
 # Expose the port the app runs on
-EXPOSE 8081
+EXPOSE 8080
 
 # Define the command to run the application
 # We will override this with 'command:' in docker-compose to run the migration first
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8081"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8080"]

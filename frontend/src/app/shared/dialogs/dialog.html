@@ -1,0 +1,25 @@
+<div class="dialog-container">
+  <div class="dialog-header" [style.background]="colorMap[data.type]">
+    <mat-icon class="dialog-icon">{{ iconMap[data.type] }}</mat-icon>
+  </div>
+
+  <div class="dialog-body">
+    <h2 class="title">{{ data.title }}</h2>
+    <p class="message">{{ data.message }}</p>
+  </div>
+
+  <div class="dialog-actions">
+    <button
+      mat-button
+      mat-dialog-close
+      *ngIf="data.type === 'confirm' || data.type === 'question'"
+      (click)="close(false)"
+    >
+      {{ data.cancelText || 'Cancelar' }}
+    </button>
+
+    <button mat-raised-button color="primary" (click)="close(true)">
+      {{ data.confirmText || 'Aceptar' }}
+    </button>
+  </div>
+</div>
