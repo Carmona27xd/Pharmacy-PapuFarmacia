@@ -4,10 +4,27 @@ from typing import List, Optional
 from app import schemas, crud
 from app.database import get_db
 
-router = APIRouter(prefix="/api/products")
+router = APIRouter()
+
+# Root endpoint
+@router.get("/")
+def read_root():
+    return {
+        "message": "Product Service API",
+        "version": "1.0.0",
+        "docs": "/docs"
+    }
+    
+# Health check general
+@router.get("/health",
+    status_code=status.HTTP_200_OK,
+    summary="Health check",
+    description="Check the health status of the product service")
+def health_check():
+    return {"status": "ok", "service": "product-service"}
 
 @router.get(
-    "/", 
+    "/products", 
     response_model=List[schemas.Product],
     status_code=status.HTTP_200_OK,
     summary="Get all products",

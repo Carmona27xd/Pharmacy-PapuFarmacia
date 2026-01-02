@@ -1,4 +1,4 @@
 export const environment = {
-  authService: 'http://localhost:8081',
-  userService: 'http://localhost:8082',
+  authService: 'http://api_gateway/api/auth',
+  userService: 'http://api_gateway/api/user',
 };

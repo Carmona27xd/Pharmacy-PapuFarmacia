@@ -6,7 +6,6 @@ app = FastAPI(
     title="Auth service",
     description="Handles user authentication and authorization",
     version="1.0.0",
-    root_path="/api/auth",
     docs_url="/docs",
     openapi_url="/openapi.json"
 )
