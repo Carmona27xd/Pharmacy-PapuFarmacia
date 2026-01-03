@@ -80,6 +80,18 @@ class AuthService:
         if not user:
             raise ValueError("User not found")
         return user
+
+    #admin user update
+    def update_user(self, user_id: int, user_data: schemas.UserUpdate):
+        updates = user_data.model_dump(exclude_none=True)
+
+        updated = user_repository.update_user(self.db, user_id, updates)
+        if not updated:
+            raise ValueError("User not found")
+        return updated
     
+    def forward_auth_header(self, token: str):
+        return {"Authorization": f"Bearer {token}"}
+
 def get_auth_service(db: Session = Depends(get_db)):
     return AuthService(db)
