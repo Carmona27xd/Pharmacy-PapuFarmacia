@@ -4,8 +4,12 @@ from app.security import security
 from app.database import get_db
 from app.services.auth_service import AuthService, get_auth_service
 from app.dependencies.dependencies import get_current_user, admin_required
+from fastapi.security import OAuth2PasswordBearer
+from sqlalchemy.orm import Session
 
 router = APIRouter(prefix="/api/auth", tags=["Authentication"])
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
 
 # --- API Endpoints ---
 @router.post("/register", response_model=schemas.User)
@@ -91,14 +95,14 @@ def list_users(
         )
 
 @router.patch("/users/{user_id}", response_model=schemas.User)
-def update_user(
+async def update_user(
     user_id: int,
-    user_data: schemas.UserUpdate,
-    current_user = Depends(admin_required),
+    payload: schemas.UserUpdate,
+    current_user=Depends(admin_required),
     auth_service: AuthService = Depends(get_auth_service)
 ):
     try:
-        return auth_service.update_user(user_id, user_data)
+        return auth_service.update_user(user_id, payload)
     except ValueError as e:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

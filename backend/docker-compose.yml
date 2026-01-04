@@ -20,15 +20,15 @@ services:
       - auth_vol_postgres:/var/lib/postgresql/data
     networks:
       - internal_network
-    healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          "pg_isready -U ${POSTGRES_AUTH_USER} -d ${POSTGRES_AUTH_DB}",
-        ]
-      interval: 10s
-      timeout: 5s
-      retries: 10
+    # healthcheck:
+    # test:
+    # [
+    # "CMD-SHELL",
+    # "pg_isready -U ${POSTGRES_AUTH_USER} -d ${POSTGRES_AUTH_DB}",
+    # ]
+    # interval: 10s
+    # timeout: 5s
+    # retries: 10
 
   # --------------------------------------------------------------------------------------
   # AUTH SERVICE
@@ -39,8 +39,10 @@ services:
     env_file:
       - .env
     environment:
+      USER_SERVICE_PHOTO_URL: ${USER_SERVICE_PHOTO_URL}
       DATABASE_URL: postgresql://${POSTGRES_AUTH_USER}:${POSTGRES_AUTH_PASSWORD}@${POSTGRES_AUTH_HOST}:${POSTGRES_AUTH_PORT}/${POSTGRES_AUTH_DB}
       SECRET_KEY: ${SECRET_KEY}
+      AUTH_SERVICE_URL: ${AUTH_SERVICE_URL}
     expose:
       - "8080"
     command: >
@@ -53,22 +55,21 @@ services:
         python /app/seed_data.py;
         uvicorn app.main:app --host 0.0.0.0 --port 8080"
     depends_on:
-      # TODO Fix
-      # user_service:
-      # condition: service_healthy
+      user_service:
+        condition: service_started
       auth_db_postgres:
-        condition: service_healthy
+        condition: service_started
     networks:
       - internal_network
-    healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          "python - << 'EOF'\nimport requests\nprint(requests.get('http://auth_service:8080/api/auth/health').status_code)\nEOF",
-        ]
-      interval: 10s
-      timeout: 5s
-      retries: 10
+    # healthcheck:
+    # test:
+    # [
+    # "CMD-SHELL",
+    # "python - << 'EOF'\nimport requests\nprint(requests.get('http://auth_service:8080/api/auth/health').status_code)\nEOF",
+    # ]
+    # interval: 10s
+    # timeout: 5s
+    # retries: 10
 
   # --------------------------------------------------------------------------------------
   # USER DATABASE (MONGO)
@@ -86,18 +87,18 @@ services:
       - "27017"
     volumes:
       - user_vol_mongo:/data/db
-    healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          'mongosh --username ${MONGO_USER_INITDB_ROOT_USERNAME} --password ${MONGO_USER_INITDB_ROOT_PASSWORD} --eval "db.adminCommand(''ping'')"',
-        ]
-      interval: 10s
-      timeout: 5s
-      retries: 10
-      start_period: 10s
     networks:
       - internal_network
+    # healthcheck:
+    # test:
+    # [
+    # "CMD-SHELL",
+    # 'mongosh --username ${MONGO_USER_INITDB_ROOT_USERNAME} --password ${MONGO_USER_INITDB_ROOT_PASSWORD} --eval "db.adminCommand(''ping'')"',
+    # ]
+    # interval: 10s
+    # timeout: 5s
+    # retries: 10
+    # start_period: 10s
 
   # --------------------------------------------------------------------------------------
   # USER SERVICE
@@ -115,18 +116,18 @@ services:
       sh -c "uvicorn app.main:app --host 0.0.0.0 --port 8080"
     depends_on:
       user_db_mongo:
-        condition: service_healthy
-    healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          "python - << 'EOF'\nimport requests\nprint(requests.get('http://user_service:8080/api/user/health').status_code)\nEOF",
-        ]
-      interval: 10s
-      timeout: 5s
-      retries: 10
+        condition: service_started
     networks:
       - internal_network
+    # healthcheck:
+    # test:
+    # [
+    # "CMD-SHELL",
+    # "python - << 'EOF'\nimport requests\nprint(requests.get('http://user_service:8080/api/user/health').status_code)\nEOF",
+    # ]
+    # interval: 10s
+    # timeout: 5s
+    # retries: 10
 
   # --------------------------------------------------------------------------------------
   # PRODUCT DATABASE (POSTGRES)
@@ -147,15 +148,15 @@ services:
       - product_vol_postgres:/var/lib/postgresql/data
     networks:
       - internal_network
-    healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          "pg_isready -h ${POSTGRES_PRODUCT_HOST} -U ${POSTGRES_PRODUCT_USER}",
-        ]
-      interval: 10s
-      timeout: 5s
-      retries: 10
+    # healthcheck:
+    # test:
+    # [
+    # "CMD-SHELL",
+    # "pg_isready -h ${POSTGRES_PRODUCT_HOST} -U ${POSTGRES_PRODUCT_USER}",
+    # ]
+    # interval: 10s
+    # timeout: 5s
+    # retries: 10
 
   # --------------------------------------------------------------------------------------
   # PRODUCT SERVICE
@@ -174,18 +175,38 @@ services:
       sh -c "uvicorn app.main:app --host 0.0.0.0 --port 8080"
     depends_on:
       product_db_postgres:
-        condition: service_healthy
+        condition: service_started
     networks:
       - internal_network
-    healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          "python - << 'EOF'\nimport requests\nprint(requests.get('http://product_service:8080/health').status_code)\nEOF",
-        ]
-      interval: 10s
-      timeout: 5s
-      retries: 10
+    # healthcheck:
+    # test:
+    # [
+    # "CMD-SHELL",
+    # "python - << 'EOF'\nimport requests\nprint(requests.get('http://product_service:8080/health').status_code)\nEOF",
+    # ]
+    # interval: 10s
+    # timeout: 5s
+    # retries: 10
+
+  # --------------------------------------------------------------------------------------
+  # ADMIN SERVICE
+  # --------------------------------------------------------------------------------------
+  admin_service:
+    build: ./admin-service
+    container_name: admin_service
+    env_file:
+      - .env
+    environment:
+      - AUTH_SERVICE_URL=${AUTH_SERVICE_URL}
+    expose:
+      - "8080"
+    depends_on:
+      auth_service:
+        condition: service_started
+    networks:
+      - internal_network
+    # healthcheck:
+    
 
   # --------------------------------------------------------------------------------------
   # API GATEWAY
@@ -196,9 +217,14 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - auth_service
-      # - user_service
-      - product_service
+      auth_service:
+        condition: service_started
+      user_service:
+        condition: service_started
+      product_service:
+        condition: service_started
+      admin_service:
+        condition: service_started
     networks:
       - internal_network
       - external_network

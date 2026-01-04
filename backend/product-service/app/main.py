@@ -14,7 +14,6 @@ app = FastAPI(
     description="For managing products in the inventory",
     version="1.0.0",
     lifespan=lifespan,
-    root_path="/api/products",
     docs_url="/docs",
     openapi_url="/openapi.json"
 )
@@ -29,20 +28,3 @@ app.add_middleware(
 )
 
 app.include_router(router)
-
-# Root endpoint
-@app.get("/")
-def read_root():
-    return {
-        "message": "Product Service API",
-        "version": "1.0.0",
-        "docs": "/docs"
-    }
-    
-# Health check general
-@app.get("/health",
-    status_code=status.HTTP_200_OK,
-    summary="Health check",
-    description="Check the health status of the product service")
-def health_check():
-    return {"status": "ok", "service": "product-service"}

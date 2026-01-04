@@ -10,7 +10,7 @@ import httpx
 import os
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
-USER_SERVICE_URL = os.getenv("USER_SERVICE_URL")
+USER_SERVICE_PHOTO_URL = os.getenv("USER_SERVICE_PHOTO_URL")
 
 class AuthService:
     def __init__(self, db: Session):
@@ -39,7 +39,7 @@ class AuthService:
 
             try: 
                 with httpx.Client() as client:
-                    response = client.post(USER_SERVICE_URL, json=payload, timeout=5)
+                    response = client.post(USER_SERVICE_PHOTO_URL, json=payload, timeout=5)
                     response.raise_for_status()
             except httpx.RequestError as e:
                 user_repository.delete_user(self.db, db_user.id)
@@ -74,6 +74,11 @@ class AuthService:
             print(f"[LOGIN ERROR] {e}")   # <== Add this temporarily
             raise Exception("Login service unavailable - please try again later")
 
+    def get_all_users(self, limit: int = 100, offset: int = 0):
+        users = user_repository.get_all_users(self.db, limit=limit, offset=offset)
+        if not users:
+            raise ValueError("No users registered/active")
+        return users
     
     def get_user_by_id(self, user_id: int) -> schemas.User:
         user = user_repository.get_user_by_id(self.db, user_id)

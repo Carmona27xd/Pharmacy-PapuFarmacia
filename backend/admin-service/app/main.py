@@ -3,8 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.routers import router
 
 app = FastAPI(
-    title="User service",
-    description="for profile pics and future features",
+    title="Admin service",
+    description="Handles administrative tasks and user management",
     version="1.0.0",
     docs_url="/docs",
     openapi_url="/openapi.json"
@@ -20,4 +20,3 @@ app.add_middleware(
 )
 
 app.include_router(router)
-

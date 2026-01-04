@@ -3,7 +3,7 @@ from app.services.user_service import UserService, get_user_service
 from app.core.security import get_current_user
 from app import schemas
 
-router = APIRouter(prefix="/api/user", tags=["Users"])
+router = APIRouter(tags=["Users"])
 
 @router.get("/profile/{user_id}", response_model=schemas.UserProfileResponse)
 def get_user_profile(
