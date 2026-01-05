@@ -15,7 +15,8 @@ app = FastAPI(
     version="1.0.0",
     lifespan=lifespan,
     docs_url="/docs",
-    openapi_url="/openapi.json"
+    openapi_url="/openapi.json",
+    root_path="/api/products"
 )
 
 app.add_middleware(

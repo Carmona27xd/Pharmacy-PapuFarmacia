@@ -36,6 +36,8 @@ def create_user_profile(
     profile_data: schemas.UserProfileCreate,
     user_service: UserService = Depends(get_user_service)
 ):
+    profile_id = user_service.create_profile(profile_data)
+    return {"message": "Profile created successfully", "profile_id": profile_id}
     try: 
         profile_id = user_service.create_profile(profile_data)
         return {"message": "Profile created successfully", "profile_id": profile_id}

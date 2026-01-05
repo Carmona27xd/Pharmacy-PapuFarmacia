@@ -7,11 +7,33 @@ from app.dependencies.dependencies import get_current_user, admin_required
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 
-router = APIRouter(prefix="/api/auth", tags=["Authentication"])
+router = APIRouter(
+    # prefix="/api/auth", 
+    tags=["Authentication"])
 
+<<<<<<< HEAD
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
 
 # --- API Endpoints ---
+=======
+##########################################################################
+@router.get("/")
+def read_root():
+    return {
+        "message": "Auth Service API",
+        "version": "1.0.0",
+        "docs": "/docs"
+    }
+
+@router.get("/health",
+    status_code=status.HTTP_200_OK,
+    summary="Health check",
+    description="Check the health status of the auth service")
+def health_check():
+    return {"status": "ok", "service": "auth-service"}
+
+# --- API Endpoints --- ##################################################
+>>>>>>> c577c07403639462b6402aa4920abaea4c82d96c
 @router.post("/register", response_model=schemas.User)
 def register(
     user: schemas.UserCreate,

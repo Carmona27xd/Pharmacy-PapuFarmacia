@@ -7,7 +7,8 @@ app = FastAPI(
     description="for profile pics and future features",
     version="1.0.0",
     docs_url="/docs",
-    openapi_url="/openapi.json"
+    openapi_url="/openapi.json",
+    root_path="/api/users"
 )
 
 app.add_middleware(

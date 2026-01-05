@@ -1,10 +1,23 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { catchError, Observable, tap } from 'rxjs';
 import { ServicesConfig } from '../config';
 import { environment } from '../../../environments/environment.development';
-import { InterfaceLogin } from '../../interfaces/user/login';
-import { InterfaceNewUser } from '../../interfaces/user/new-user';
+
+export interface UserTemplate {
+  id?: number;
+  fullName?: string;
+  username?: string;
+  email?: string;
+  password?: string;
+  isActive?: boolean;
+  idRole?: number;
+}
+
+export interface LoginTemplate {
+  identifier: string;
+  password: string;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -16,14 +29,27 @@ export class ServiceAuth {
     this.baseUrl = environment.authService;
   }
 
-  login(data: InterfaceLogin): Observable<any> {
-    return this.httpClient.post<any>(`${this.baseUrl}/login`, data, { observe: 'response' }).pipe(
+  login(identifier: string, password: string): Observable<any> {
+    return this.httpClient.post<any>(`${this.baseUrl}/login`, { identifier, password }).pipe(
       tap((res: any) => {
         if (res?.token) {
           localStorage.setItem('auth_token', res.token);
         }
-      })
+      }),
+      catchError(this.config.handleError)
     );
+  }
+
+  logout() {
+    localStorage.removeItem('auth_token');
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem('auth_token');
+  }
+
+  isAuthenticated(): boolean {
+    return !!localStorage.getItem('auth_token');
   }
 
   logout() {
