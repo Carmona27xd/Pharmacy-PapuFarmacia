@@ -4,9 +4,27 @@ from app.database import get_db
 from app.services.auth_service import AuthService, get_auth_service
 from app.dependencies.dependencies import get_current_user
 
-router = APIRouter(prefix="/api/auth", tags=["Authentication"])
+router = APIRouter(
+    # prefix="/api/auth", 
+    tags=["Authentication"])
 
-# --- API Endpoints ---
+##########################################################################
+@router.get("/")
+def read_root():
+    return {
+        "message": "Auth Service API",
+        "version": "1.0.0",
+        "docs": "/docs"
+    }
+
+@router.get("/health",
+    status_code=status.HTTP_200_OK,
+    summary="Health check",
+    description="Check the health status of the auth service")
+def health_check():
+    return {"status": "ok", "service": "auth-service"}
+
+# --- API Endpoints --- ##################################################
 @router.post("/register", response_model=schemas.User)
 def register(
     user: schemas.UserCreate,
@@ -47,7 +65,3 @@ def login(
 @router.get("/verify-token")
 def verify_token(current_user: schemas.User = Depends(get_current_user)):
     return current_user
-
-@router.get("/health")
-def health_check():
-    return {"status": "ok"}

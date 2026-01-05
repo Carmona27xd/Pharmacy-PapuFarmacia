@@ -1,27 +1,40 @@
-from pydantic import BaseModel, Field, validator
-from typing import Optional 
-from datetime import datetime
+from pydantic import BaseModel, Field, ConfigDict
+from datetime import date
+from typing import Optional
 
-class ProductsBase(BaseModel):
-    name: str = Field(..., example="Paracetamol 500mg")
-    description: Optional[str] = Field(None, example="Caja con 20 capsulas")
-    price: float = Field(..., ge=0, example=45.50)
-    stock: int = Field(..., ge=0, example=50)
-    category: str = Field(..., example="Analgesicos")
-    manufacturer: str = Field(..., example="Bayer")
-    requires_prescription: bool = Field(default=False)
-    sku: str = Field(..., example="750123456789")
+class ProductBase(BaseModel):
+    productTypeId: int = Field(..., description="ID of the product type")
+    chemicalName: Optional[str] = Field(None, max_length=255)
+    comercialName: str = Field(..., min_length=1, max_length=255)
+    description: Optional[str] = Field(None, max_length=1000)
+    price: float = Field(..., gt=0, description="Price must be greater than zero")
+    outdate: Optional[date] = None
+    stock: int = Field(..., ge=0, description="Stock must be zero or positive")
+    batch: str = Field(..., min_length=1, max_length=100)
+    provider: str = Field(..., min_length=1, max_length=255)
+    pharmaceutical: Optional[str] = Field(None, max_length=255)
+    imagen: Optional[str] = Field(None, max_length=500)
 
-class ProductCreate(ProductsBase):
-    expiration_date: datetime
+class ProductCreate(ProductBase):
+    """Schema for create a product"""
+    pass
 
-class productsResponse(ProductsBase):
-    id: str
-    create_ate: datetime
-    update_at: datetime
+class ProductUpdate(BaseModel):
+    """Schema for update a product (all fields optional)"""
+    productTypeId: Optional[int] = None
+    chemicalName: Optional[str] = None
+    comercialName: Optional[str] = None
+    description: Optional[str] = None
+    price: Optional[float] = Field(None, gt=0)
+    outdate: Optional[date] = None
+    stock: Optional[int] = Field(None, ge=0)
+    batch: Optional[str] = None
+    provider: Optional[str] = None
+    pharmaceutical: Optional[str] = None
+    imagen: Optional[str] = None
 
-    class Config:
-        from_attributes = True
-
-        
-
+class Product(ProductBase):
+    """Schema for response of product"""
+    id: int
+    
+    model_config = ConfigDict(from_attributes=True)
