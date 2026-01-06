@@ -1,5 +1,6 @@
 import re
 from pydantic import BaseModel, EmailStr, Field, field_validator
+from typing import Optional
 
 #Base schema 
 class UserBase(BaseModel):
@@ -61,4 +62,12 @@ class Token(BaseModel):
 class TokenData(BaseModel):
     user_id: int | None = None
 
-#pass recovery options
+#user update schemas 
+class UserUpdate(BaseModel):
+    is_active: Optional[bool] = None
+    full_name: Optional[str] = Field(default=None, min_length=2, max_length=50)
+    username: Optional[str] = Field(default=None, min_length=4, max_length=50)
+    role_id: Optional[int] = Field(default=None, ge=1)
+
+class FullUserResponse(User):
+    profile_picture: str | None

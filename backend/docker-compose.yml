@@ -42,6 +42,7 @@ services:
       USER_SERVICE_PHOTO_URL: ${USER_SERVICE_PHOTO_URL}
       DATABASE_URL: postgresql://${POSTGRES_AUTH_USER}:${POSTGRES_AUTH_PASSWORD}@${POSTGRES_AUTH_HOST}:${POSTGRES_AUTH_PORT}/${POSTGRES_AUTH_DB}
       SECRET_KEY: ${SECRET_KEY}
+      AUTH_SERVICE_URL: ${AUTH_SERVICE_URL}
     expose:
       - "8080"
     command: >
@@ -82,7 +83,6 @@ services:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER_INITDB_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_USER_INITDB_ROOT_PASSWORD}
       MONGO_INITDB_DATABASE: ${MONGO_USER_DB}
-      MONGO_INITDB_HOST: ${MONGO_USER_HOST}
     expose:
       - "27017"
     volumes:
@@ -189,6 +189,26 @@ services:
     # retries: 10
 
   # --------------------------------------------------------------------------------------
+  # ADMIN SERVICE
+  # --------------------------------------------------------------------------------------
+  admin_service:
+    build: ./admin-service
+    container_name: admin_service
+    env_file:
+      - .env
+    environment:
+      - AUTH_SERVICE_URL=${AUTH_SERVICE_URL}
+    expose:
+      - "8080"
+    depends_on:
+      auth_service:
+        condition: service_started
+    networks:
+      - internal_network
+    # healthcheck:
+    
+
+  # --------------------------------------------------------------------------------------
   # API GATEWAY
   # --------------------------------------------------------------------------------------
   api_gateway:
@@ -202,6 +222,8 @@ services:
       user_service:
         condition: service_started
       product_service:
+        condition: service_started
+      admin_service:
         condition: service_started
     networks:
       - internal_network
