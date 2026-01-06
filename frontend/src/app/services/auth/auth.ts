@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { catchError, Observable, tap } from 'rxjs';
 import { ServicesConfig } from '../config';
 import { environment } from '../../../environments/environment.development';
+import { InterfaceNewUser } from '../../interfaces/user/new-user';
 
 export interface UserTemplate {
   id?: number;
@@ -38,18 +39,6 @@ export class ServiceAuth {
       }),
       catchError(this.config.handleError)
     );
-  }
-
-  logout() {
-    localStorage.removeItem('auth_token');
-  }
-
-  getToken(): string | null {
-    return localStorage.getItem('auth_token');
-  }
-
-  isAuthenticated(): boolean {
-    return !!localStorage.getItem('auth_token');
   }
 
   logout() {

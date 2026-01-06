@@ -31,7 +31,7 @@ export const routes: Routes = [
   },
   // Products
   {
-    path: 'registro-producto',
+    path: '/productos/registro',
     // TODO canActivate: [GuardAuth],
     component: PageRegisterProduct,
   },
