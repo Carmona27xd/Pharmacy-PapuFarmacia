@@ -11,12 +11,6 @@ router = APIRouter(
     # prefix="/api/auth", 
     tags=["Authentication"])
 
-<<<<<<< HEAD
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
-
-# --- API Endpoints ---
-=======
-##########################################################################
 @router.get("/")
 def read_root():
     return {
@@ -33,7 +27,6 @@ def health_check():
     return {"status": "ok", "service": "auth-service"}
 
 # --- API Endpoints --- ##################################################
->>>>>>> c577c07403639462b6402aa4920abaea4c82d96c
 @router.post("/register", response_model=schemas.User)
 def register(
     user: schemas.UserCreate,

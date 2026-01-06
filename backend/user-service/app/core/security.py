@@ -6,7 +6,7 @@ import os
 security = HTTPBearer()
 
 SECRET_KEY = os.getenv("SECRET_KEY")
-ALGORITHM = os.getenv("ALGORITHM")
+ALGORITHM = os.getenv("ALGORITHM", "HS256")
 
 def verify_jwt(token: str):
     try:

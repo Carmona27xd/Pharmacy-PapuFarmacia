@@ -45,11 +45,7 @@ def get_products(
     description="Search products by name, provider or range of price"
 )
 def search_products(
-<<<<<<< HEAD
-    name: Optional[str] = Query(None, description="Comercial nanme of product"),
-=======
     name: Optional[str] = Query(None, description="Commercial nanme of product"),
->>>>>>> c577c07403639462b6402aa4920abaea4c82d96c
     provider: Optional[str] = Query(None, description="Provider name"),
     min_price: Optional[float] = Query(None, ge=0, description="Minimum price"),
     max_price: Optional[float] = Query(None, ge=0, description="Maximum price"),
