@@ -26,19 +26,19 @@ export const routes: Routes = [
     component: PageLogin,
   },
   {
-    path: 'registro-usuario',
+    path: 'usuario/registro',
     component: PageRegistration,
   },
   // Products
   {
-    path: '/productos/registro',
+    path: 'productos/registro',
     // TODO canActivate: [GuardAuth],
     component: PageRegisterProduct,
   },
   {
-    path: 'detalles-producto',
+    path: 'productos/detalles',
     component: PageDetailsProduct,
   },
-  { path: 'buscar-producto', component: PageSearchForProducts },
+  { path: 'productos/buscar', component: PageSearchForProducts },
   { path: '**', component: PageNotFound },
 ];

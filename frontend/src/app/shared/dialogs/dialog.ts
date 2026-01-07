@@ -14,12 +14,12 @@ export interface ComponentDialog {
 }
 
 @Component({
-  selector: 'app-dialog',
+  selector: 'app-custom-dialog',
   standalone: true,
   imports: [MatIconModule, CommonModule],
   templateUrl: './dialog.html',
 })
-export class CustomDialogComponent {
+export class ComponentCustomDialog {
   iconMap: Record<DialogType, string> = {
     error: 'error',
     warning: 'warning',
@@ -39,7 +39,7 @@ export class CustomDialogComponent {
   };
 
   constructor(
-    private ref: MatDialogRef<CustomDialogComponent>,
+    private ref: MatDialogRef<ComponentCustomDialog>,
     @Inject(MAT_DIALOG_DATA) public data: ComponentDialog
   ) {}
 
