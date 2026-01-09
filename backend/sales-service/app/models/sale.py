@@ -10,3 +10,5 @@ class Sale(Base):
     total_amount = Column(Float(10,2), nullable=False)
     payment_method = Column(String(30), nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+    items = relationship("SaleItem", back_populates="sale", cascade="all, delete-orphan")

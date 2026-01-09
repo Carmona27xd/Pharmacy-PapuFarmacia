@@ -243,11 +243,12 @@ services:
       - "8080"
     command: >
       sh -c "
-      until pg_isready -h ${POSTGRES_SALES_HOST} -p ${POSTGRES_SALES_PORT}; do
-      echo 'Waiting for postgres...';
-      sleep 2;
+      set -e;
+      until pg_isready -h ${POSTGRES_SALES_HOST} -U ${POSTGRES_SALES_USER} -d ${POSTGRES_SALES_DB}; do
+        echo 'Esperando a PostgreSQL...';
+        sleep 2;
       done;
-      alembic upgrade head &&
+      alembic upgrade head && 
       uvicorn app.main:app --host 0.0.0.0 --port 8080
       "
     depends_on:
