@@ -3,48 +3,38 @@ import { HttpClient } from '@angular/common/http';
 import { ServicesConfig } from '../config';
 import { environment } from '../../../environments/environment.development';
 
-// TODO Validate data attributes from backend
-export interface UserTemplate {
-  id?: number;
-  fullName?: string;
-  username?: string;
-  email?: string;
-  password?: string;
-  isActive?: boolean;
-  idRole?: number;
-}
-
-export interface LoginTemplate {
-  identifier: string;
-  password: string;
-}
-
 @Injectable({
   providedIn: 'root',
 })
 export class ServiceUser {
-  private baseUrl: string = '';
+  private authServiceURL: string = '';
+  private userServiceURL: string = '';
 
   constructor(private httpClient: HttpClient, private config: ServicesConfig) {
-    this.baseUrl = `${environment.userService}/profiles`;
+    this.authServiceURL = environment.authService;
+    this.userServiceURL = environment.userService;
   }
 
   getData(idUser: number) {
     const headers = { Authorization: 'Bearer token' };
-    return this.httpClient.get<UserTemplate>(`${this.baseUrl}/${idUser}`, { headers });
+    return this.httpClient.get<UserTemplate>(`${this.authServiceURL}/${idUser}`, { headers });
   }
 
   postData(user: UserTemplate) {
-    return this.httpClient.post<UserTemplate>(`${this.baseUrl}`, {});
+    return this.httpClient.post<UserTemplate>(`${this.authServiceURL}`, {});
   }
 
   putData(user: UserTemplate) {
     const headers = { Authorization: 'Bearer token' };
-    return this.httpClient.put<UserTemplate>(`${this.baseUrl}/${user.id}`, {}, { headers });
+    return this.httpClient.put<UserTemplate>(`${this.authServiceURL}/${user.id}`, {}, { headers });
   }
 
   putProfilePhoto(user: UserTemplate) {
     const headers = { Authorization: 'Bearer token' };
-    return this.httpClient.put<UserTemplate>(`${this.baseUrl}/${user.id}/picture`, {}, { headers });
+    return this.httpClient.put<UserTemplate>(
+      `${this.authServiceURL}/${user.id}/picture`,
+      {},
+      { headers }
+    );
   }
 }

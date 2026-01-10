@@ -1,45 +1,35 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, tap } from 'rxjs';
-import { shareReplay } from 'rxjs/operators';
 import { ServicesConfig } from '../config';
 import { environment } from '../../../environments/environment.development';
-import { InterfaceNewUser } from '../../interfaces/user/new-user';
-
-export interface UserTemplate {
-  id?: number;
-  fullName?: string;
-  username?: string;
-  email?: string;
-  password?: string;
-  isActive?: boolean;
-  idRole?: number;
-}
-
-export interface LoginTemplate {
-  identifier: string;
-  password: string;
-}
+import { InterfaceNewUser } from '../../interfaces/user/registration';
+import { InterfaceLogin } from '../../interfaces/user/login';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ServiceAuth {
-  private baseUrl: string = '';
+  private authServiceURL: string = '';
 
   constructor(private httpClient: HttpClient, private config: ServicesConfig) {
-    this.baseUrl = environment.authService;
+    this.authServiceURL = environment.authService;
   }
 
-  login(identifier: string, password: string): Observable<any> {
-    return this.httpClient.post<any>(`${this.baseUrl}/login`, { identifier, password }).pipe(
-      tap((res: any) => {
-        if (res?.token) {
-          localStorage.setItem('auth_token', res.token);
-        }
-      }),
-      catchError(this.config.handleError)
-    );
+  login(login: InterfaceLogin): Observable<any> {
+    return this.httpClient
+      .post<any>(`${this.authServiceURL}/login`, {
+        identifier: login.identifier,
+        password: login.password,
+      })
+      .pipe(
+        tap((res: any) => {
+          if (res?.token) {
+            localStorage.setItem('auth_token', res.token);
+          }
+        }),
+        catchError(this.config.handleError)
+      );
   }
 
   logout() {
@@ -56,10 +46,10 @@ export class ServiceAuth {
 
   // TODO Check if this is correct and what response are
   verifyToken(tokenJWT: string) {
-    return this.httpClient.get(`${this.baseUrl}/verify-token`);
+    return this.httpClient.get(`${this.authServiceURL}/verify-token`);
   }
 
   postUser(user: InterfaceNewUser) {
-    return this.httpClient.post<InterfaceNewUser>(`${this.baseUrl}/register`, user);
+    return this.httpClient.post<InterfaceNewUser>(`${this.authServiceURL}/register`, user);
   }
 }
