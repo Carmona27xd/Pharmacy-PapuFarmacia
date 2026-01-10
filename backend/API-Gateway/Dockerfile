@@ -16,6 +16,7 @@ COPY ./services/admin_api.conf /etc/nginx/api_conf.d/services/admin_api.conf
 COPY ./services/auth_api.conf /etc/nginx/api_conf.d/services/auth_api.conf
 COPY ./services/product_api.conf /etc/nginx/api_conf.d/services/product_api.conf
 COPY ./services/user_api.conf /etc/nginx/api_conf.d/services/user_api.conf
+COPY ./services/sales_api.conf /etc/nginx/api_conf.d/services/sales_api.conf
 
 EXPOSE 8080
 
