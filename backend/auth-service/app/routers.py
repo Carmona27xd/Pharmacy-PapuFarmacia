@@ -70,6 +70,10 @@ def get_full_user(
     current_user = Depends(get_current_user),
     auth_service: AuthService = Depends(get_auth_service)
 ):
+    return auth_service.get_all_user_data(
+            current_user.id,
+            token=token.credentials
+        )
     try:
         return auth_service.get_all_user_data(
             current_user.id,
