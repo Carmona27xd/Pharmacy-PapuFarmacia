@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 import { catchError, Observable, tap } from 'rxjs';
 import { ServicesConfig } from '../config';
 import { environment } from '../../../environments/environment.development';
-import { InterfaceNewUser } from '../../interfaces/user/registration';
-import { InterfaceLogin } from '../../interfaces/user/login';
+import { InterfaceLogin } from '../../interfaces/user/user-login';
+import { InterfaceUserCreate } from '../../interfaces/user/user-create';
 
 @Injectable({
   providedIn: 'root',
@@ -16,20 +16,15 @@ export class ServiceAuth {
     this.authServiceURL = environment.authService;
   }
 
-  login(login: InterfaceLogin): Observable<any> {
-    return this.httpClient
-      .post<any>(`${this.authServiceURL}/login`, {
-        identifier: login.identifier,
-        password: login.password,
-      })
-      .pipe(
-        tap((res: any) => {
-          if (res?.token) {
-            localStorage.setItem('auth_token', res.token);
-          }
-        }),
-        catchError(this.config.handleError)
-      );
+  login(loginData: InterfaceLogin): Observable<any> {
+    return this.httpClient.post<any>(`${this.authServiceURL}/login`, loginData).pipe(
+      tap((res: any) => {
+        if (res?.token) {
+          localStorage.setItem('auth_token', res.token);
+        }
+      }),
+      catchError(this.config.handleError)
+    );
   }
 
   logout() {
@@ -49,7 +44,7 @@ export class ServiceAuth {
     return this.httpClient.get(`${this.authServiceURL}/verify-token`);
   }
 
-  postUser(user: InterfaceNewUser) {
-    return this.httpClient.post<InterfaceNewUser>(`${this.authServiceURL}/register`, user);
+  postUser(userData: InterfaceUserCreate): Observable<any> {
+    return this.httpClient.post<any>(`${this.authServiceURL}/register`, userData);
   }
 }

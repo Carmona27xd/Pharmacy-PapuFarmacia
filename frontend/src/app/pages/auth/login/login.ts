@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { ComponentInputField } from '../../../shared/inputs/input-field/input-field';
 import { ServiceAuth } from '../../../services/auth/auth';
 import { ServiceShowCustomDialog } from '../../../shared/dialogs/service-dialog';
+import { InterfaceLogin } from '../../../interfaces/user/user-login';
 
 @Component({
   selector: 'login',
@@ -37,9 +38,12 @@ export class PageLogin implements OnInit {
       return;
     }
 
-    const { identifier, password } = this.loginForm.value;
+    const loginData: InterfaceLogin = {
+      identifier: this.loginForm.value.identifier,
+      password: this.loginForm.value.password,
+    };
 
-    this.serviceAuth.login(identifier, password).subscribe({
+    this.serviceAuth.login(loginData).subscribe({
       next: (data: any) => {
         this.token = data;
         console.log('Token recibido:', data);
@@ -51,6 +55,11 @@ export class PageLogin implements OnInit {
           this.customDialogService.error(
             'Error de autenticación',
             'Credenciales incorrectas. Por favor, inténtelo de nuevo.'
+          );
+        } else {
+          this.customDialogService.error(
+            'Error de servidor',
+            'Ocurrió un error inesperado. Por favor, inténtelo más tarde.'
           );
         }
       },

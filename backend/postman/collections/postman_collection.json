@@ -232,6 +232,18 @@
                 "key": "Authorization",
                 "value": "Bearer {{bearer}}",
                 "type": "text"
+              },
+              {
+                "key": "WWW-Authenticate",
+                "value": "Bearer {{bearer}}",
+                "type": "text",
+                "uuid": "74febc3f-3eb1-47ef-8145-381223f66d0e"
+              },
+              {
+                "key": "token",
+                "value": "{{bearer}}",
+                "type": "text",
+                "uuid": "8ce1cbc9-21a0-457b-992c-25c7d483d968"
               }
             ],
             "body": {
@@ -1067,12 +1079,12 @@
   ],
   "variable": [
     {
-      "id": "b575d1f9-22d4-4523-80cb-e15b2edc3319",
+      "id": "16dee361-63c4-442d-874a-735a47fce4a9",
       "key": "bearer",
       "value": ""
     },
     {
-      "id": "879096bf-05c8-4c8c-bf79-571d89c50243",
+      "id": "dfcf9c8b-b3df-4a11-93ed-8725bc4a3db6",
       "key": "web_client",
       "value": ""
     }
