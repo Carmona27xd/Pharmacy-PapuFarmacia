@@ -2,9 +2,9 @@ import { Routes } from '@angular/router';
 
 import { GuardAuth } from './guards/auth-guard';
 
+import { PageNotFound } from './pages/errors/not-found/not-found';
 import { PageLogin } from './pages/auth/login/login';
 import { PageRegistration } from './pages/auth/registration/registration';
-import { PageNotFound } from './pages/errors/not-found/not-found';
 import { PageHome } from './pages/home/home';
 import { PageRegisterProduct } from './pages/products/register/register-product';
 import { PageDetailsProduct } from './pages/products/details/details-product';
