@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, tap } from 'rxjs';
+import { shareReplay } from 'rxjs/operators';
 import { ServicesConfig } from '../config';
 import { environment } from '../../../environments/environment.development';
 

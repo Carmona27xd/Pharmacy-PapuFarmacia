@@ -7,7 +7,6 @@ import { throwError } from 'rxjs';
 })
 export class ServicesConfig {
   handleError(error: HttpErrorResponse) {
-    console.error('Error HTTP:', error);
-    return throwError(() => new Error('Error en la petición'));
+    return throwError(error);
   }
 }
