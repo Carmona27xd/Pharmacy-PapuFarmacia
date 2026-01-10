@@ -11,14 +11,18 @@ router = APIRouter(
     # prefix="/api/auth", 
     tags=["Authentication"])
 
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
+
+# INFO ####################################################
 @router.get("/")
 def read_root():
     return {
         "message": "Auth Service API",
         "version": "1.0.0",
-        "docs": "/docs"
+        "docs": "api/auth/docs"
     }
 
+# Health ##################################################
 @router.get("/health",
     status_code=status.HTTP_200_OK,
     summary="Health check",
@@ -26,7 +30,7 @@ def read_root():
 def health_check():
     return {"status": "ok", "service": "auth-service"}
 
-# --- API Endpoints --- ##################################################
+# New user ################################################
 @router.post("/register", response_model=schemas.User)
 def register(
     user: schemas.UserCreate,
@@ -44,7 +48,8 @@ def register(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             detail="Service Unavailable, please try again later"
         )
-    
+
+# Login ###################################################   
 @router.post("/login", response_model=schemas.Token)
 def login(
     form_data: schemas.UserLogin,
@@ -64,6 +69,14 @@ def login(
             detail="Service Unavailable, please try again later"
         )
 
+# Verify JWT ##############################################   
+@router.get("/verify-token")
+def verify_token(current_user: schemas.User = Depends(get_current_user)):
+    return current_user
+
+
+## TODO Move to user_api.conf
+# Info user ###############################################
 @router.get("/me", response_model=schemas.FullUserResponse)
 def get_full_user(
     token: str = Depends(security),
@@ -74,22 +87,14 @@ def get_full_user(
         return auth_service.get_all_user_data(
             current_user.id,
             token=token.credentials
-            )
+        )
     except ValueError as e:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=str(e)
         )
-    
-@router.get("/verify-token")
-def verify_token(current_user: schemas.User = Depends(get_current_user)):
-    return current_user
 
-@router.get("/health")
-def health_check():
-    return {"status": "ok"}
-
-#admin user mgmt
+# Management users admin ##################################
 @router.get("/users", response_model=list[schemas.User])
 def list_users(
     limit: int = 50,
@@ -108,7 +113,8 @@ def list_users(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             detail=str(e)
         )
-
+        
+# Modify user data ########################################
 @router.patch("/users/{user_id}", response_model=schemas.User)
 async def update_user(
     user_id: int,

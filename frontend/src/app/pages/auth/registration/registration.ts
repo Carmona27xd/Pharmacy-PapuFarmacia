@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 
 import { ComponentInputField } from '../../../shared/inputs/input-field/input-field';
 import { ComponentCancelAcceptButtons } from '../../../shared/buttons/cancel-accept/cancel-accept';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'registration',
