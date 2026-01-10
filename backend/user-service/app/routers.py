@@ -5,6 +5,12 @@ from app import schemas
 
 router = APIRouter(tags=["Users"])
 
+# Health ##################################################
+@router.get("/health")
+def health_check():
+    return {"status": "OK"}
+
+# - #######################################################
 @router.get("/profile/{user_id}", response_model=schemas.UserProfileResponse)
 def get_user_profile(
     user_id: int,
@@ -30,14 +36,13 @@ def get_user_profile(
             detail=f"Database error: {str(e)}"
         )
 
-
+# - #######################################################
 @router.post("/profile", response_model=dict)
 def create_user_profile(
     profile_data: schemas.UserProfileCreate,
     user_service: UserService = Depends(get_user_service)
 ):
     profile_id = user_service.create_profile(profile_data)
-    return {"message": "Profile created successfully", "profile_id": profile_id}
     try: 
         profile_id = user_service.create_profile(profile_data)
         return {"message": "Profile created successfully", "profile_id": profile_id}
@@ -47,6 +52,7 @@ def create_user_profile(
             detail=str(e)
         )
 
+# Update photo of user ####################################
 @router.put("/profile/{user_id}", response_model=dict)
 def update_user_profile(
     user_id: int,
@@ -74,7 +80,8 @@ def update_user_profile(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=str(e)
         )
-    
+
+# - #######################################################
 @router.put("/profile/{user_id}/picture", response_model=dict)
 def update_profile_picture(
     user_id: int,
@@ -102,7 +109,3 @@ def update_profile_picture(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=str(e)
         )
-    
-@router.get("/health")
-def health_check():
-    return {"status": "OK"}

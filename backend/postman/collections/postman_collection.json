@@ -348,7 +348,170 @@
           "response": []
         }
       ],
-      "id": "afda23c4-157e-4ed8-b8a2-95be327b4a28"
+      "id": "afda23c4-157e-4ed8-b8a2-95be327b4a28",
+      "auth": {
+        "type": "jwt",
+        "jwt": [
+          {
+            "key": "algorithm",
+            "value": "HS256",
+            "type": "string"
+          },
+          {
+            "key": "isSecretBase64Encoded",
+            "value": false,
+            "type": "boolean"
+          },
+          {
+            "key": "payload",
+            "value": "{}",
+            "type": "string"
+          },
+          {
+            "key": "addTokenTo",
+            "value": "header",
+            "type": "string"
+          },
+          {
+            "key": "headerPrefix",
+            "value": "Bearer",
+            "type": "string"
+          },
+          {
+            "key": "queryParamKey",
+            "value": "token",
+            "type": "string"
+          },
+          {
+            "key": "header",
+            "value": "{}",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "api/admin",
+      "item": [
+        {
+          "name": "users",
+          "id": "14c45d88-4ada-4fba-804d-1e1f3c4f68be",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Web-Client-Token",
+                "value": "{{web_client}}",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bearer}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/admin/users?limit=50&offset=0",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "admin",
+                "users"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "50",
+                  "type": "text",
+                  "uuid": "d030e28e-4baf-4335-9216-316cbbb3bb8e"
+                },
+                {
+                  "key": "offset",
+                  "value": "0",
+                  "type": "text",
+                  "uuid": "a721bf82-823f-492e-ad3b-1718dc702dd0"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "users/{user_id}/ban",
+          "id": "0d2e1ac7-03f0-45ce-9bc8-2e00c2d2af35",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "X-Web-Client-Token",
+                "value": "{{web_client}}",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bearer}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/admin/users/2/ban",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "admin",
+                "users",
+                "2",
+                "ban"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "users/{user_id}/unban",
+          "id": "137de7a8-569c-4071-b2f0-675642248288",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "X-Web-Client-Token",
+                "value": "{{web_client}}",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bearer}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/admin/users/2/unban",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "admin",
+                "users",
+                "2",
+                "unban"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "id": "ad2eb312-36ca-4163-8f9e-1cd2ad4a4bc6"
     },
     {
       "name": "api/user",
@@ -904,12 +1067,12 @@
   ],
   "variable": [
     {
-      "id": "2b4c125d-c377-429c-ade6-5bc0cb3e1886",
+      "id": "e50d7901-360c-4e70-bfb5-1d3fdc98b421",
       "key": "bearer",
       "value": ""
     },
     {
-      "id": "c7168070-005a-4344-a5c0-99ed9ef1013e",
+      "id": "a86266be-ce5a-4fa9-8208-253dfef12e6f",
       "key": "web_client",
       "value": ""
     }
