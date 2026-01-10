@@ -1,31 +1,24 @@
-<div class="w-[380px] border rounded-sm overflow-hidden background-white flex flex-col">
-  ]">
-  <div class="p-[10px] flex justify-center items-center" [style.background]="colorMap[data.type]">
-    <mat-icon class="text-white text-[38px] w-auto h-auto">{{ iconMap[data.type] }}</mat-icon>
+<div class="dialog-container">
+  <div class="dialog-header" [style.background]="colorMap[data.type]">
+    <mat-icon class="dialog-icon">{{ iconMap[data.type] }}</mat-icon>
   </div>
 
-  <div class="p-[20px] text-center">
-    <h2 class="mt-0 ml-0 mr-[10px] text-[20px] font-semibold">{{ data.title }}</h2>
-    <p class="m-0 text-[#555] text-[15px]">{{ data.message }}</p>
+  <div class="dialog-body">
+    <h2 class="title">{{ data.title }}</h2>
+    <p class="message">{{ data.message }}</p>
   </div>
 
-  <div class="flex justify-end p-[16px] gap-[12px]">
+  <div class="dialog-actions">
     <button
       mat-button
       mat-dialog-close
       *ngIf="data.type === 'confirm' || data.type === 'question'"
       (click)="close(false)"
-      class="p-3 bg-gray-300 rounded-4xl outline-gray-400 border-0 hover:bg-gray-400 outline-2 transition-all duration-100"
     >
       {{ data.cancelText || 'Cancelar' }}
     </button>
 
-    <button
-      mat-raised-button
-      color="primary"
-      (click)="close(true)"
-      class="p-3 bg-gray-300 rounded-4xl outline-gray-400 border-0 hover:bg-gray-400 outline-2 transition-all duration-100"
-    >
+    <button mat-raised-button color="primary" (click)="close(true)">
       {{ data.confirmText || 'Aceptar' }}
     </button>
   </div>

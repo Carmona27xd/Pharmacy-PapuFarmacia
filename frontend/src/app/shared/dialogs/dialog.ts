@@ -18,6 +18,7 @@ export interface ComponentDialog {
   standalone: true,
   imports: [MatIconModule, CommonModule],
   templateUrl: './dialog.html',
+  styleUrls: ['./dialog.css'],
 })
 export class CustomDialogComponent {
   iconMap: Record<DialogType, string> = {
