@@ -9,6 +9,7 @@ import { PageHome } from './pages/home/home';
 import { PageRegisterProduct } from './pages/products/register/register-product';
 import { PageDetailsProduct } from './pages/products/details/details-product';
 import { PageSearchForProducts } from './pages/products/search-for/search-for';
+import { ViewMyProfile } from './pages/users/view-my-profile/view-my-profile/view-my-profile';
 
 export const routes: Routes = [
   {
@@ -20,7 +21,7 @@ export const routes: Routes = [
     path: 'inicio',
     component: PageHome,
   },
-  // Users
+  // Auth
   {
     path: 'login',
     component: PageLogin,
@@ -28,6 +29,12 @@ export const routes: Routes = [
   {
     path: 'usuario/registro',
     component: PageRegistration,
+  },
+  // Users
+  {
+    path: 'usuario/perfil',
+    // TODO canActivate: [GuardAuth],
+    component: ViewMyProfile,
   },
   // Products
   {
