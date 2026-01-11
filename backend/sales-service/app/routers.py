@@ -5,6 +5,8 @@ from typing import Optional
 from datetime import datetime
 from app.core.security import get_current_user
 from app.services.sales_service import SalesService, get_sales_service
+from app.services.report_service import ReportService, get_report_service
+from fastapi.responses import JSONResponse, StreamingResponse
 
 router = APIRouter(
     # prefix="/api/sales",
@@ -86,14 +88,52 @@ async def get_sales(
     current_user = Depends(get_current_user),
     sales_service: SalesService = Depends(get_sales_service)
 ):
+    try:
+        filters = {
+            "date_from": date_from,
+            "date_to": date_to,
+            "payment_method": payment_method,
+            "user_id": user_id,
+            "min_total": min_total,
+            "max_total": max_total
+        }
 
-    filters = {
-        "date_from": date_from,
-        "date_to": date_to,
-        "payment_method": payment_method,
-        "user_id": user_id,
-        "min_total": min_total,
-        "max_total": max_total
-    }
+        return sales_service.list_sales(filters, page, size)
+    
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=str(e)
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail=repr(e)
+        )
 
-    return sales_service.list_sales(filters, page, size)
+@router.get("/reports/cash-closing")
+def cash_closing_report(
+    date_from: datetime,
+    date_to: datetime,
+    current_user = Depends(get_current_user),
+    report_service: ReportService = Depends(get_report_service)
+):
+    try:
+        pdf_buffer = report_service.generate_sales_report(date_from, date_to)
+
+    
+        return StreamingResponse(
+            pdf_buffer,
+            media_type="application/pdf",
+            headers={"Content-Disposition": "attachment; filename=cash_closing_report.pdf"}
+        )
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=str(e)
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail=repr(e)
+        )
