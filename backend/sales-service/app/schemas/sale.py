@@ -23,3 +23,24 @@ class SaleResponse(BaseModel):
     created_at: datetime
     items: List[SaleItemResponse]
 
+class SaleRead(SaleCreate):
+    id: int
+    items: List[SaleItemResponse]
+    created_at: datetime
+
+    class Config:
+        orm_mode = True
+
+class SalesListResponse(BaseModel):
+    total: int
+    page: int
+    size: int
+    sales: List[SaleResponse]
+
+class SaleFilters(BaseModel):
+    date_from: Optional[datetime] = None
+    date_to: Optional[datetime] = None
+    payment_method: Optional[str] = None
+    user_id: Optional[int] = None
+    min_total: Optional[float] = None
+    max_total: Optional[float] = None
