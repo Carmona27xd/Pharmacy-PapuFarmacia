@@ -882,11 +882,13 @@
               "query": [
                 {
                   "key": "skip",
-                  "value": "0"
+                  "value": "0",
+                  "uuid": "b6ad0515-ac44-4c8f-a7ff-82054e0115e9"
                 },
                 {
                   "key": "limit",
-                  "value": "100"
+                  "value": "100",
+                  "uuid": "6b01a2b3-fc24-489d-a725-e735d112f46a"
                 }
               ]
             }
@@ -997,7 +999,7 @@
               }
             },
             "url": {
-              "raw": "http://localhost:8080/api/products/create",
+              "raw": "http://localhost:8080/api/products/",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -1006,7 +1008,7 @@
               "path": [
                 "api",
                 "products",
-                "create"
+                ""
               ]
             }
           },
@@ -1095,12 +1097,12 @@
   ],
   "variable": [
     {
-      "id": "46787e37-4786-452a-93b0-2ff4601fb318",
+      "id": "1c4567c5-aad3-4ea2-82c4-0e78e494e95f",
       "key": "bearer",
       "value": ""
     },
     {
-      "id": "36590cca-fc52-4e23-970e-b3c97180d620",
+      "id": "51d1d98e-b4c1-46e6-b644-7f8a57840d60",
       "key": "web_client",
       "value": ""
     }

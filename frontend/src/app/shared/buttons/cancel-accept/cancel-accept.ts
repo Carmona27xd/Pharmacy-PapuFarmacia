@@ -9,6 +9,9 @@ export class ComponentCancelAcceptButtons {
   buttonCancelText = 'Cancelar';
   buttonAcceptText = 'Aceptar';
 
+  @Output() cancel: EventEmitter<void> = new EventEmitter<void>();
+  @Output() accept: EventEmitter<void> = new EventEmitter<void>();
+
   onClickCancel() {
     this.cancel.emit();
   }

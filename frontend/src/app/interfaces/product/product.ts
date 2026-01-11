@@ -1,5 +1,5 @@
-import { InterfaceBaseProduct } from './base-product';
+import { InterfaceProductBase } from './base-product';
 
-interface InterfaceProduct extends InterfaceBaseProduct {
+export interface InterfaceProduct extends InterfaceProductBase {
   id: number;
 }

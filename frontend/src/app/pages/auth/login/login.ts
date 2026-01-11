@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import { ComponentInputField } from '../../../shared/inputs/input-field/input-field';
 import { ServiceAuth } from '../../../services/auth/auth';
 import { ServiceShowCustomDialog } from '../../../shared/dialogs/service-dialog';
-import { InterfaceLogin } from '../../../interfaces/user/user-login';
+import { InterfaceLogin } from '../../../interfaces/user/login';
 
 @Component({
   selector: 'login',

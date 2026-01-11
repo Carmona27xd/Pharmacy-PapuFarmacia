@@ -3,8 +3,10 @@ import { Injectable } from '@angular/core';
 import { catchError, Observable, tap } from 'rxjs';
 import { ServicesConfig } from '../config';
 import { environment } from '../../../environments/environment.development';
-import { InterfaceLogin } from '../../interfaces/user/user-login';
-import { InterfaceUserCreate } from '../../interfaces/user/user-create';
+import { InterfaceLogin } from '../../interfaces/user/login';
+import { InterfacePostUser } from '../../interfaces/user/post-user';
+import { InterfaceLoginResponse } from '../../interfaces/user/login-response';
+import { InterfaceTokenVerified } from '../../interfaces/user/token-verified';
 
 @Injectable({
   providedIn: 'root',
@@ -16,15 +18,16 @@ export class ServiceAuth {
     this.authServiceURL = environment.authService;
   }
 
-  login(loginData: InterfaceLogin): Observable<any> {
-    return this.httpClient.post<any>(`${this.authServiceURL}/login`, loginData).pipe(
-      tap((res: any) => {
-        if (res?.token) {
-          localStorage.setItem('auth_token', res.token);
-        }
-      }),
-      catchError(this.config.handleError)
-    );
+  login(loginData: InterfaceLogin): Observable<InterfaceLoginResponse> {
+    return this.httpClient
+      .post<InterfaceLoginResponse>(`${this.authServiceURL}/login`, loginData)
+      .pipe(
+        tap((res: InterfaceLoginResponse) => {
+          if (res?.access_token) {
+            localStorage.setItem('auth_token', res.access_token);
+          }
+        })
+      );
   }
 
   logout() {
@@ -40,11 +43,11 @@ export class ServiceAuth {
   }
 
   // TODO Check if this is correct and what response are
-  verifyToken(tokenJWT: string) {
-    return this.httpClient.get(`${this.authServiceURL}/verify-token`);
+  verifyToken(tokenJWT: string): Observable<InterfaceTokenVerified> {
+    return this.httpClient.get<InterfaceTokenVerified>(`${this.authServiceURL}/verify-token`);
   }
 
-  postUser(userData: InterfaceUserCreate): Observable<any> {
+  postUser(userData: InterfacePostUser): Observable<any> {
     return this.httpClient.post<any>(`${this.authServiceURL}/register`, userData);
   }
 }

@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ServicesConfig } from '../config';
 import { environment } from '../../../environments/environment.development';
+import { InterfaceUserWithProfilePicture } from '../../interfaces/user/user-photo';
+import { InterfacePostUser } from '../../interfaces/user/post-user';
+import { InterfacePutUser } from '../../interfaces/user/put-user';
 
 @Injectable({
   providedIn: 'root',
@@ -15,25 +18,22 @@ export class ServiceUser {
     this.userServiceURL = environment.userService;
   }
 
-  getData(idUser: number) {
+  getData() {
     const headers = { Authorization: 'Bearer token' };
-    return this.httpClient.get<UserTemplate>(`${this.authServiceURL}/${idUser}`, { headers });
+    return this.httpClient.get<InterfaceUserWithProfilePicture>(`${this.authServiceURL}/me`, {
+      headers,
+    });
   }
 
-  postData(user: UserTemplate) {
-    return this.httpClient.post<UserTemplate>(`${this.authServiceURL}`, {});
+  postData(userData: InterfacePostUser) {
+    return this.httpClient.post<InterfacePostUser>(`${this.authServiceURL}/register`, userData);
   }
 
-  putData(user: UserTemplate) {
+  putData(userData: InterfacePutUser, user_id: number) {
     const headers = { Authorization: 'Bearer token' };
-    return this.httpClient.put<UserTemplate>(`${this.authServiceURL}/${user.id}`, {}, { headers });
-  }
-
-  putProfilePhoto(user: UserTemplate) {
-    const headers = { Authorization: 'Bearer token' };
-    return this.httpClient.put<UserTemplate>(
-      `${this.authServiceURL}/${user.id}/picture`,
-      {},
+    return this.httpClient.patch<InterfacePutUser>(
+      `${this.authServiceURL}/users/${user_id}`,
+      userData,
       { headers }
     );
   }
