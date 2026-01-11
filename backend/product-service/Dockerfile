@@ -1,19 +1,19 @@
-FROM python:3.11-slim
+FROM python:3.11-slim-bookworm
 
-# Cambiamos /app por /usr/src para evitar colisiones de nombres con tu carpeta 'app'
-WORKDIR /usr/src
+WORKDIR /app
 
-# PYTHONPATH debe apuntar al padre de la carpeta 'app'
-ENV PYTHONPATH=/usr/src
+RUN apt-get update && apt-get install -y postgresql-client && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copiamos todo el contenido de product-service a /usr/src
-# Esto creará /usr/src/app/, /usr/src/requirements.txt, etc.
-COPY . .
+COPY ./app ./app
+COPY ./alembic.ini .
+COPY ./alembic ./alembic
 
-EXPOSE 8083
+# Expose the port the app runs on
+EXPOSE 8080
 
-# Ejecutamos desde /usr/src buscando el paquete app.main
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8083"]
+# Define the command to run the application
+# We will override this with 'command:' in docker-compose to run the migration first
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8080"]

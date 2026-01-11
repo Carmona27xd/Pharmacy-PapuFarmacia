@@ -1,5 +1,6 @@
 import re
 from pydantic import BaseModel, EmailStr, Field, field_validator
+from typing import Optional
 
 #Base schema 
 class UserBase(BaseModel):
@@ -7,7 +8,7 @@ class UserBase(BaseModel):
     full_name: str
     username: str
     is_active: bool = True
-    role_id: int = 2
+    role_id: int = 1
 
 class UserLogin(BaseModel):
     identifier: str
@@ -30,6 +31,8 @@ class UserCreate(UserBase):
     def validate_password_strength(cls, v):
         if len(v) < 8:
             raise ValueError('Password must be at least 8 characters')
+        if len(v) > 50:
+            raise ValueError('Password must be less than 50 characters')
         if not any(c.isupper() for c in v):
             raise ValueError('Password must contain at least one uppercase letter')
         if not any(c.islower() for c in v):
@@ -59,4 +62,12 @@ class Token(BaseModel):
 class TokenData(BaseModel):
     user_id: int | None = None
 
-#pass recovery options
+#user update schemas 
+class UserUpdate(BaseModel):
+    is_active: Optional[bool] = None
+    full_name: Optional[str] = Field(default=None, min_length=2, max_length=50)
+    username: Optional[str] = Field(default=None, min_length=4, max_length=50)
+    role_id: Optional[int] = Field(default=None, ge=1)
+
+class FullUserResponse(User):
+    profile_picture: str | None

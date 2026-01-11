@@ -1,5 +1,5 @@
 from datetime import timedelta
-from fastapi import Depends
+from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 
@@ -7,10 +7,11 @@ from app import schemas, security
 from app.database import get_db
 from app.repositories import user_repository
 import httpx
-import os
+import os, requests
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
-USER_SERVICE_URL = os.getenv("USER_SERVICE_URL")
+USER_SERVICE_PHOTO_URL = os.getenv("USER_SERVICE_PHOTO_URL")
+USER_SERVICE_PROFILE_URL = os.getenv("USER_SERVICE_PROFILE_URL")
 
 class AuthService:
     def __init__(self, db: Session):
@@ -39,7 +40,7 @@ class AuthService:
 
             try: 
                 with httpx.Client() as client:
-                    response = client.post(USER_SERVICE_URL, json=payload, timeout=5)
+                    response = client.post(USER_SERVICE_PHOTO_URL, json=payload, timeout=5)
                     response.raise_for_status()
             except httpx.RequestError as e:
                 user_repository.delete_user(self.db, db_user.id)
@@ -74,12 +75,57 @@ class AuthService:
             print(f"[LOGIN ERROR] {e}")   # <== Add this temporarily
             raise Exception("Login service unavailable - please try again later")
 
+    def get_all_users(self, limit: int = 100, offset: int = 0):
+        users = user_repository.get_all_users(self.db, limit=limit, offset=offset)
+        if not users:
+            raise ValueError("No users registered/active")
+        return users
     
     def get_user_by_id(self, user_id: int) -> schemas.User:
         user = user_repository.get_user_by_id(self.db, user_id)
         if not user:
             raise ValueError("User not found")
         return user
+
+    #admin user update
+    def update_user(self, user_id: int, user_data: schemas.UserUpdate):
+        updates = user_data.model_dump(exclude_none=True)
+
+        updated = user_repository.update_user(self.db, user_id, updates)
+        if not updated:
+            raise ValueError("User not found")
+        return updated
+
+    def get_all_user_data(self, user_id: int, token: str):
+        try:
+            base_user = user_repository.get_user_by_id(self.db, user_id)
+
+            headers = self.forward_auth_header(token)
+
+            profile_resp = requests.get(
+                f"{USER_SERVICE_PROFILE_URL}/{user_id}",
+                headers=headers
+            )
+
+            if profile_resp.status_code != 200:
+                raise Exception(profile_resp.json().get("detail", "Error retrieving profile"))
+
+            profile = profile_resp.json()
+
+            return {
+                **schemas.User.model_validate(base_user).model_dump(),
+                **profile
+            }
+
+        except ValueError as e:
+            raise e
+        except Exception as e:
+            print(f"ERROR in get_all_user_data: {e}")
+            raise Exception("Service unavailable, please try again later")
+
     
+    def forward_auth_header(self, token: str):
+        return {"Authorization": f"Bearer {token}"}
+
 def get_auth_service(db: Session = Depends(get_db)):
     return AuthService(db)

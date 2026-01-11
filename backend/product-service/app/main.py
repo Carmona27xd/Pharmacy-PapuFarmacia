@@ -1,37 +1,31 @@
-from fastapi import FastAPI, Depends, HTTPException, status
-from motor.motor_asyncio import AsyncIOMotorClient
-import os
+from fastapi import FastAPI, status
+from fastapi.middleware.cors import CORSMiddleware
+from app.routers import router
+from app.database import create_tables
 
-from app.services.product_service import ProductService
-from app import schemas 
+async def lifespan(app: FastAPI):
+    # Startup actions
+    create_tables()
+    yield
+    # Shutdown actions
 
-app = FastAPI(title="Pharma Product Service")
+app = FastAPI(
+    title="Product service",
+    description="For managing products in the inventory",
+    version="1.0.0",
+    lifespan=lifespan,
+    docs_url="/docs",
+    openapi_url="/openapi.json",
+    root_path="/api/products"
+)
 
-MONGO_URL = os.getenv("DATABASE_URL", "mongodb://localhost:27017")
+app.add_middleware(
+    CORSMiddleware,
+    # TODO Cors
+    allow_origins=["*"],
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-db_client: AsyncIOMotorClient = None
-
-@app.on_event("startup")
-async def startup_db_client():
-    global db_client
-    db_client = AsyncIOMotorClient(MONGO_URL)
-    print("Conectado a Mongo DB")
-
-@app.on_event("shutdown")
-async def shutdown_db_client():
-    db_client.close()
-
-def get_product_service():
-    return ProductService(db_client)
-
-@app.post("/products", status_code=status.HTTP_201_CREATED)
-async def create_product(
-    product_data: schemas.ProductCreate,
-    service: ProductService = Depends(get_product_service) 
-):
-    try:
-        product_id = await service.register_product(product_data)
-        return {"message": "Producto registrado", "id": product_id}
-    except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
-
+app.include_router(router)
