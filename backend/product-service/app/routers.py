@@ -12,7 +12,7 @@ def read_root():
     return {
         "message": "Product Service API",
         "version": "1.0.0",
-        "docs": "api/products/docs"
+        "docs": "/docs"
     }
     
 # Health ##################################################
