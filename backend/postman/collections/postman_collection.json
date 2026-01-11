@@ -114,7 +114,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"email\": \"aSD@dominio.com\",\r\n    \"full_name\": \"Juan Pérez\",\r\n    \"username\": \"juaerez110qaq\",\r\n    \"password\": \"Password123\",\r\n    \"is_active\": true,\r\n    \"role_id\": 2\r\n}",
+              "raw": "{\r\n    \"email\": \"examplqeq@dominio.com\",\r\n    \"full_name\": \"Juan Pérez\",\r\n    \"username\": \"juanpeqreqz\",\r\n    \"password\": \"Password123\",\r\n    \"is_active\": true,\r\n    \"role_id\": 1\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -236,24 +236,28 @@
               {
                 "key": "X-Web-Client-Token",
                 "value": "{{web_client}}",
-                "type": "text"
+                "type": "text",
+                "disabled": true
               },
               {
                 "key": "Authorization",
                 "value": "Bearer {{bearer}}",
-                "type": "text"
+                "type": "text",
+                "disabled": true
               },
               {
                 "key": "WWW-Authenticate",
                 "value": "Bearer {{bearer}}",
                 "type": "text",
-                "uuid": "74febc3f-3eb1-47ef-8145-381223f66d0e"
+                "uuid": "74febc3f-3eb1-47ef-8145-381223f66d0e",
+                "disabled": true
               },
               {
                 "key": "token",
                 "value": "{{bearer}}",
                 "type": "text",
-                "uuid": "8ce1cbc9-21a0-457b-992c-25c7d483d968"
+                "uuid": "8ce1cbc9-21a0-457b-992c-25c7d483d968",
+                "disabled": true
               }
             ],
             "body": {
