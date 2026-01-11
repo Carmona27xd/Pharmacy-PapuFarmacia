@@ -221,6 +221,16 @@
             "disableBodyPruning": true
           },
           "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwicm9sZV9pZCI6MSwiZXhwIjoxNzY4MDkzOTU2fQ.Tpr3z6-32xEIEf0WuaU74NDAsfL6QM-TSOgcZ0tS9_s",
+                  "type": "string"
+                }
+              ]
+            },
             "method": "GET",
             "header": [
               {
@@ -1079,12 +1089,12 @@
   ],
   "variable": [
     {
-      "id": "16dee361-63c4-442d-874a-735a47fce4a9",
+      "id": "fa756794-08c4-4a5f-a900-548a16fba316",
       "key": "bearer",
       "value": ""
     },
     {
-      "id": "dfcf9c8b-b3df-4a11-93ed-8725bc4a3db6",
+      "id": "ab413942-29b6-46d9-8cc3-3db58cd2a118",
       "key": "web_client",
       "value": ""
     }
