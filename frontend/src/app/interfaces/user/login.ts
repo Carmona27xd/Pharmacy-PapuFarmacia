@@ -1,4 +1,4 @@
 export interface InterfaceLogin {
-  identifier: string;
+  identifier: string; // username o email
   password: string;
 }
