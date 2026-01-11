@@ -114,7 +114,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"email\": \"examplqeq@dominio.com\",\r\n    \"full_name\": \"Juan Pérez\",\r\n    \"username\": \"juanpeqreqz\",\r\n    \"password\": \"Password123\",\r\n    \"is_active\": true,\r\n    \"role_id\": 1\r\n}",
+              "raw": "{\r\n    \"email\": \"example@dominio.com\",\r\n    \"full_name\": \"Juan Pérez\",\r\n    \"username\": \"exampleUser\",\r\n    \"password\": \"Password123\",\r\n    \"is_active\": true,\r\n    \"role_id\": 2\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -146,12 +146,13 @@
               {
                 "key": "http_apikey",
                 "value": "{{web_client}}",
-                "type": "text"
+                "type": "text",
+                "disabled": true
               }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"identifier\": \"admin@example.com\",\r\n    \"password\": \"Password123\"\r\n}",
+              "raw": "{\r\n    \"identifier\": \"admin\",\r\n    \"password\": \"Password123\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -226,40 +227,13 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwicm9sZV9pZCI6MSwiZXhwIjoxNzY4MDkzOTU2fQ.Tpr3z6-32xEIEf0WuaU74NDAsfL6QM-TSOgcZ0tS9_s",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwicm9sZV9pZCI6MSwiZXhwIjoxNzY4MTIzNjYyfQ.rfzqwxzcysow8iJQ5AF4nvA90RntqmqH5sAnWw2yPSQ",
                   "type": "string"
                 }
               ]
             },
             "method": "GET",
-            "header": [
-              {
-                "key": "X-Web-Client-Token",
-                "value": "{{web_client}}",
-                "type": "text",
-                "disabled": true
-              },
-              {
-                "key": "Authorization",
-                "value": "Bearer {{bearer}}",
-                "type": "text",
-                "disabled": true
-              },
-              {
-                "key": "WWW-Authenticate",
-                "value": "Bearer {{bearer}}",
-                "type": "text",
-                "uuid": "74febc3f-3eb1-47ef-8145-381223f66d0e",
-                "disabled": true
-              },
-              {
-                "key": "token",
-                "value": "{{bearer}}",
-                "type": "text",
-                "uuid": "8ce1cbc9-21a0-457b-992c-25c7d483d968",
-                "disabled": true
-              }
-            ],
+            "header": [],
             "body": {
               "mode": "raw",
               "raw": ""
@@ -292,12 +266,14 @@
               {
                 "key": "X-Web-Client-Token",
                 "value": "{{web_client}}",
-                "type": "text"
+                "type": "text",
+                "disabled": true
               },
               {
                 "key": "Authorization",
                 "value": "Bearer {{bearer}}",
-                "type": "text"
+                "type": "text",
+                "disabled": true
               }
             ],
             "body": {
@@ -319,11 +295,13 @@
               "query": [
                 {
                   "key": "limit",
-                  "value": "50"
+                  "value": "50",
+                  "uuid": "22da1257-d838-4871-b49c-4cab2578fd78"
                 },
                 {
                   "key": "offset",
-                  "value": "0"
+                  "value": "0",
+                  "uuid": "8b91ec97-e29c-4d2a-bd3d-2a7d6c433de3"
                 }
               ]
             }
@@ -415,6 +393,67 @@
           }
         ]
       }
+    },
+    {
+      "name": "api/admin",
+      "item": [
+        {
+          "name": "users",
+          "id": "883ccf3d-f720-48f0-a835-e14f91d67eed",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "users/{user_id}/ban",
+          "id": "ff2b2383-c931-41fb-8a60-22d1dac31d42",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text",
+                "uuid": "5a329e47-c892-4a2d-bc32-f572cb903246"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/admin/users/1/ban",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "admin",
+                "users",
+                "1",
+                "ban"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "users/{user_id}/unban",
+          "id": "e92e2326-841b-45dd-b677-12e165e1fe7e",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": []
+        }
+      ],
+      "id": "5468a8c1-16f9-4487-8c6e-681a567bee42"
     },
     {
       "name": "api/admin",
