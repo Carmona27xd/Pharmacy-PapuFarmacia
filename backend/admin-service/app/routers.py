@@ -8,7 +8,6 @@ from app.core.security import admin_required
 router = APIRouter(prefix="/api/admin", tags=["Admin"])
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
 
-# Get list of users #######################################
 @router.get("/users", response_model=list[User])
 async def list_users(
     limit: int = 50,
@@ -19,7 +18,7 @@ async def list_users(
 ):
     return await admin_service.list_users(token, limit, offset)
 
-# Set a ban to user #######################################
+
 @router.patch("/users/{user_id}/ban", response_model=User)
 async def ban_user(
     user_id: int,
@@ -29,7 +28,7 @@ async def ban_user(
 ):
     return await admin_service.ban_user(token, user_id)
 
-# Unban user ##############################################
+
 @router.patch("/users/{user_id}/unban", response_model=User)
 async def unban_user(
     user_id: int,

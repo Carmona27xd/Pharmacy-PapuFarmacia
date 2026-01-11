@@ -6,7 +6,7 @@ from app.database import get_db
 
 router = APIRouter()
 
-# INFO ####################################################
+# Root endpoint
 @router.get("/")
 def read_root():
     return {
@@ -15,7 +15,7 @@ def read_root():
         "docs": "/docs"
     }
     
-# Health ##################################################
+# Health check general
 @router.get("/health",
     status_code=status.HTTP_200_OK,
     summary="Health check",
@@ -23,7 +23,6 @@ def read_root():
 def health_check():
     return {"status": "ok", "service": "product-service"}
 
-# Get list of products ####################################
 @router.get(
     "/products", 
     response_model=List[schemas.Product],
@@ -38,7 +37,6 @@ def get_products(
 ):
     return crud.get_products(db, skip=skip, limit=limit)
 
-# Search product by query #################################
 @router.get(
     "/search",
     response_model=List[schemas.Product],
@@ -55,7 +53,6 @@ def search_products(
 ):
     return crud.search_products(db, name, provider, min_price, max_price)
 
-# Get product by ID #######################################
 @router.get(
     "/{product_id}",
     response_model=schemas.Product,
@@ -69,7 +66,6 @@ def get_product(
 ):
     return crud.get_product(db, product_id)
 
-# Create product ##########################################
 @router.post(
     "/",
     response_model=schemas.Product,
@@ -84,7 +80,6 @@ def create_product(
     # TODO Manage images upload
     return crud.create_product(db, product)
 
-# Modicy product ##########################################
 @router.put(
     "/{product_id}",
     response_model=schemas.Product,
@@ -99,7 +94,6 @@ def update_product(
 ):
     return crud.update_product(db, product_id, product)
 
-# Delete product by ID ####################################
 @router.delete(
     "/{product_id}",
     response_model=schemas.Product,
