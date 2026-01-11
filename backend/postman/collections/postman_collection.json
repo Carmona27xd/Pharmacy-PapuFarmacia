@@ -100,18 +100,7 @@
           "id": "6e1d20ad-9cdc-434f-9559-ec6d5fd135c5",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "http_apikey",
-                "value": "{{web_client}}",
-                "type": "text"
-              },
-              {
-                "key": "",
-                "value": "",
-                "type": "text"
-              }
-            ],
+            "header": [],
             "body": {
               "mode": "raw",
               "raw": "{\r\n    \"email\": \"example@dominio.com\",\r\n    \"full_name\": \"Juan Pérez\",\r\n    \"username\": \"exampleUser\",\r\n    \"password\": \"Password123\",\r\n    \"is_active\": true,\r\n    \"role_id\": 2\r\n}",
@@ -142,17 +131,10 @@
           "id": "d85347cd-c5f5-4f35-bd8c-c48004014b38",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "http_apikey",
-                "value": "{{web_client}}",
-                "type": "text",
-                "disabled": true
-              }
-            ],
+            "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"identifier\": \"admin\",\r\n    \"password\": \"Password123\"\r\n}",
+              "raw": "{\r\n    \"identifier\": \"exampleUser\",\r\n    \"password\": \"Password123\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -182,17 +164,30 @@
             "disableBodyPruning": true
           },
           "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearer}}",
+                  "type": "string"
+                }
+              ]
+            },
             "method": "GET",
             "header": [
               {
-                "key": "X-Web-Client-Token",
-                "value": "{{web_client}}",
-                "type": "text"
-              },
-              {
                 "key": "Authorization",
                 "value": "Bearer {{bearer}}",
-                "type": "text"
+                "type": "text",
+                "disabled": true
+              },
+              {
+                "key": "X-Web-Client-Token",
+                "value": "{{web_client}}",
+                "type": "text",
+                "uuid": "188b1d37-7d2f-476b-9863-887321c9b000",
+                "disabled": true
               }
             ],
             "body": {
@@ -211,7 +206,8 @@
                 "auth",
                 "verify-token"
               ]
-            }
+            },
+            "description": "No funciona con token: usuario \"admin\" y contraseña \"Password\""
           },
           "response": []
         },
@@ -312,22 +308,25 @@
           "name": "users/{user_id]",
           "id": "bbdec774-286d-47af-9e69-1e75fd6bb678",
           "request": {
+            "auth": {
+              "type": "noauth"
+            },
             "method": "PATCH",
             "header": [
               {
-                "key": "X-Web-Client-Token",
-                "value": "{{web_client}}",
+                "key": "Authorization",
+                "value": "Bearer {{bearer}}",
                 "type": "text"
               },
               {
-                "key": "Authorization",
-                "value": "Bearer {{bearer}}",
+                "key": "X-Web-Client-Token",
+                "value": "{{web_client}}",
                 "type": "text"
               }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"is_active\": true,\r\n    \"full_name\": \"Juan Pérez\",\r\n    \"username\": \"juan_perez110qaqsss\",\r\n    \"role_id\": 1\r\n}",
+              "raw": "{\r\n    \"is_active\": true,\r\n    \"full_name\": \"Juan Pérez\",\r\n    \"username\": \"anotherExample\",\r\n    \"role_id\": 1\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -335,7 +334,7 @@
               }
             },
             "url": {
-              "raw": "http://localhost:8080/api/auth/users/2",
+              "raw": "http://localhost:8080/api/auth/users/1",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -345,53 +344,17 @@
                 "api",
                 "auth",
                 "users",
-                "2"
+                "1"
               ]
-            }
+            },
+            "description": "No funciona"
           },
           "response": []
         }
       ],
       "id": "afda23c4-157e-4ed8-b8a2-95be327b4a28",
       "auth": {
-        "type": "jwt",
-        "jwt": [
-          {
-            "key": "algorithm",
-            "value": "HS256",
-            "type": "string"
-          },
-          {
-            "key": "isSecretBase64Encoded",
-            "value": false,
-            "type": "boolean"
-          },
-          {
-            "key": "payload",
-            "value": "{}",
-            "type": "string"
-          },
-          {
-            "key": "addTokenTo",
-            "value": "header",
-            "type": "string"
-          },
-          {
-            "key": "headerPrefix",
-            "value": "Bearer",
-            "type": "string"
-          },
-          {
-            "key": "queryParamKey",
-            "value": "token",
-            "type": "string"
-          },
-          {
-            "key": "header",
-            "value": "{}",
-            "type": "string"
-          }
-        ]
+        "type": "noauth"
       }
     },
     {
@@ -1132,12 +1095,12 @@
   ],
   "variable": [
     {
-      "id": "fa756794-08c4-4a5f-a900-548a16fba316",
+      "id": "46787e37-4786-452a-93b0-2ff4601fb318",
       "key": "bearer",
       "value": ""
     },
     {
-      "id": "ab413942-29b6-46d9-8cc3-3db58cd2a118",
+      "id": "36590cca-fc52-4e23-970e-b3c97180d620",
       "key": "web_client",
       "value": ""
     }
