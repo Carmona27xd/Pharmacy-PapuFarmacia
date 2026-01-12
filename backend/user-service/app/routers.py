@@ -3,7 +3,7 @@ from app.services.user_service import UserService, get_user_service
 from app.core.security import get_current_user
 from app import schemas
 
-router = APIRouter(prefix="/api/user", tags=["Users"])
+router = APIRouter(tags=["Users"])
 
 @router.get("/profile/{user_id}", response_model=schemas.UserProfileResponse)
 def get_user_profile(
@@ -36,6 +36,8 @@ def create_user_profile(
     profile_data: schemas.UserProfileCreate,
     user_service: UserService = Depends(get_user_service)
 ):
+    profile_id = user_service.create_profile(profile_data)
+    return {"message": "Profile created successfully", "profile_id": profile_id}
     try: 
         profile_id = user_service.create_profile(profile_data)
         return {"message": "Profile created successfully", "profile_id": profile_id}
