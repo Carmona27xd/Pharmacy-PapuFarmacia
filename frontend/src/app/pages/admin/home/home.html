@@ -1,0 +1,71 @@
+<div class="container">
+
+  <!-- Title -->
+  <h2>Admin – Manage Users</h2>
+
+  <!-- Loading -->
+  <div *ngIf="loading">
+    Loading users...
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="error" class="error">
+    {{ error }}
+  </div>
+
+  <!-- Users Table -->
+  <table *ngIf="!loading && users.length > 0" class="table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Full Name</th>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let user of users">
+        <td>{{ user.id }}</td>
+        <td>{{ user.full_name }}</td>
+        <td>{{ user.username }}</td>
+        <td>{{ user.email }}</td>
+
+        <!-- Simple role mapping -->
+        <td>
+          {{ user.role_id === 1 ? 'Admin' : 'User' }}
+        </td>
+
+        <td>
+          <span *ngIf="user.is_active">Active</span>
+          <span *ngIf="!user.is_active">Banned</span>
+        </td>
+
+        <td>
+          <!-- Show Ban or Unban button depending on active state -->
+          <button
+            *ngIf="user.is_active"
+            (click)="banUser(user.id)"
+          >
+            Ban
+          </button>
+
+          <button
+            *ngIf="!user.is_active"
+            (click)="unbanUser(user.id)"
+          >
+            Unban
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- No users -->
+  <div *ngIf="!loading && users.length === 0">
+    No users found.
+  </div>
+</div>

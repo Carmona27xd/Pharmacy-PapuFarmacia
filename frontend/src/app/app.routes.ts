@@ -10,6 +10,7 @@ import { PageRegisterProduct } from './pages/products/register/register-product'
 import { PageDetailsProduct } from './pages/products/details/details-product';
 import { PageSearchForProducts } from './pages/products/search-for/search-for';
 import { ViewMyProfile } from './pages/users/view-my-profile/view-my-profile/view-my-profile';
+import { AdminPage } from './pages/admin/home/home';
 
 export const routes: Routes = [
   {
@@ -50,5 +51,11 @@ export const routes: Routes = [
     path: 'productos/detalles/:productId',
     component: PageDetailsProduct,
   },
+    //admin feed
+  { 
+    path: 'admin/home',
+    component: AdminPage
+  },
   { path: '**', component: PageNotFound },
+
 ];
