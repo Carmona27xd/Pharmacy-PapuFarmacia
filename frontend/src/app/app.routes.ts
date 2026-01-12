@@ -10,6 +10,7 @@ import { PageRegisterProduct } from './pages/products/register/register-product'
 import { PageDetailsProduct } from './pages/products/details/details-product';
 import { PageSearchForProducts } from './pages/products/search-for/search-for';
 import { ViewMyProfile } from './pages/users/view-my-profile/view-my-profile/view-my-profile';
+import { PageAdminHome } from './pages/admin/home/home/home';
 
 export const routes: Routes = [
   {
@@ -29,6 +30,12 @@ export const routes: Routes = [
   {
     path: 'usuario/registro',
     component: PageRegistration,
+  },
+  // Admin
+  {
+    path: 'admin/home',
+    // TODO canActivate: [GuardAuth],
+    component: PageAdminHome,
   },
   // Users
   {
