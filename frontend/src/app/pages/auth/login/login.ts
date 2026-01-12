@@ -52,7 +52,10 @@ export class PageLogin implements OnInit {
         console.error('Error en login:', err);
 
         if (err.status === 401) {
-          this.customDialogService.error('Error de autenticación', err.message);
+          this.customDialogService.error(
+            'Error de autenticación',
+            'Crdenciales inválidas. Intenta nuevamente.'
+          );
         } else {
           this.customDialogService.error('Error de servidor', err.message);
         }
