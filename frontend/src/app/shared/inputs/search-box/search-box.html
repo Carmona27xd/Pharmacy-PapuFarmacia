@@ -1,4 +1,5 @@
 <form
+  (ngSubmit)="onSearch()"
   class="inline-flex gap-0 align-middle w-72 border-0 rounded-lg p-0 focus-within:outline-2 focus-within:outline-red-800 focus-within:rounded-lg"
   role="search"
 >
@@ -6,13 +7,15 @@
     type="search"
     placeholder="Buscar..."
     aria-label="Buscar"
+    [(ngModel)]="searchQuery"
+    name="searchQuery"
+    (keypress)="onKeyPress($event)"
     class="rounded-l-md w-64 h-7 px-2 m-0 outline-0 bg-white text-black placeholder:text-gray-500 placeholder:text-sm"
   />
   <button
-    type="button"
-    class="bg-white text-black rounded-r-md w-8 h-7 p-auto"
+    type="submit"
+    class="bg-white text-black rounded-r-md w-8 h-7 p-auto hover:bg-gray-100 transition-colors"
     aria-label="Buscar"
-    href="/buscar"
   >
     <search-svg class="auto"></search-svg>
   </button>

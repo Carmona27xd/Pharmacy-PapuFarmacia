@@ -4,7 +4,6 @@ import { filter } from 'rxjs/operators';
 
 import { ComponentNavBar } from './shared/layout/nav-bar/nav-bar';
 import { ComponentFooter } from './shared/layout/footer/footer';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',

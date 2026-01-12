@@ -2,49 +2,39 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ServicesConfig } from '../config';
 import { environment } from '../../../environments/environment.development';
-
-// TODO Validate data attributes from backend
-export interface UserTemplate {
-  id?: number;
-  fullName?: string;
-  username?: string;
-  email?: string;
-  password?: string;
-  isActive?: boolean;
-  idRole?: number;
-}
-
-export interface LoginTemplate {
-  identifier: string;
-  password: string;
-}
+import { InterfaceUserWithProfilePicture } from '../../interfaces/user/user-photo';
+import { InterfacePostUser } from '../../interfaces/user/post-user';
+import { InterfacePutUser } from '../../interfaces/user/put-user';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ServiceUser {
-  private baseUrl: string = '';
+  private authServiceURL: string = '';
+  private userServiceURL: string = '';
 
   constructor(private httpClient: HttpClient, private config: ServicesConfig) {
-    this.baseUrl = `${environment.userService}/profiles`;
+    this.authServiceURL = environment.authService;
+    this.userServiceURL = environment.userService;
   }
 
-  getData(idUser: number) {
+  getData() {
     const headers = { Authorization: 'Bearer token' };
-    return this.httpClient.get<UserTemplate>(`${this.baseUrl}/${idUser}`, { headers });
+    return this.httpClient.get<InterfaceUserWithProfilePicture>(`${this.authServiceURL}/me`, {
+      headers,
+    });
   }
 
-  postData(user: UserTemplate) {
-    return this.httpClient.post<UserTemplate>(`${this.baseUrl}`, {});
+  postData(userData: InterfacePostUser) {
+    return this.httpClient.post<InterfacePostUser>(`${this.authServiceURL}/register`, userData);
   }
 
-  putData(user: UserTemplate) {
+  putData(userData: InterfacePutUser, user_id: number) {
     const headers = { Authorization: 'Bearer token' };
-    return this.httpClient.put<UserTemplate>(`${this.baseUrl}/${user.id}`, {}, { headers });
-  }
-
-  putProfilePhoto(user: UserTemplate) {
-    const headers = { Authorization: 'Bearer token' };
-    return this.httpClient.put<UserTemplate>(`${this.baseUrl}/${user.id}/picture`, {}, { headers });
+    return this.httpClient.patch<InterfacePutUser>(
+      `${this.authServiceURL}/users/${user_id}`,
+      userData,
+      { headers }
+    );
   }
 }

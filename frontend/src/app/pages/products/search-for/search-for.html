@@ -1,13 +1,15 @@
-<header class="justify-self-start m-3">
-  <h1>Resultados para: "{{ searchQuery }}"</h1>
+<header class="m-3">
+  <h1 class="text-xl font-bold mb-4">Resultados para: "{{ searchQuery }}"</h1>
 
-  <div class="container text-center">
-    @if (results.length > 0) { @for (item of results; track item.id) {
-    <div class="border p-2 rounded">
-      {{ item.name }}
-    </div>
-    } } @else {
-    <div class="mt-4 text-gray-500">No se encontraron resultados.</div>
+  @if (loading) {
+  <p class="text-gray-500">Buscando productos...</p>
+  } @if (!loading && products.length === 0) {
+  <div class="mt-4 text-gray-500">No se encontraron resultados.</div>
+  } @if (products.length > 0) {
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    @for (item of products; track item.id) {
+    <app-product-card-1 [product]="item"> </app-product-card-1>
     }
   </div>
+  }
 </header>

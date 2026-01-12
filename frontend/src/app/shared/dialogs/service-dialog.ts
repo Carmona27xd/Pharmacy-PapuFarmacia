@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { CustomDialogComponent, ComponentDialog, DialogType } from './dialog';
+import { ComponentCustomDialog, ComponentDialog, DialogType } from './dialog';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ServiceDialog {
+export class ServiceShowCustomDialog {
   constructor(private dialog: MatDialog) {}
 
   open(type: DialogType, title: string, message = '') {
-    return this.dialog.open(CustomDialogComponent, {
+    return this.dialog.open(ComponentCustomDialog, {
       width: '380px',
       data: { type, title, message },
     });
@@ -33,7 +33,7 @@ export class ServiceDialog {
 
   question(title: string, message = '') {
     return this.dialog
-      .open(CustomDialogComponent, {
+      .open(ComponentCustomDialog, {
         width: '380px',
         data: {
           type: 'question',
