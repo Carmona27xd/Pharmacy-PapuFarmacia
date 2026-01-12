@@ -103,7 +103,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"email\": \"example@dominio.com\",\r\n    \"full_name\": \"Juan Pérez\",\r\n    \"username\": \"exampleUser\",\r\n    \"password\": \"Password123\",\r\n    \"is_active\": true,\r\n    \"role_id\": 2\r\n}",
+              "raw": "{\r\n    \"email\": \"example1@dominio.com\",\r\n    \"full_name\": \"Juan Pérez\",\r\n    \"username\": \"exampleUser1\",\r\n    \"password\": \"Password123\",\r\n    \"is_active\": true,\r\n    \"role_id\": 2\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -134,7 +134,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"identifier\": \"exampleUser\",\r\n    \"password\": \"Password123\"\r\n}",
+              "raw": "{\r\n    \"identifier\": \"exampleUser1\",\r\n    \"password\": \"Password123\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -164,23 +164,12 @@
             "disableBodyPruning": true
           },
           "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{bearer}}",
-                  "type": "string"
-                }
-              ]
-            },
             "method": "GET",
             "header": [
               {
                 "key": "Authorization",
                 "value": "Bearer {{bearer}}",
-                "type": "text",
-                "disabled": true
+                "type": "text"
               },
               {
                 "key": "X-Web-Client-Token",
@@ -219,17 +208,17 @@
           },
           "request": {
             "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwicm9sZV9pZCI6MSwiZXhwIjoxNzY4MTIzNjYyfQ.rfzqwxzcysow8iJQ5AF4nvA90RntqmqH5sAnWw2yPSQ",
-                  "type": "string"
-                }
-              ]
+              "type": "noauth"
             },
             "method": "GET",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bearer}}",
+                "type": "text",
+                "uuid": "61bd9eb3-93a3-4929-a3b4-de92af91ca9c"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": ""
@@ -952,7 +941,7 @@
               "raw": ""
             },
             "url": {
-              "raw": "http://localhost:8080/api/products?product_id=1",
+              "raw": "http://localhost:8080/api/products/1",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -960,13 +949,8 @@
               "port": "8080",
               "path": [
                 "api",
-                "products"
-              ],
-              "query": [
-                {
-                  "key": "product_id",
-                  "value": "1"
-                }
+                "products",
+                "1"
               ]
             }
           },
@@ -999,7 +983,7 @@
               }
             },
             "url": {
-              "raw": "http://localhost:8080/api/products/",
+              "raw": "http://localhost:8080/api/products/create",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -1008,7 +992,7 @@
               "path": [
                 "api",
                 "products",
-                ""
+                "create"
               ]
             }
           },
@@ -1041,7 +1025,7 @@
               }
             },
             "url": {
-              "raw": "http://localhost:8080/api/products/3/update",
+              "raw": "http://localhost:8080/api/products/1/update",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -1050,7 +1034,7 @@
               "path": [
                 "api",
                 "products",
-                "3",
+                "1",
                 "update"
               ]
             }
@@ -1097,12 +1081,12 @@
   ],
   "variable": [
     {
-      "id": "1c4567c5-aad3-4ea2-82c4-0e78e494e95f",
+      "id": "2c6a28f7-6165-4e97-b0f1-bffa524024b8",
       "key": "bearer",
       "value": ""
     },
     {
-      "id": "51d1d98e-b4c1-46e6-b644-7f8a57840d60",
+      "id": "20e42ddf-f9d1-4a10-a42b-7ce70b75b357",
       "key": "web_client",
       "value": ""
     }

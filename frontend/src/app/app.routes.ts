@@ -16,6 +16,7 @@ import { OrdersListComponent } from './pages/orders-list/orders-list';
 import { EditSupplierComponent } from './pages/suppliers/edit-supplier/edit-supplier';
 
 import { ViewMyProfile } from './pages/users/view-my-profile/view-my-profile/view-my-profile';
+import { PageAdminHome } from './pages/admin/home/home/home';
 
 export const routes: Routes = [
   /*
@@ -36,6 +37,12 @@ export const routes: Routes = [
   {
     path: 'usuario/registro',
     component: PageRegistration,
+  },
+  // Admin
+  {
+    path: 'admin/home',
+    // TODO canActivate: [GuardAuth],
+    component: PageAdminHome,
   },
   // Users
   {
