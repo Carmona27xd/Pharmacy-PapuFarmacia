@@ -1,0 +1,149 @@
+<div class="container mx-auto p-6">
+  <h1 class="text-3xl font-bold mb-6 text-gray-800">Listado de Proveedores</h1>
+
+  <div class="flex gap-4 mb-4">
+    <button routerLink="/suppliers/create" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow">
+      + Nuevo Proveedor
+    </button>
+    <button routerLink="/orders" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded shadow">
+      Ver Historial de Órdenes
+    </button>
+  </div>
+
+  <div class="bg-white shadow-md rounded my-6 overflow-x-auto">
+    <table class="min-w-full w-full table-auto">
+      <thead>
+        <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+          <th class="py-3 px-6 text-left">Nombre</th>
+          <th class="py-3 px-6 text-left">RFC</th>
+          <th class="py-3 px-6 text-left">Licencia</th>
+          <th class="py-3 px-6 text-center">Acciones</th>
+        </tr>
+      </thead>
+      <tbody class="text-gray-600 text-sm font-light">
+        <tr *ngFor="let item of suppliers" 
+            (click)="openModal(item)" 
+            class="border-b border-gray-200 hover:bg-gray-100 cursor-pointer transition duration-150">
+
+          <td class="py-3 px-6 text-left whitespace-nowrap">
+            <span class="font-medium">{{ item.name }}</span>
+          </td>
+          
+          <td class="py-3 px-6 text-left">
+            {{ item.RFC }}
+          </td>
+          
+          <td class="py-3 px-6 text-left">
+            <span class="bg-green-200 text-green-700 py-1 px-3 rounded-full text-xs">
+              {{ item.licence_number }}
+            </span>
+          </td>
+          
+          <td class="py-3 px-6 text-center" (click)="$event.stopPropagation()">
+            <div class="flex item-center justify-center gap-4">
+              
+              <a [routerLink]="['/orders/create', item.licence_number]" 
+                 title="Crear Orden de Compra"
+                 class="w-4 mr-2 transform hover:text-purple-500 hover:scale-110 cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                </svg>
+              </a>
+
+              <a [routerLink]="['/suppliers/edit', item.licence_number]"
+                 title="Editar Proveedor"
+                 class="w-4 mr-2 transform hover:text-yellow-500 hover:scale-110 cursor-pointer">
+                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                </svg>
+              </a>
+
+              <button (click)="deleteSupplier(item.licence_number)"
+                      title="Eliminar Proveedor"
+                      class="w-4 mr-2 transform hover:text-red-500 hover:scale-110 cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+              </button>
+              
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div *ngIf="selectedSupplier" class="fixed inset-0 z-50 flex items-center justify-center bg-opacity-10 backdrop-blur-sm p-4">
+  
+  <div class="bg-white rounded-lg shadow-2xl w-full max-w-lg overflow-hidden animate-fade-in-down">
+    
+    <div class="bg-blue-600 px-6 py-4 flex justify-between items-center">
+      <h3 class="text-white text-xl font-bold">Detalles del Proveedor</h3>
+      <button (click)="closeModal()" class="text-white hover:text-gray-200 focus:outline-none">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <div class="p-6 space-y-4 max-h-[80vh] overflow-y-auto">
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs font-bold text-gray-500 uppercase">RFC</label>
+          <p class="text-gray-800 font-semibold">{{ selectedSupplier.RFC }}</p>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-gray-500 uppercase">Tipo</label>
+          <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
+            {{ selectedSupplier.supplier_type }}
+          </span>
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-xs font-bold text-gray-500 uppercase">Nombre / Razón Social</label>
+        <p class="text-gray-800 text-lg">{{ selectedSupplier.name }}</p>
+      </div>
+
+      <div class="bg-gray-50 p-3 rounded-lg border border-gray-100">
+        <h4 class="text-sm font-bold text-gray-700 mb-2 border-b pb-1">Información de Contacto</h4>
+        <div class="grid grid-cols-1 gap-2 text-sm">
+          <p><span class="font-semibold">Contacto:</span> {{ selectedSupplier.contact }}</p>
+          <p><span class="font-semibold">Teléfono:</span> {{ selectedSupplier.phone }}</p>
+          <p><span class="font-semibold">Email:</span> {{ selectedSupplier.email }} </p>
+          <p><span class="font-semibold">Dirección:</span> {{ selectedSupplier.address }}</p>
+        </div>
+      </div>
+
+      <div class="bg-yellow-50 p-3 rounded-lg border border-yellow-100">
+        <h4 class="text-sm font-bold text-gray-700 mb-2 border-b border-yellow-200 pb-1">Licencia Sanitaria</h4>
+        <div class="flex justify-between text-sm">
+          <div>
+            <span class="block text-xs text-gray-500">Número</span>
+            <span class="font-mono font-bold">{{ selectedSupplier.licence_number }}</span>
+          </div>
+          <div class="text-right">
+            <span class="block text-xs text-gray-500">Vence el</span>
+            <span class="font-bold text-red-600">
+              {{ selectedSupplier.licence_expiration ? (selectedSupplier.licence_expiration | date:'mediumDate') : 'N/A' }}
+            </span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="text-xs text-gray-400 pt-4 border-t mt-4 flex justify-between">
+        <span>Creado: {{ selectedSupplier.created_at | date:'short' }}</span>
+        <span>Actualizado: {{ selectedSupplier.updated_at | date:'short' }}</span>
+      </div>
+
+    </div>
+
+    <div class="bg-gray-100 px-6 py-3 flex justify-end">
+      <button (click)="closeModal()" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded transition">
+        Cerrar
+      </button>
+    </div>
+
+  </div>
+</div>

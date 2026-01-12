@@ -1,0 +1,114 @@
+<div class="container mx-auto p-6">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold text-gray-800">Historial de Órdenes</h1>
+    
+    <button routerLink="/suppliers" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">
+      Ver Proveedores
+    </button>
+  </div>
+
+  <div class="bg-white shadow-md rounded-lg my-6 overflow-x-auto">
+    <table class="min-w-full w-full table-auto">
+      <thead>
+        <tr class="bg-purple-200 text-purple-900 uppercase text-sm leading-normal">
+          <th class="py-3 px-6 text-left">Fecha</th>
+          <th class="py-3 px-6 text-left">Proveedor (Licencia)</th>
+          <th class="py-3 px-6 text-left">Detalle</th>
+          <th class="py-3 px-6 text-right">Monto Total</th>
+        </tr>
+      </thead>
+      <tbody class="text-gray-600 text-sm font-light">
+        
+        <tr *ngFor="let item of orders" 
+            (click)="openModal(item)" 
+            class="border-b border-gray-200 hover:bg-purple-50 cursor-pointer transition duration-150">
+          
+          <td class="py-3 px-6 text-left whitespace-nowrap">
+            <div class="flex items-center">
+              <span class="font-medium">{{ item.created_at | date:'short' }}</span>
+            </div>
+          </td>
+
+          <td class="py-3 px-6 text-left">
+            <span class="bg-gray-200 text-gray-700 py-1 px-3 rounded-full text-xs">
+              {{ item.licence_supplier }}
+            </span>
+          </td>
+
+          <td class="py-3 px-6 text-left">
+            <div class="font-bold">{{ item.detail }}</div>
+            <div class="text-xs text-gray-500 truncate max-w-xs" title="{{ item.description }}">
+              {{ item.description }}
+            </div>
+          </td>
+
+          <td class="py-3 px-6 text-right font-bold text-green-600">
+            {{ item.total_amount | currency }}
+          </td>
+
+        </tr>
+        
+        <tr *ngIf="orders.length === 0">
+          <td colspan="4" class="py-4 text-center text-gray-500">
+            No hay órdenes registradas aún.
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div *ngIf="selectedOrder" class="fixed inset-0 z-50 flex items-center justify-center bg-opacity-10 backdrop-blur-sm p-4">
+  
+  <div class="bg-white rounded-lg shadow-2xl w-full max-w-lg overflow-hidden animate-fade-in-down">
+    
+    <div class="bg-purple-600 px-6 py-4 flex justify-between items-center">
+      <h3 class="text-white text-xl font-bold">Detalle de Orden</h3>
+      <button (click)="closeModal()" class="text-white hover:text-gray-200 focus:outline-none">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <div class="p-6 space-y-4 max-h-[80vh] overflow-y-auto">
+      
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs font-bold text-gray-500 uppercase">Fecha de Creación</label>
+          <p class="text-gray-800 font-semibold">{{ selectedOrder.created_at | date:'medium' }}</p>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-gray-500 uppercase">Licencia Proveedor</label>
+          <span class="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded-full border border-purple-200">
+            {{ selectedOrder.licence_supplier }}
+          </span>
+        </div>
+      </div>
+
+      <div class="bg-gray-50 p-4 rounded-lg border border-gray-100">
+        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Asunto / Detalle</label>
+        <p class="text-gray-900 font-bold text-lg mb-3">{{ selectedOrder.detail }}</p>
+        
+        <label class="block text-xs font-bold text-gray-500 uppercase mb-1 border-t border-gray-200 pt-2">Descripción Completa</label>
+        <p class="text-gray-700 text-sm leading-relaxed whitespace-pre-wrap">{{ selectedOrder.description }}</p>
+      </div>
+
+      <div class="flex justify-between items-center bg-green-50 p-4 rounded-lg border border-green-100">
+        <span class="text-green-800 font-bold uppercase text-sm">Monto Total de la Orden</span>
+        <span class="text-3xl font-bold text-green-600 tracking-tight">
+          {{ selectedOrder.total_amount | currency }}
+        </span>
+      </div>
+
+    </div>
+
+    <div class="bg-gray-100 px-6 py-3 flex justify-end">
+      <button (click)="closeModal()" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded transition">
+        Cerrar
+      </button>
+    </div>
+
+  </div>
+</div>

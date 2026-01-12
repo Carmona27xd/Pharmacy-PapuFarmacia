@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+// Agrega esto en los imports
+import { Router } from '@angular/router';
 
 import { ComponentInputField } from '../../../shared/inputs/input-field/input-field';
 import { ComponentCancelAcceptButtons } from '../../../shared/buttons/cancel-accept/cancel-accept';

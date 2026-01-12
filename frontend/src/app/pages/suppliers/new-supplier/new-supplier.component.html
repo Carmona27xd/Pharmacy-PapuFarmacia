@@ -1,0 +1,82 @@
+<div class="max-w-4xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
+  <h2 class="text-2xl font-bold mb-6 text-gray-800">Registrar Nuevo Proveedor</h2>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      
+      <div>
+        <label class="block text-gray-700 text-sm font-bold mb-2">Nombre o Razón Social</label>
+        <input type="text" formControlName="name" 
+               class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500">
+      </div>
+
+      <div>
+        <label class="block text-gray-700 text-sm font-bold mb-2">RFC</label>
+        <input type="text" formControlName="RFC" 
+               class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500 uppercase">
+      </div>
+
+      <div>
+        <label class="block text-gray-700 text-sm font-bold mb-2">Nombre de Contacto</label>
+        <input type="text" formControlName="contact" 
+               class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500">
+      </div>
+
+      <div>
+        <label class="block text-gray-700 text-sm font-bold mb-2">Teléfono</label>
+        <input type="text" formControlName="phone" 
+               class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500">
+      </div>
+
+      <div>
+        <label class="block text-gray-700 text-sm font-bold mb-2">Correo Electrónico</label>
+        <input type="email" formControlName="email" 
+               class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500">
+      </div>
+
+      <div>
+        <label class="block text-gray-700 text-sm font-bold mb-2">Número de Licencia</label>
+        <input type="text" formControlName="licence_number" 
+               class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500">
+      </div>
+
+      <div>
+        <label class="block text-gray-700 text-sm font-bold mb-2">Tipo de Proveedor</label>
+        <select formControlName="supplier_type" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500 bg-white">
+
+          <option value="Manufacturer">Fabricante</option>
+          <option value="Distributor">Distribuidor</option>
+          <option value="Wholesaler">Mayorista</option>
+          <option value="Laboratory">Laboratorio</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-gray-700 text-sm font-bold mb-2">Vencimiento de Licencia</label>
+        <input type="date" formControlName="licence_expiration" 
+               class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500 bg-white">
+      </div>
+
+      <div class="md:col-span-2">
+        <label class="block text-gray-700 text-sm font-bold mb-2">Dirección Completa</label>
+        <textarea formControlName="address" rows="3"
+                  class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"></textarea>
+      </div>
+
+    </div>
+
+    <div class="flex items-center justify-end mt-6 gap-4">
+      <button type="button" routerLink="/suppliers" 
+              class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400">
+        Cancelar
+      </button>
+      
+      <button type="submit" [disabled]="form.invalid"
+              class="px-6 py-2 bg-blue-600 text-white font-bold rounded hover:bg-blue-700 disabled:opacity-50">
+        Guardar Proveedor
+      </button>
+    </div>
+
+    
+  </form>
+</div>

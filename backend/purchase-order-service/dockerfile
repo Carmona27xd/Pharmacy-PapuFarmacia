@@ -1,0 +1,19 @@
+FROM python:3.11-slim
+
+# Cambiamos /app por /usr/src para evitar colisiones de nombres con tu carpeta 'app'
+WORKDIR /usr/src
+
+# PYTHONPATH debe apuntar al padre de la carpeta 'app'
+ENV PYTHONPATH=/usr/src
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copiamos todo el contenido de product-service a /usr/src
+# Esto creará /usr/src/app/, /usr/src/requirements.txt, etc.
+COPY . .
+
+EXPOSE 8085
+
+# Ejecutamos desde /usr/src buscando el paquete app.main
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8085"]

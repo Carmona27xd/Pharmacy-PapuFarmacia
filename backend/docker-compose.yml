@@ -1,7 +1,11 @@
+version: '3.8'
+
 name: papufarmacia
 
 services:
-  # Base de Datos para Autenticación (PostgreSQL)
+  # ---------------------------------------------------------------------
+  # BASE DE DATOS: AUTENTICACIÓN (PostgreSQL)
+  # ---------------------------------------------------------------------
   pharma_auth_db:
     image: postgres:15-alpine
     container_name: pharma_auth_db
@@ -10,33 +14,34 @@ services:
       POSTGRES_USER: ${POSTGRES_AUTH_USER}
       POSTGRES_PASSWORD: ${POSTGRES_AUTH_PASSWORD}
       POSTGRES_DB: ${POSTGRES_AUTH_DB}
-      POSTGRES_HOST: ${POSTGRES_AUTH_HOST}
     expose:
       - "5432"
     volumes:
       - auth_vol_postgres:/var/lib/postgresql/data
     networks:
       - papufarmacia_network
-    healthcheck: 
-      test: ["CMD-SHELL", "pg_isready -h localhost -U ${POSTGRES_USER}"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_AUTH_USER} -d ${POSTGRES_AUTH_DB}"]
       interval: 5s
       timeout: 5s
       retries: 10
 
-  # Servicio de Autenticación
+  # ---------------------------------------------------------------------
+  # SERVICIO: AUTENTICACIÓN
+  # ---------------------------------------------------------------------
   auth_service:
     build: ./auth-service
     container_name: pharma_auth_service
     env_file: .env
     environment:
-      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@pharma_auth_db:5432/${POSTGRES_DB}
+      - DATABASE_URL=postgresql://${POSTGRES_AUTH_USER}:${POSTGRES_AUTH_PASSWORD}@pharma_auth_db:5432/${POSTGRES_AUTH_DB}
       - SECRET_KEY=${SECRET_KEY}
       - USER_SERVICE_URL=${USER_URL}
     ports:
       - "8081:8081"
     command: >
       sh -c "
-        until pg_isready -h pharma_auth_db -U ${POSTGRES_USER} -d ${POSTGRES_DB}; do
+        until pg_isready -h pharma_auth_db -U ${POSTGRES_AUTH_USER} -d ${POSTGRES_AUTH_DB}; do
           echo 'Esperando a PostgreSQL...';
           sleep 2;
         done;
@@ -56,7 +61,9 @@ services:
       timeout: 3s
       retries: 5
 
-  # Base de Datos para Usuarios y Productos (MongoDB)
+  # ---------------------------------------------------------------------
+  # BASE DE DATOS: USUARIOS/PRODUCTOS/PROVEEDORES (MongoDB)
+  # ---------------------------------------------------------------------
   pharma_user_db:
     image: mongo:6-jammy
     container_name: pharma_user_db
@@ -64,10 +71,10 @@ services:
     environment:
       - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
-      - MONGO_INITDB_DATABASE=${MONGO_USER_DB}
+      # Nota: Mongo ignora MONGO_INITDB_DATABASE si se crean las DBs dinámicamente, pero está bien dejarlo.
     ports:
       - "27018:27017"
-    volumes: 
+    volumes:
       - mongo_user_data:/data/db
     networks:
       - papufarmacia_network
@@ -78,7 +85,9 @@ services:
       retries: 5
       start_period: 10s
 
-  # Servicio de Usuarios
+  # ---------------------------------------------------------------------
+  # SERVICIO: USUARIOS
+  # ---------------------------------------------------------------------
   user_service:
     build: ./user-service
     container_name: pharma_user_service
@@ -99,18 +108,18 @@ services:
       timeout: 3s
       retries: 5
 
-  # --- NUEVO: Servicio de Productos de Farmacia ---
+  # ---------------------------------------------------------------------
+  # SERVICIO: PRODUCTOS
+  # ---------------------------------------------------------------------
   product_service:
     build: ./product-service
     container_name: pharma_product_service
     env_file: .env
     environment:
       - DATABASE_URL=mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@pharma_user_db:27017/pharma_inventory?authSource=admin
-      # También puedes forzar el PYTHONPATH aquí por si acaso
       - PYTHONPATH=/usr/src
     ports:
       - "8083:8083"
-    # El comando debe ser idéntico al del Dockerfile
     command: "uvicorn app.main:app --host 0.0.0.0 --port 8083"
     depends_on:
       pharma_user_db:
@@ -123,7 +132,55 @@ services:
       timeout: 3s
       retries: 5
 
-  # API Gateway (Nginx)
+  # ---------------------------------------------------------------------
+  # SERVICIO: PROVEEDORES (NUEVO)
+  # ---------------------------------------------------------------------
+  supplier_service:
+    build: ./supplier-service
+    container_name: pharma_supplier_service
+    env_file: .env
+    environment:
+      - DATABASE_URL=mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@pharma_user_db:27017/pharma_suppliers?authSource=admin
+    ports:
+      - "8084:8084"
+    command: "uvicorn app.main:app --host 0.0.0.0 --port 8084"
+    depends_on:
+      pharma_user_db:
+        condition: service_healthy
+    networks:
+      - papufarmacia_network
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8084/health')"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # ---------------------------------------------------------------------
+  # SERVICIO: ORDENES DE COMPRA
+  # ---------------------------------------------------------------------
+  purchase_order_service:
+    build: ./purchase-order-service
+    container_name: pharma_purchase_order_service
+    env_file: .env
+    environment:
+      - DATABASE_URL=mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@pharma_user_db:27017/pharma_orders?authSource=admin
+    ports:
+      - "8085:8085"
+    command: "uvicorn app.main:app --host 0.0.0.0 --port 8085"
+    depends_on:
+      pharma_user_db:
+        condition: service_healthy
+    networks:
+      - papufarmacia_network
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8085/health')"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # ---------------------------------------------------------------------
+  # API GATEWAY
+  # ---------------------------------------------------------------------
   api_gateway:
     build: ./API-Gateway
     container_name: api_gateway
@@ -135,25 +192,26 @@ services:
       user_service:
         condition: service_healthy
       product_service:
-        condition: service_healthy # Ahora también espera a productos
+        condition: service_healthy
+      supplier_service:
+        condition: service_healthy
     networks:
-      - internal_network
-      - external_network
+      - papufarmacia_network  # <-- IMPORTANTE: Debe estar en la misma red que los servicios
+      - external_network      # Para salida a internet si hace falta
 
 # --------------------------------------------------------------------------------------
 # VOLUMES
 # --------------------------------------------------------------------------------------
 volumes:
   auth_vol_postgres:
-  user_vol_mongo:
-  product_vol_postgres:
+  mongo_user_data: # Corregido para que coincida con el uso arriba
+  product_vol_postgres: # Si no lo usas, puedes borrarlo
 
 # --------------------------------------------------------------------------------------
 # NETWORKS
 # --------------------------------------------------------------------------------------
 networks:
-  internal_network:
+  papufarmacia_network:
     driver: bridge
-    internal: true
   external_network:
     driver: bridge
