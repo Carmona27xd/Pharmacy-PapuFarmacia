@@ -81,7 +81,7 @@ def create_product(
     return crud.create_product(db, product)
 
 @router.put(
-    "/{product_id}",
+    "/{product_id}/update",
     response_model=schemas.Product,
     status_code=status.HTTP_200_OK,
     summary="Update a product",
@@ -95,7 +95,7 @@ def update_product(
     return crud.update_product(db, product_id, product)
 
 @router.delete(
-    "/{product_id}",
+    "/{product_id}/delete",
     response_model=schemas.Product,
     status_code=status.HTTP_200_OK,
     summary="Delete a product",

@@ -8,7 +8,7 @@ class UserBase(BaseModel):
     full_name: str
     username: str
     is_active: bool = True
-    role_id: int = 1
+    role_id: int = 2
 
 class UserLogin(BaseModel):
     identifier: str

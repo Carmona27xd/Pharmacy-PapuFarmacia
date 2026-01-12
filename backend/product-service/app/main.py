@@ -19,13 +19,4 @@ app = FastAPI(
     root_path="/api/products"
 )
 
-app.add_middleware(
-    CORSMiddleware,
-    # TODO Cors
-    allow_origins=["*"],
-    allow_credentials=False,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
 app.include_router(router)

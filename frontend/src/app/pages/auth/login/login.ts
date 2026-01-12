@@ -1,10 +1,13 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import { ComponentInputField } from '../../../shared/inputs/input-field/input-field';
 import { ServiceAuth } from '../../../services/auth/auth';
+import { ServiceShowCustomDialog } from '../../../shared/dialogs/service-dialog';
+import { InterfaceLogin } from '../../../interfaces/user/login';
+import { InterfaceApiError } from '../../../interfaces/http/HTTPError';
 
 @Component({
   selector: 'login',
@@ -16,7 +19,12 @@ export class PageLogin implements OnInit {
   loginForm: FormGroup;
   token: any = null;
 
-  constructor(private fb: FormBuilder, private serviceAuth: ServiceAuth) {
+  constructor(
+    private fb: FormBuilder,
+    private serviceAuth: ServiceAuth,
+    private router: Router,
+    private customDialogService: ServiceShowCustomDialog
+  ) {
     this.loginForm = this.fb.group({
       identifier: ['', [Validators.required, Validators.minLength(5)]],
       password: ['', [Validators.required, Validators.minLength(6)]],
@@ -31,18 +39,26 @@ export class PageLogin implements OnInit {
       return;
     }
 
-    const { identifier, password } = this.loginForm.value;
+    const loginData: InterfaceLogin = {
+      identifier: this.loginForm.value.identifier!,
+      password: this.loginForm.value.password!,
+    };
 
-    this.serviceAuth.login(identifier, password).subscribe({
-      next: (data: any) => {
-        this.token = data;
-        console.log('Token recibido:', data);
+    this.serviceAuth.login(loginData).subscribe({
+      next: () => {
+        this.router.navigate(['/']);
       },
-      error: (err) => {
+      error: (err: InterfaceApiError) => {
         console.error('Error en login:', err);
-      },
-      complete: () => {
-        console.log('Petición de login completada');
+
+        if (err.status === 401) {
+          this.customDialogService.error(
+            'Error de autenticación',
+            'Crdenciales inválidas. Intenta nuevamente.'
+          );
+        } else {
+          this.customDialogService.error('Error de servidor', err.message);
+        }
       },
     });
   }

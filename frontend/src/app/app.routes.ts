@@ -2,9 +2,9 @@ import { Routes } from '@angular/router';
 
 import { GuardAuth } from './guards/auth-guard';
 
+import { PageNotFound } from './pages/errors/not-found/not-found';
 import { PageLogin } from './pages/auth/login/login';
 import { PageRegistration } from './pages/auth/registration/registration';
-import { PageNotFound } from './pages/errors/not-found/not-found';
 import { PageHome } from './pages/home/home';
 import { PageRegisterProduct } from './pages/products/register/register-product';
 import { PageDetailsProduct } from './pages/products/details/details-product';
@@ -15,6 +15,7 @@ import { CreateOrderComponent } from './pages/suppliers/new-purchase-order/new-p
 import { OrdersListComponent } from './pages/orders-list/orders-list';
 import { EditSupplierComponent } from './pages/suppliers/edit-supplier/edit-supplier';
 
+import { ViewMyProfile } from './pages/users/view-my-profile/view-my-profile/view-my-profile';
 
 export const routes: Routes = [
   /*
@@ -27,23 +28,33 @@ export const routes: Routes = [
     path: 'inicio',
     component: PageHome,
   },
-  // Users
+  // Auth
   {
     path: 'login',
     component: PageLogin,
   },
   {
-    path: 'registro-usuario',
+    path: 'usuario/registro',
     component: PageRegistration,
+  },
+  // Users
+  {
+    path: 'usuario/perfil',
+    // TODO canActivate: [GuardAuth],
+    component: ViewMyProfile,
   },
   // Products
   {
-    path: 'registro-producto',
+    path: 'productos/buscar/:query',
+    component: PageSearchForProducts,
+  },
+  {
+    path: 'productos/registro',
     // TODO canActivate: [GuardAuth],
     component: PageRegisterProduct,
   },
   {
-    path: 'detalles-producto',
+    path: 'productos/detalles/:productId',
     component: PageDetailsProduct,
   },
   */

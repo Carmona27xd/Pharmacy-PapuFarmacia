@@ -1,0 +1,1110 @@
+{
+  "info": {
+    "_postman_id": "fd4b404b-43b5-4252-8530-87ae2de136d3",
+    "name": "pharmacy-web-system:8080",
+    "description": "# 🚀 Get started here\n\nThis template guides you through CRUD operations (GET, POST, PUT, DELETE), variables, and tests.\n\n## 🔖 **How to use this template**\n\n#### **Step 1: Send requests**\n\nRESTful APIs allow you to perform CRUD operations using the POST, GET, PUT, and DELETE HTTP methods.\n\nThis collection contains each of these [request](https://learning.postman.com/docs/sending-requests/requests/) types. Open each request and click \"Send\" to see what happens.\n\n#### **Step 2: View responses**\n\nObserve the response tab for status code (200 OK), response time, and size.\n\n#### **Step 3: Send new Body data**\n\nUpdate or add new data in \"Body\" in the POST request. Typically, Body data is also used in PUT request.\n\n```\n{\n    \"name\": \"Add your name in the body\"\n}\n\n ```\n\n#### **Step 4: Update the variable**\n\nVariables enable you to store and reuse values in Postman. We have created a [variable](https://learning.postman.com/docs/sending-requests/variables/) called `base_url` with the sample request [https://postman-api-learner.glitch.me](https://postman-api-learner.glitch.me). Replace it with your API endpoint to customize this collection.\n\n#### **Step 5: Add tests in the \"Scripts\" tab**\n\nAdding tests to your requests can help you confirm that your API is working as expected. You can write test scripts in JavaScript and view the output in the \"Test Results\" tab.\n\n<img src=\"https://content.pstmn.io/fa30ea0a-373d-4545-a668-e7b283cca343/aW1hZ2UucG5n\" alt=\"\" height=\"1530\" width=\"2162\">\n\n## 💪 Pro tips\n\n- Use folders to group related requests and organize the collection.\n    \n- Add more [scripts](https://learning.postman.com/docs/writing-scripts/intro-to-scripts/) to verify if the API works as expected and execute workflows.\n    \n\n## 💡Related templates\n\n[API testing basics](https://go.postman.co/redirect/workspace?type=personal&collectionTemplateId=e9a37a28-055b-49cd-8c7e-97494a21eb54&sourceTemplateId=ddb19591-3097-41cf-82af-c84273e56719)  \n[API documentation](https://go.postman.co/redirect/workspace?type=personal&collectionTemplateId=e9c28f47-1253-44af-a2f3-20dce4da1f18&sourceTemplateId=ddb19591-3097-41cf-82af-c84273e56719)  \n[Authorization methods](https://go.postman.co/redirect/workspace?type=personal&collectionTemplateId=31a9a6ed-4cdf-4ced-984c-d12c9aec1c27&sourceTemplateId=ddb19591-3097-41cf-82af-c84273e56719)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "api/auth",
+      "item": [
+        {
+          "name": "docs",
+          "id": "97033b8e-5767-4e76-9f21-644d96135e70",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/auth/docs",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "auth",
+                "docs"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/",
+          "id": "b42510ec-4851-44e5-bfad-78079811bbdd",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/auth",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "auth"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "health",
+          "id": "0704ab22-2bda-47bc-8c67-d2d2620d01f6",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/auth/health",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "auth",
+                "health"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "register",
+          "id": "6e1d20ad-9cdc-434f-9559-ec6d5fd135c5",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"example@dominio.com\",\r\n    \"full_name\": \"Juan Pérez\",\r\n    \"username\": \"exampleUser\",\r\n    \"password\": \"Password123\",\r\n    \"is_active\": true,\r\n    \"role_id\": 2\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/auth/register",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "login",
+          "id": "d85347cd-c5f5-4f35-bd8c-c48004014b38",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"identifier\": \"exampleUser\",\r\n    \"password\": \"Password123\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/auth/login",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "verify-token",
+          "id": "9d720f3f-802a-423c-9677-d1d5c0a0197e",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearer}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bearer}}",
+                "type": "text",
+                "disabled": true
+              },
+              {
+                "key": "X-Web-Client-Token",
+                "value": "{{web_client}}",
+                "type": "text",
+                "uuid": "188b1d37-7d2f-476b-9863-887321c9b000",
+                "disabled": true
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/auth/verify-token",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "auth",
+                "verify-token"
+              ]
+            },
+            "description": "No funciona con token: usuario \"admin\" y contraseña \"Password\""
+          },
+          "response": []
+        },
+        {
+          "name": "me",
+          "id": "7fc75679-3c9b-4b73-9a67-98a012e1ae3e",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwicm9sZV9pZCI6MSwiZXhwIjoxNzY4MTIzNjYyfQ.rfzqwxzcysow8iJQ5AF4nvA90RntqmqH5sAnWw2yPSQ",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/auth/me",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "auth",
+                "me"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "users",
+          "id": "930a7435-817c-4a12-bcb4-f3d88f01007e",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Web-Client-Token",
+                "value": "{{web_client}}",
+                "type": "text",
+                "disabled": true
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bearer}}",
+                "type": "text",
+                "disabled": true
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/auth/users?limit=50&offset=0",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "auth",
+                "users"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "50",
+                  "uuid": "22da1257-d838-4871-b49c-4cab2578fd78"
+                },
+                {
+                  "key": "offset",
+                  "value": "0",
+                  "uuid": "8b91ec97-e29c-4d2a-bd3d-2a7d6c433de3"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "users/{user_id]",
+          "id": "bbdec774-286d-47af-9e69-1e75fd6bb678",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bearer}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Web-Client-Token",
+                "value": "{{web_client}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"is_active\": true,\r\n    \"full_name\": \"Juan Pérez\",\r\n    \"username\": \"anotherExample\",\r\n    \"role_id\": 1\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/auth/users/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "auth",
+                "users",
+                "1"
+              ]
+            },
+            "description": "No funciona"
+          },
+          "response": []
+        }
+      ],
+      "id": "afda23c4-157e-4ed8-b8a2-95be327b4a28",
+      "auth": {
+        "type": "noauth"
+      }
+    },
+    {
+      "name": "api/admin",
+      "item": [
+        {
+          "name": "users",
+          "id": "883ccf3d-f720-48f0-a835-e14f91d67eed",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "users/{user_id}/ban",
+          "id": "ff2b2383-c931-41fb-8a60-22d1dac31d42",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text",
+                "uuid": "5a329e47-c892-4a2d-bc32-f572cb903246"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/admin/users/1/ban",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "admin",
+                "users",
+                "1",
+                "ban"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "users/{user_id}/unban",
+          "id": "e92e2326-841b-45dd-b677-12e165e1fe7e",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": []
+        }
+      ],
+      "id": "5468a8c1-16f9-4487-8c6e-681a567bee42"
+    },
+    {
+      "name": "api/admin",
+      "item": [
+        {
+          "name": "users",
+          "id": "14c45d88-4ada-4fba-804d-1e1f3c4f68be",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Web-Client-Token",
+                "value": "{{web_client}}",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bearer}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/admin/users?limit=50&offset=0",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "admin",
+                "users"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "50",
+                  "type": "text",
+                  "uuid": "d030e28e-4baf-4335-9216-316cbbb3bb8e"
+                },
+                {
+                  "key": "offset",
+                  "value": "0",
+                  "type": "text",
+                  "uuid": "a721bf82-823f-492e-ad3b-1718dc702dd0"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "users/{user_id}/ban",
+          "id": "0d2e1ac7-03f0-45ce-9bc8-2e00c2d2af35",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "X-Web-Client-Token",
+                "value": "{{web_client}}",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bearer}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/admin/users/2/ban",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "admin",
+                "users",
+                "2",
+                "ban"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "users/{user_id}/unban",
+          "id": "137de7a8-569c-4071-b2f0-675642248288",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "X-Web-Client-Token",
+                "value": "{{web_client}}",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bearer}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/admin/users/2/unban",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "admin",
+                "users",
+                "2",
+                "unban"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "id": "ad2eb312-36ca-4163-8f9e-1cd2ad4a4bc6"
+    },
+    {
+      "name": "api/user",
+      "item": [
+        {
+          "name": "docs",
+          "id": "7255d932-a005-4240-a42f-737374b83299",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/users/docs",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "users",
+                "docs"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "health",
+          "id": "f2b571a7-8250-41fe-a23b-69bd5bbdbc53",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/users/health",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "users",
+                "health"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "profile/{user_id}",
+          "id": "0e046b25-a8f8-498c-9549-3afc77453bbf",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Web-Client-Token",
+                "value": "{{web_client}}",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bearer}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/users/profile/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "users",
+                "profile",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "profile",
+          "id": "dfee8db7-2fa2-42f4-804d-8b65e35105e8",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Web-Client-Token",
+                "value": "{{web_client}}",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bearer}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"user_id\": 1,\r\n  \"profile_picture\": \"avatar1.png\"\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/users/profile",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "users",
+                "profile"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "profile/{user_id}",
+          "id": "9446181c-dba6-46a5-a92f-616f5d6afbbb",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "X-Web-Client-Token",
+                "value": "{{web_client}}",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bearer}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"profile_picture\": \"avatar4.png\"\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/users/profile/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "users",
+                "profile",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "profile/{user_id}/picture",
+          "id": "e92cada1-0bb7-4147-a6e0-af2d05dc43f4",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "X-Web-Client-Token",
+                "value": "{{web_client}}",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bearer}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"profile_picture\": \"avatar1.png\"\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/users/profile/1/picture",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "users",
+                "profile",
+                "1",
+                "picture"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "id": "d139267d-6bcd-43bd-85e3-09853dc8cc7f"
+    },
+    {
+      "name": "api/products",
+      "item": [
+        {
+          "name": "docs",
+          "id": "64bc3bc7-2982-4faf-be2f-8e47364fca30",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/products/docs",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "products",
+                "docs"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "health",
+          "id": "2c5c2289-65bc-4a0a-9bd5-3685097d5b9a",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/products/health",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "products",
+                "health"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/",
+          "id": "21d18cc9-61ed-4914-bb78-e1480f6cb494",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/products",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "products"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "products",
+          "id": "a014148c-0634-4571-a0fc-20544d9d698f",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"productTypeId\": 0,\r\n  \"chemicalName\": \"string\",\r\n  \"comercialName\": \"string\",\r\n  \"description\": \"string\",\r\n  \"price\": 1,\r\n  \"outdate\": \"2026-01-04\",\r\n  \"stock\": 0,\r\n  \"batch\": \"string\",\r\n  \"provider\": \"string\",\r\n  \"pharmaceutical\": \"string\",\r\n  \"imagen\": \"string\"\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/products?skip=0&limit=100",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "products"
+              ],
+              "query": [
+                {
+                  "key": "skip",
+                  "value": "0",
+                  "uuid": "b6ad0515-ac44-4c8f-a7ff-82054e0115e9"
+                },
+                {
+                  "key": "limit",
+                  "value": "100",
+                  "uuid": "6b01a2b3-fc24-489d-a725-e735d112f46a"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "search",
+          "id": "02fc6cbb-8503-4318-86fd-0f128d6bd3c5",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"productTypeId\": 0,\r\n  \"chemicalName\": \"string\",\r\n  \"comercialName\": \"string\",\r\n  \"description\": \"string\",\r\n  \"price\": 1,\r\n  \"outdate\": \"2026-01-04\",\r\n  \"stock\": 0,\r\n  \"batch\": \"string\",\r\n  \"provider\": \"string\",\r\n  \"pharmaceutical\": \"string\",\r\n  \"imagen\": \"string\"\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/products/search?name=mouse&min_price=100&max_price=500",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "products",
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "name",
+                  "value": "mouse"
+                },
+                {
+                  "key": "min_price",
+                  "value": "100"
+                },
+                {
+                  "key": "max_price",
+                  "value": "500"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "{product_id}",
+          "id": "ded0b9f4-f772-40a6-83c6-3b68a4f4acb2",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/products?product_id=1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "products"
+              ],
+              "query": [
+                {
+                  "key": "product_id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/create",
+          "id": "060cbb5f-f092-4f2b-8870-855d55547768",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Web-Client-Token",
+                "value": "{{web_client}}",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bearer}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"productTypeId\": 1,\r\n  \"chemicalName\": \"string\",\r\n  \"comercialName\": \"string\",\r\n  \"description\": \"string\",\r\n  \"price\": 1,\r\n  \"outdate\": \"2026-01-04\",\r\n  \"stock\": 1,\r\n  \"batch\": \"string\",\r\n  \"provider\": \"string\",\r\n  \"pharmaceutical\": \"string\",\r\n  \"imagen\": \"string\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/products/",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "products",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "{product_id}/update",
+          "id": "47086bd0-25db-4a27-8507-424e596cc077",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "X-Web-Client-Token",
+                "value": "{{web_client}}",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bearer}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"productTypeId\": 2,\r\n  \"chemicalName\": \"string\",\r\n  \"comercialName\": \"string\",\r\n  \"description\": \"string\",\r\n  \"price\": 1,\r\n  \"outdate\": \"2026-01-04\",\r\n  \"stock\": 1,\r\n  \"batch\": \"string\",\r\n  \"provider\": \"string\",\r\n  \"pharmaceutical\": \"string\",\r\n  \"imagen\": \"string\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/products/3/update",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "products",
+                "3",
+                "update"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "{product_id}/delete",
+          "id": "e87199eb-fa86-45fd-b7bd-edf0f302f197",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "X-Web-Client-Token",
+                "value": "{{web_client}}",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bearer}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/products/3/delete",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "products",
+                "3",
+                "delete"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "id": "1cc41eb5-0eef-48f2-92b5-1ad19c85883b"
+    }
+  ],
+  "variable": [
+    {
+      "id": "1c4567c5-aad3-4ea2-82c4-0e78e494e95f",
+      "key": "bearer",
+      "value": ""
+    },
+    {
+      "id": "51d1d98e-b4c1-46e6-b644-7f8a57840d60",
+      "key": "web_client",
+      "value": ""
+    }
+  ]
+}

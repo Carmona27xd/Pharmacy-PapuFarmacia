@@ -7,7 +7,8 @@ app = FastAPI(
     description="Handles administrative tasks and user management",
     version="1.0.0",
     docs_url="/docs",
-    openapi_url="/openapi.json"
+    openapi_url="/openapi.json",
+    root_path="/api/admin"
 )
 
 app.add_middleware(

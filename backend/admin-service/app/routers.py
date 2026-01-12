@@ -5,7 +5,7 @@ from app.services.admin_service import AdminService
 from app.schemas.user import User
 from app.core.security import admin_required
 
-router = APIRouter(prefix="/api/admin", tags=["Admin"])
+router = APIRouter(tags=["Admin"])
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
 
 @router.get("/users", response_model=list[User])
