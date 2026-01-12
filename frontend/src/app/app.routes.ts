@@ -37,6 +37,7 @@ export const routes: Routes = [
     component: ViewMyProfile,
   },
   // Products
+  { path: 'productos/buscar/:query', component: PageSearchForProducts },
   {
     path: 'productos/registro',
     // TODO canActivate: [GuardAuth],
@@ -46,6 +47,5 @@ export const routes: Routes = [
     path: 'productos/detalles',
     component: PageDetailsProduct,
   },
-  { path: 'productos/buscar', component: PageSearchForProducts },
   { path: '**', component: PageNotFound },
 ];

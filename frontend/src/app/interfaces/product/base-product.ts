@@ -9,5 +9,5 @@ export interface InterfaceProductBase {
   batch: string;
   provider: string;
   pharmaceutical: string;
-  imagen: string;
+  image: string;
 }

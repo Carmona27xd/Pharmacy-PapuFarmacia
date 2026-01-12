@@ -6,6 +6,7 @@ import { InterfacePostProduct } from '../../interfaces/product/post-product';
 import { Observable } from 'rxjs';
 import { InterfaceProduct } from '../../interfaces/product/product';
 import { InterfacePutProduct } from '../../interfaces/product/put-product';
+import { ProductList } from '../../interfaces/product/products';
 
 @Injectable({
   providedIn: 'root',
@@ -17,12 +18,12 @@ export class ServiceProduct {
     this.productServiceURL = environment.productService;
   }
 
-  get_all(): Observable<InterfaceProduct> {
-    return this.httpClient.get<InterfaceProduct>(`${this.productServiceURL}`);
+  get_all(): Observable<ProductList> {
+    return this.httpClient.get<ProductList>(`${this.productServiceURL}`);
   }
 
-  getByQuery(name: string, min_price: number, max_price: number): Observable<InterfaceProduct> {
-    return this.httpClient.get<InterfaceProduct>(
+  getByQuery(name: string, min_price: number, max_price: number): Observable<ProductList> {
+    return this.httpClient.get<ProductList>(
       `${this.productServiceURL}/search?name=${name}&min_price=${min_price}&max_price=${max_price}`
     );
   }

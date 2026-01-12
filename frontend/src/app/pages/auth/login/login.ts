@@ -7,6 +7,7 @@ import { ComponentInputField } from '../../../shared/inputs/input-field/input-fi
 import { ServiceAuth } from '../../../services/auth/auth';
 import { ServiceShowCustomDialog } from '../../../shared/dialogs/service-dialog';
 import { InterfaceLogin } from '../../../interfaces/user/login';
+import { InterfaceApiError } from '../../../interfaces/http/HTTPError';
 
 @Component({
   selector: 'login',
@@ -39,32 +40,22 @@ export class PageLogin implements OnInit {
     }
 
     const loginData: InterfaceLogin = {
-      identifier: this.loginForm.value.identifier,
-      password: this.loginForm.value.password,
+      identifier: this.loginForm.value.identifier!,
+      password: this.loginForm.value.password!,
     };
 
     this.serviceAuth.login(loginData).subscribe({
-      next: (data: any) => {
-        this.token = data;
-        console.log('Token recibido:', data);
+      next: () => {
         this.router.navigate(['/']);
       },
-      error: (err) => {
+      error: (err: InterfaceApiError) => {
         console.error('Error en login:', err);
-        if (err.error.status === 401) {
-          this.customDialogService.error(
-            'Error de autenticación',
-            'Credenciales incorrectas. Por favor, inténtelo de nuevo.'
-          );
+
+        if (err.status === 401) {
+          this.customDialogService.error('Error de autenticación', err.message);
         } else {
-          this.customDialogService.error(
-            'Error de servidor',
-            'Ocurrió un error inesperado. Por favor, inténtelo más tarde.'
-          );
+          this.customDialogService.error('Error de servidor', err.message);
         }
-      },
-      complete: () => {
-        console.log('Petición de login completada');
       },
     });
   }
