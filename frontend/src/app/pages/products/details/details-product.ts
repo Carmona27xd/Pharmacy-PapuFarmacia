@@ -4,11 +4,12 @@ import { ServiceProduct } from '../../../services/product/product';
 import { PRODUCT_TYPES } from '../../../interfaces/product/PRODUCT_TYPES';
 import { InterfaceProductType } from '../../../interfaces/product/product-type';
 import { ActivatedRoute } from '@angular/router';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-product-details',
   standalone: true,
-  imports: [],
+  imports: [NgClass],
   templateUrl: './details-product.html',
 })
 export class PageDetailsProduct implements OnInit {
