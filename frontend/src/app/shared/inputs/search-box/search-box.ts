@@ -18,7 +18,7 @@ export class ComponentSearchBox {
     const query = this.searchQuery.trim();
 
     if (query.length > 0) {
-      this.router.navigate(['/productos/buscar', query]);
+      this.router.navigate(['/productos/buscar/', query]);
     }
   }
 

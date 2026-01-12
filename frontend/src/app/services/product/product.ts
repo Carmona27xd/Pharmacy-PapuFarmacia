@@ -29,9 +29,7 @@ export class ServiceProduct {
   }
 
   getById(product_id: number): Observable<InterfaceProduct> {
-    return this.httpClient.get<InterfaceProduct>(
-      `${this.productServiceURL}/products/${product_id}`
-    );
+    return this.httpClient.get<InterfaceProduct>(`${this.productServiceURL}/${product_id}`);
   }
 
   post(productData: InterfacePostProduct): Observable<InterfaceProduct> {

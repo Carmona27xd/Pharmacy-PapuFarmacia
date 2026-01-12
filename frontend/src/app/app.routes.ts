@@ -37,14 +37,17 @@ export const routes: Routes = [
     component: ViewMyProfile,
   },
   // Products
-  { path: 'productos/buscar/:query', component: PageSearchForProducts },
+  {
+    path: 'productos/buscar/:query',
+    component: PageSearchForProducts,
+  },
   {
     path: 'productos/registro',
     // TODO canActivate: [GuardAuth],
     component: PageRegisterProduct,
   },
   {
-    path: 'productos/detalles',
+    path: 'productos/detalles/:productId',
     component: PageDetailsProduct,
   },
   { path: '**', component: PageNotFound },
