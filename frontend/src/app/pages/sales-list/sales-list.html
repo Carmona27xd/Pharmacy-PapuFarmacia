@@ -1,0 +1,78 @@
+<div class="p-6 bg-gray-50 min-h-screen">
+  
+  <div class="flex justify-between items-center mb-6">
+    <div>
+      <h1 class="text-3xl font-bold text-gray-800">Historial de Ventas</h1>
+      <p class="text-gray-600">Consulta las transacciones realizadas</p>
+    </div>
+    <button routerLink="/sales" 
+            class="bg-teal-600 text-white px-4 py-2 rounded-lg hover:bg-teal-700 font-bold flex items-center gap-2">
+      <span>+ Nueva Venta</span>
+    </button>
+  </div>
+
+  <div class="bg-white rounded-lg shadow overflow-hidden">
+    
+    <div *ngIf="loading" class="p-8 text-center text-gray-500">
+      Cargando ventas...
+    </div>
+
+    <div *ngIf="errorMessage" class="p-4 bg-red-100 text-red-700 border-l-4 border-red-500">
+      {{ errorMessage }}
+    </div>
+
+    <table *ngIf="!loading && sales.length > 0" class="w-full text-left border-collapse">
+      <thead class="bg-gray-100 text-gray-600 uppercase text-sm font-semibold">
+        <tr>
+          <th class="p-4 border-b">ID Venta</th>
+          <th class="p-4 border-b">Fecha y Hora</th>
+          <th class="p-4 border-b">Método Pago</th>
+          <th class="p-4 border-b">Total</th>
+          </tr>
+      </thead>
+      <tbody class="text-gray-700">
+        <tr *ngFor="let sale of sales" class="hover:bg-gray-50 border-b last:border-0 transition">
+          <td class="p-4 font-bold text-teal-600">#{{ sale.id }}</td>
+          
+          <td class="p-4">{{ sale.created_at | date:'medium' }}</td>
+          
+          <td class="p-4">
+            <span [ngClass]="{
+              'bg-green-100 text-green-800': sale.payment_method === 'CASH',
+              'bg-blue-100 text-blue-800': sale.payment_method === 'CARD',
+              'bg-purple-100 text-purple-800': sale.payment_method === 'TRANSFER'
+            }" class="px-2 py-1 rounded text-xs font-bold">
+              {{ sale.payment_method }}
+            </span>
+          </td>
+
+          <td class="p-4 font-bold">{{ sale.total_amount | currency }}</td>
+          
+          </tr>
+      </tbody>
+    </table>
+
+    <div *ngIf="!loading && sales.length === 0" class="p-8 text-center text-gray-500">
+      No hay ventas registradas todavía.
+    </div>
+
+    <div *ngIf="totalRecords > 0" class="bg-gray-50 px-4 py-3 border-t flex items-center justify-between">
+      <span class="text-sm text-gray-600">
+        Página <strong>{{ currentPage }}</strong> de <strong>{{ totalPages }}</strong>
+      </span>
+      <div class="flex gap-2">
+        <button (click)="loadSales(currentPage - 1)" 
+                [disabled]="currentPage === 1"
+                class="px-3 py-1 border rounded bg-white hover:bg-gray-100 disabled:opacity-50">
+          Anterior
+        </button>
+        <button (click)="loadSales(currentPage + 1)" 
+                [disabled]="currentPage >= totalPages"
+                class="px-3 py-1 border rounded bg-white hover:bg-gray-100 disabled:opacity-50">
+          Siguiente
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>

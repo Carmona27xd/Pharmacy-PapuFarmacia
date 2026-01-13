@@ -18,6 +18,7 @@ import { EditSupplierComponent } from './pages/suppliers/edit-supplier/edit-supp
 import { ViewMyProfile } from './pages/users/view-my-profile/view-my-profile/view-my-profile';
 import { AdminPage } from './pages/admin/home/home';
 import { PosComponent } from './pages/sales/sales';
+import { SalesListComponent } from './pages/sales-list/sales-list';
 
 export const routes: Routes = [
   {
@@ -84,6 +85,10 @@ export const routes: Routes = [
   {
     path: 'admin/home',
     component: AdminPage
+  },
+  {
+    path: 'sales/list',
+    component: SalesListComponent
   },
   { path: '**', component: PageNotFound },
 
