@@ -5,6 +5,7 @@ import { ServicesConfig } from '../config';
 import { environment } from '../../../environments/environment.development';
 import { InterfacePatchUser } from '../../interfaces/user/patch_user';
 import { InterfaceUserBase } from '../../interfaces/user/base-user';
+import { InterfaceUser } from '../../interfaces/user/user';
 
 
 @Injectable({
@@ -21,7 +22,7 @@ export class ServiceAdmmin {
 
     getData() {
         const headers = { Authorization: 'Bearer token' };
-        return this.httpClient.get<InterfaceUserBase>(`${this.adminServiceURL}/users`, {
+        return this.httpClient.get<InterfaceUser>(`${this.adminServiceURL}/users`, {
             headers,
         })
     }

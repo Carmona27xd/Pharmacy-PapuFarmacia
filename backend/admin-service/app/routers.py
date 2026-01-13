@@ -8,6 +8,14 @@ from app.core.security import admin_required
 router = APIRouter(tags=["Admin"])
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
 
+# Health check general
+@router.get("/health",
+    status_code=status.HTTP_200_OK,
+    summary="Health check",
+    description="Check the health status of the admin service")
+def health_check():
+    return {"status": "ok", "service": "admin-service"}
+
 @router.get("/users", response_model=list[User])
 async def list_users(
     limit: int = 50,
@@ -26,6 +34,12 @@ async def ban_user(
     current_user=Depends(admin_required),
     admin_service: AdminService = Depends(get_admin_service),
 ):
+    if user_id == current_user["user_id"]:
+        raise HTTPException(
+            status_code=400,
+            detail="That is YOU"
+        )
+
     return await admin_service.ban_user(token, user_id)
 
 
