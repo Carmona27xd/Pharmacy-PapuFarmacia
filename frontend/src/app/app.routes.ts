@@ -19,7 +19,6 @@ import { ViewMyProfile } from './pages/users/view-my-profile/view-my-profile/vie
 import { PageAdminHome } from './pages/admin/home/home/home';
 
 export const routes: Routes = [
-  /*
   {
     path: '',
     redirectTo: 'inicio',
@@ -64,8 +63,6 @@ export const routes: Routes = [
     path: 'productos/detalles/:productId',
     component: PageDetailsProduct,
   },
-  */
-  //Suppliers
   {
     path: 'suppliers', 
     component: SuppliersListComponent
@@ -83,9 +80,6 @@ export const routes: Routes = [
   }, 
   { path: 'suppliers/edit/:licence', 
     component: EditSupplierComponent 
-  }
-  /*
-  { path: 'buscar-producto', component: PageSearchForProducts },
+  },
   { path: '**', component: PageNotFound },
-   */
 ];

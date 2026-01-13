@@ -1,0 +1,66 @@
+version: '3.8'
+
+name: papufarmacia-carmona
+
+services:
+  # ======================================================================
+  # TU BASE DE DATOS PERSONALIZADA
+  # ======================================================================
+  carmona_mongo:  # <--- CAMBIO 1: Nombre del servicio nuevo
+    image: mongo:6.0
+    container_name: carmona_mongo # <--- CAMBIO 2: Nombre del contenedor único para ti
+    env_file: .env
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_USER_INITDB_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_USER_DB}
+    ports:
+      - "27017:27017" # Puerto abierto para tu Python Local
+    volumes:
+      - carmona_vol_mongo:/data/db
+    networks:
+      - carmona_network
+
+  # ======================================================================
+  # TUS SERVICIOS
+  # ======================================================================
+  # Recuerda comentarlos si corres Python en terminal
+  
+  supplier_service:
+    build: ./supplier-service
+    container_name: pharma_supplier_service
+    env_file: .env
+    environment:
+      # CAMBIO 3: Ahora apuntamos a 'carmona_mongo' en lugar de 'user_db_mongo'
+      - DATABASE_URL=mongodb://${MONGO_USER_INITDB_ROOT_USERNAME}:${MONGO_USER_INITDB_ROOT_PASSWORD}@carmona_mongo:27017/pharma_suppliers?authSource=admin
+    ports:
+      - "8084:8084"
+    command: "uvicorn app.main:app --host 0.0.0.0 --port 8084"
+    depends_on:
+      carmona_mongo: # <--- CAMBIO 4: Dependemos del nuevo nombre
+        condition: service_started
+    networks:
+      - carmona_network
+
+  purchase_order_service:
+    build: ./purchase-order-service
+    container_name: pharma_purchase_order_service
+    env_file: .env
+    environment:
+      # CAMBIO 5: Apuntamos a 'carmona_mongo'
+      - DATABASE_URL=mongodb://${MONGO_USER_INITDB_ROOT_USERNAME}:${MONGO_USER_INITDB_ROOT_PASSWORD}@carmona_mongo:27017/pharma_orders?authSource=admin
+    ports:
+      - "8085:8085"
+    command: "uvicorn app.main:app --host 0.0.0.0 --port 8085"
+    depends_on:
+      carmona_mongo: # <--- CAMBIO 6: Dependencia actualizada
+        condition: service_started
+    networks:
+      - carmona_network
+
+volumes:
+  carmona_vol_mongo: # Volumen propio para no mezclar datos con el equipo
+
+networks:
+  carmona_network:
+    driver: bridge

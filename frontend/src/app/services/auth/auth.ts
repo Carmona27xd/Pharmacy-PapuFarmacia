@@ -30,16 +30,24 @@ export class ServiceAuth {
       );
   }
 
+  logout() {
+    localStorage.removeItem('auth_token');
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem('auth_token');
+  }
+
+  isAuthenticated(): boolean {
+    return !!localStorage.getItem('auth_token');
+  }
+
   // TODO Check if this is correct and what response are
   verifyToken(tokenJWT: string): Observable<InterfaceTokenVerified> {
     return this.httpClient.get<InterfaceTokenVerified>(`${this.authServiceURL}/verify-token`);
   }
 
-  /*
-  postUser(user: InterfaceNewUser) {
-    return this.httpClient.post<InterfaceNewUser>(`${this.baseUrl}/register`, user);
   postUser(userData: InterfacePostUser): Observable<any> {
     return this.httpClient.post<any>(`${this.authServiceURL}/register`, userData);
   }
-  */
 }
