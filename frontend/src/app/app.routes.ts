@@ -11,6 +11,7 @@ import { PageDetailsProduct } from './pages/products/details/details-product';
 import { PageSearchForProducts } from './pages/products/search-for/search-for';
 import { ViewMyProfile } from './pages/users/view-my-profile/view-my-profile/view-my-profile';
 import { PageAdminHome } from './pages/admin/home/home/home';
+import { PageEditProduct } from './pages/products/edit/edit-product';
 
 export const routes: Routes = [
   {
@@ -56,6 +57,10 @@ export const routes: Routes = [
   {
     path: 'productos/detalles/:productId',
     component: PageDetailsProduct,
+  },
+  {
+    path: 'productos/editar/:productId',
+    component: PageEditProduct,
   },
   { path: '**', component: PageNotFound },
 ];

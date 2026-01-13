@@ -148,4 +148,9 @@ export class PageDetailsProduct implements OnInit, OnDestroy {
   goBack(): void {
     this.router.navigate(['/productos']);
   }
+
+  updateProduct(): void {
+    const productIdParam = this.route.snapshot.paramMap.get('productId');
+    this.router.navigate(['/productos/editar', productIdParam]);
+  }
 }

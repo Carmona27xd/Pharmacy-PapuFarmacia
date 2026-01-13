@@ -1,9 +1,17 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input, forwardRef, ChangeDetectorRef, input } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor, Validators } from '@angular/forms';
+
+export interface SelectOption {
+  value: any;
+  label: string;
+  disabled?: boolean;
+}
 
 @Component({
   selector: 'app-input-field',
   standalone: true,
+  imports: [CommonModule],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -14,25 +22,36 @@ import { NG_VALUE_ACCESSOR, ControlValueAccessor, Validators } from '@angular/fo
   templateUrl: './input-field.html',
 })
 export class ComponentInputField {
+  // Configuración general
   @Input() label: string = '';
-  @Input() type: string = 'text'; // text, password, email, number, etc.
+  @Input() fieldType: 'input' | 'textarea' | 'select' = 'input';
   @Input() placeholder: string = '';
   @Input() disabled: boolean = false;
   @Input() autoComplete: string = 'off';
 
+  // Para input
+  @Input() type: string = 'text'; // text, password, email, number, date, etc.
+
+  // Para textarea
+  @Input() rows: number = 4;
+  @Input() maxLength?: number;
+
+  // Para select
+  @Input() options: SelectOption[] = [];
+  @Input() emptyOptionText: string = 'Seleccione una opción';
+  @Input() showEmptyOption: boolean = true;
+
   // Estado interno
-  value: string | null = '';
+  value: any = '';
 
   private onChange: (v: any) => void = () => {};
   private onTouched: () => void = () => {};
 
   constructor(private cdr: ChangeDetectorRef) {}
 
-  // Reactive Forms -> Angular llama a esto cuando carga el control
+  // ControlValueAccessor Implementation
   writeValue(obj: any): void {
-    // Normaliza: nunca undefined/NULL -> evita que el input tenga value="undefined"
     this.value = obj ?? '';
-    // Forzamos detección por si writeValue se llamó fuera del ciclo
     this.cdr.detectChanges();
   }
 
@@ -46,17 +65,17 @@ export class ComponentInputField {
 
   setDisabledState?(isDisabled: boolean): void {
     this.disabled = isDisabled;
-    // actualizar vista por si hace falta
     this.cdr.markForCheck();
   }
 
-  // Handler del input nativo
-  onInput(value: string) {
-    this.value = value;
-    this.onChange(value);
+  // Event Handlers
+  onInput(event: Event): void {
+    const target = event.target as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
+    this.value = target.value;
+    this.onChange(this.value);
   }
 
-  onBlur() {
+  onBlur(): void {
     this.onTouched();
   }
 }
