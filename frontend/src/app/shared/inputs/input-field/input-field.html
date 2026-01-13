@@ -1,14 +1,49 @@
 <div class="flex flex-col gap-1 my-2 w-full">
-  <label class="label-form">{{ label }}</label>
+  <label *ngIf="label" class="label-form">{{ label }}</label>
 
+  <!-- INPUT FIELD -->
   <input
+    *ngIf="fieldType === 'input'"
     [type]="type"
     [placeholder]="placeholder"
     [disabled]="disabled"
     [value]="value ?? ''"
     [autocomplete]="autoComplete"
-    (input)="onInput($event.target.value)"
+    (input)="onInput($event)"
     (blur)="onBlur()"
-    class="rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-gray-400"
+    class="rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed placeholder:text-gray-400"
   />
+
+  <!-- TEXTAREA -->
+  <textarea
+    *ngIf="fieldType === 'textarea'"
+    [placeholder]="placeholder"
+    [disabled]="disabled"
+    [rows]="rows"
+    [attr.maxlength]="maxLength"
+    [value]="value ?? ''"
+    (input)="onInput($event)"
+    (blur)="onBlur()"
+    class="rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed placeholder:text-gray-400 resize-y"
+  ></textarea>
+
+  <!-- SELECT / COMBOBOX -->
+  <select
+    *ngIf="fieldType === 'select'"
+    [disabled]="disabled"
+    [value]="value ?? ''"
+    (change)="onInput($event)"
+    (blur)="onBlur()"
+    class="rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed bg-white"
+  >
+    <option *ngIf="showEmptyOption" value="">{{ emptyOptionText }}</option>
+    <option *ngFor="let option of options" [value]="option.value" [disabled]="option.disabled">
+      {{ option.label }}
+    </option>
+  </select>
+
+  <!-- Contador de caracteres para textarea -->
+  <div *ngIf="fieldType === 'textarea' && maxLength" class="text-xs text-gray-500 text-right">
+    {{ value?.length || 0 }} / {{ maxLength }}
+  </div>
 </div>

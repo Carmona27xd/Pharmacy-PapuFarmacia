@@ -1017,7 +1017,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"productTypeId\": 2,\r\n  \"chemicalName\": \"string\",\r\n  \"comercialName\": \"string\",\r\n  \"description\": \"string\",\r\n  \"price\": 1,\r\n  \"outdate\": \"2026-01-04\",\r\n  \"stock\": 1,\r\n  \"batch\": \"string\",\r\n  \"provider\": \"string\",\r\n  \"pharmaceutical\": \"string\",\r\n  \"imagen\": \"string\"\r\n}",
+              "raw": "{\r\n  \"productTypeId\": 1,\r\n  \"chemicalName\": \"Modificado\",\r\n  \"comercialName\": \"Modificado\",\r\n  \"description\": \"Modificado\",\r\n  \"price\": 1000,\r\n  \"outdate\": \"2026-01-04\",\r\n  \"stock\": 1001,\r\n  \"batch\": \"Modificado\",\r\n  \"provider\": \"Modificado\",\r\n  \"pharmaceutical\": \"Modificado\",\r\n  \"imagen\": \"Modificado\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
