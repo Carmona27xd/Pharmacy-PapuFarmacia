@@ -1,5 +1,3 @@
-version: '3.8'
-
 name: papufarmacia
 
 services:
@@ -15,6 +13,7 @@ services:
       POSTGRES_USER: ${POSTGRES_AUTH_USER}
       POSTGRES_PASSWORD: ${POSTGRES_AUTH_PASSWORD}
       POSTGRES_DB: ${POSTGRES_AUTH_DB}
+      POSTGRES_HOST: ${POSTGRES_AUTH_HOST}
     expose:
       - "5432"
     volumes:
@@ -189,55 +188,79 @@ services:
     # timeout: 5s
     # retries: 10
 
-  # ---------------------------------------------------------------------
-  # SERVICIO: PROVEEDORES (NUEVO)
-  # ---------------------------------------------------------------------
-  supplier_service:
-    build: ./supplier-service
-    container_name: pharma_supplier_service
-    env_file: .env
+  # --------------------------------------------------------------------------------------
+  # ADMIN SERVICE
+  # --------------------------------------------------------------------------------------
+  admin_service:
+    build: ./admin-service
+    container_name: admin_service
+    env_file:
+      - .env
     environment:
-      - DATABASE_URL=mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@pharma_user_db:27017/pharma_suppliers?authSource=admin
-    ports:
-      - "8084:8084"
-    command: "uvicorn app.main:app --host 0.0.0.0 --port 8084"
+      - AUTH_SERVICE_URL=${AUTH_SERVICE_URL}
+    expose:
+      - "8080"
     depends_on:
-      pharma_user_db:
-        condition: service_healthy
+      auth_service:
+        condition: service_started
     networks:
-      - papufarmacia_network
-    healthcheck:
-      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8084/health')"]
-      interval: 5s
-      timeout: 3s
-      retries: 5
-
-  # ---------------------------------------------------------------------
-  # SERVICIO: ORDENES DE COMPRA
-  # ---------------------------------------------------------------------
-  purchase_order_service:
-    build: ./purchase-order-service
-    container_name: pharma_purchase_order_service
-    env_file: .env
+      - internal_network
+    # healthcheck:
+  
+  # --------------------------------------------------------------------------------------
+  # SALES SERVICE (POSTGRES)
+  # --------------------------------------------------------------------------------------
+  sales_db_postgres:
+    image: postgres:15-alpine
+    container_name: sales_db_postgres
+    env_file:
+      - .env
     environment:
-      - DATABASE_URL=mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@pharma_user_db:27017/pharma_orders?authSource=admin
-    ports:
-      - "8085:8085"
-    command: "uvicorn app.main:app --host 0.0.0.0 --port 8085"
-    depends_on:
-      pharma_user_db:
-        condition: service_healthy
+      POSTGRES_USER: ${POSTGRES_SALES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_SALES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_SALES_DB}
+      POSTGRES_HOST: ${POSTGRES_SALES_HOST}
+    expose:
+      - "5432"
+    volumes:
+      - sales_vol_postgres:/var/lib/postgresql/data
     networks:
-      - papufarmacia_network
-    healthcheck:
-      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8085/health')"]
-      interval: 5s
-      timeout: 3s
-      retries: 5
+      - internal_network
+    # healtcheck:
 
-  # ---------------------------------------------------------------------
+  # --------------------------------------------------------------------------------------
+  # SALES SERVICE
+  # --------------------------------------------------------------------------------------
+  sales_service:
+    build: ./sales-service
+    container_name: sales_service
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_SALES_USER}:${POSTGRES_SALES_PASSWORD}@${POSTGRES_SALES_HOST}:${POSTGRES_SALES_PORT}/${POSTGRES_SALES_DB}
+      SECRET_KEY: ${SECRET_KEY}
+    expose:
+      - "8080"
+    command: >
+      sh -c "
+      set -e;
+      until pg_isready -h ${POSTGRES_SALES_HOST} -U ${POSTGRES_SALES_USER} -d ${POSTGRES_SALES_DB}; do
+        echo 'Esperando a PostgreSQL...';
+        sleep 2;
+      done;
+      alembic upgrade head && 
+      uvicorn app.main:app --host 0.0.0.0 --port 8080
+      "
+    depends_on:
+      sales_db_postgres:
+        condition: service_started
+    networks:
+      - internal_network
+    # healthcheck:
+
+  # --------------------------------------------------------------------------------------
   # API GATEWAY
-  # ---------------------------------------------------------------------
+  # --------------------------------------------------------------------------------------
   api_gateway:
     build: ./API-Gateway
     container_name: api_gateway
@@ -255,8 +278,8 @@ services:
       sales_service:
         condition: service_started
     networks:
-      - papufarmacia_network  # <-- IMPORTANTE: Debe estar en la misma red que los servicios
-      - external_network      # Para salida a internet si hace falta
+      - internal_network
+      - external_network
 
 # --------------------------------------------------------------------------------------
 # VOLUMES
@@ -271,7 +294,8 @@ volumes:
 # NETWORKS
 # --------------------------------------------------------------------------------------
 networks:
-  papufarmacia_network:
+  internal_network:
     driver: bridge
+    internal: true
   external_network:
     driver: bridge

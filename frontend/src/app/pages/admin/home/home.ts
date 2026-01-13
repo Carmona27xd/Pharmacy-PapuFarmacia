@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 import { ServiceAdmmin } from '../../../services/admin/admin';
 import { InterfaceUser } from '../../../interfaces/user/user';
 import { CommonModule } from '@angular/common';
@@ -15,6 +15,8 @@ export class AdminPage implements OnInit {
   users: InterfaceUser[] = [];
   loading = false;
   error = '';
+
+  private cd = inject(ChangeDetectorRef)
 
   constructor(
     private adminService: ServiceAdmmin,
