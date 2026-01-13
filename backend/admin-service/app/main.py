@@ -11,6 +11,15 @@ app = FastAPI(
     root_path="/api/admin"
 )
 
+app.add_middleware(
+    CORSMiddleware,
+    # Opción Nuclear: Permitir todo ("*") para que no te de lata en desarrollo
+    allow_origins=["*"], 
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 
 app.include_router(router)

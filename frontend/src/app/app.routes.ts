@@ -17,6 +17,7 @@ import { EditSupplierComponent } from './pages/suppliers/edit-supplier/edit-supp
 
 import { ViewMyProfile } from './pages/users/view-my-profile/view-my-profile/view-my-profile';
 import { AdminPage } from './pages/admin/home/home';
+import { PosComponent } from './pages/sales/sales';
 
 export const routes: Routes = [
   {
@@ -42,6 +43,10 @@ export const routes: Routes = [
     path: 'usuario/perfil',
     // TODO canActivate: [GuardAuth],
     component: ViewMyProfile,
+  },
+  {
+    path: 'sales',
+    component: PosComponent
   },
   // Products
   {

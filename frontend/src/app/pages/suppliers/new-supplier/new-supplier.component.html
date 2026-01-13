@@ -80,18 +80,7 @@
     <div class="mt-4 p-4 bg-gray-100 border border-red-500 rounded">
   <p class="font-bold text-red-600">Estado del Formulario: {{ form.status }}</p>
   
-  <p class="font-bold mt-2">Errores por campo:</p>
-  <ul>
-    <li *ngIf="form.get('name')?.invalid">Nombre: INVÁLIDO</li>
-    <li *ngIf="form.get('RFC')?.invalid">RFC: INVÁLIDO</li>
-    <li *ngIf="form.get('contact')?.invalid">Contacto: INVÁLIDO</li>
-    <li *ngIf="form.get('phone')?.invalid">Teléfono: INVÁLIDO</li>
-    <li *ngIf="form.get('email')?.invalid">Email: INVÁLIDO</li>
-    <li *ngIf="form.get('licence_number')?.invalid">Licencia: INVÁLIDO</li>
-    <li *ngIf="form.get('licence_expiration')?.invalid">Vencimiento: INVÁLIDO</li>
-    <li *ngIf="form.get('supplier_type')?.invalid">Tipo: INVÁLIDO</li>
-    <li *ngIf="form.get('address')?.invalid">Dirección: INVÁLIDO</li>
-  </ul>
+  
 </div>
 
     
