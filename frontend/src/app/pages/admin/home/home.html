@@ -1,22 +1,30 @@
 <main class="min-h-screen bg-gray-50 py-8">
   <div class="container mx-auto px-4 max-w-7xl">
 
-    <!-- Title -->
-    <h1 class="text-3xl font-bold text-gray-800 mb-6 pb-3 border-b-2 border-indigo-600">
-      Panel de Administración – Usuarios
-    </h1>
+    <div class="flex flex-col md:flex-row justify-between items-center mb-6 pb-3 border-b-2 border-indigo-600 gap-4">
+      
+      <h1 class="text-3xl font-bold text-gray-800">
+        Panel de Administración – Usuarios
+      </h1>
 
-    <!-- Loading -->
+      <a routerLink="/registerv2/form" 
+         class="flex items-center px-4 py-2 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition duration-300 transform hover:scale-105 cursor-pointer">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+        </svg>
+        Registrar Usuario
+      </a>
+
+    </div>
+
     <div *ngIf="loading" class="bg-blue-50 border-l-4 border-blue-400 p-4 rounded-lg mb-4">
       <p class="text-blue-800 font-medium">Cargando usuarios…</p>
     </div>
 
-    <!-- Error -->
     <div *ngIf="error" class="bg-red-50 border-l-4 border-red-400 p-4 rounded-lg mb-4">
       <p class="text-red-800 font-medium">{{ error }}</p>
     </div>
 
-    <!-- Users Table -->
     <section *ngIf="!loading && users.length > 0" class="bg-white rounded-xl shadow-md p-6">
       <h2 class="text-xl font-semibold text-gray-800 mb-4">
         Lista de usuarios
@@ -82,7 +90,6 @@
               </td>
 
               <td class="px-4 py-3">
-                <!-- Ban button -->
                 <button
                   *ngIf="user.is_active"
                   (click)="banUser(user.id)"
@@ -92,7 +99,6 @@
                   Banear
                 </button>
 
-                <!-- Unban button -->
                 <button
                   *ngIf="!user.is_active"
                   (click)="unbanUser(user.id)"
@@ -108,7 +114,6 @@
       </div>
     </section>
 
-    <!-- No users -->
     <div
       *ngIf="!loading && users.length === 0"
       class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-lg"

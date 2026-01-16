@@ -1,78 +1,118 @@
-<div class="p-6 bg-gray-50 min-h-screen">
-  
-  <div class="flex justify-between items-center mb-6">
-    <div>
-      <h1 class="text-3xl font-bold text-gray-800">Historial de Ventas</h1>
-      <p class="text-gray-600">Consulta las transacciones realizadas</p>
-    </div>
-    <button routerLink="/sales" 
-            class="bg-teal-600 text-white px-4 py-2 rounded-lg hover:bg-teal-700 font-bold flex items-center gap-2">
-      <span>+ Nueva Venta</span>
-    </button>
-  </div>
+<main class="min-h-screen bg-gray-50 py-8">
+  <div class="container mx-auto px-4 max-w-7xl">
 
-  <div class="bg-white rounded-lg shadow overflow-hidden">
-    
-    <div *ngIf="loading" class="p-8 text-center text-gray-500">
-      Cargando ventas...
+    <div class="mb-8 border-b-2 border-indigo-600 pb-4">
+      <h1 class="text-3xl font-bold text-gray-800">Reporte de Ventas</h1>
+      <p class="text-gray-500 mt-1">Historial de transacciones y detalles de productos</p>
     </div>
 
-    <div *ngIf="errorMessage" class="p-4 bg-red-100 text-red-700 border-l-4 border-red-500">
-      {{ errorMessage }}
+    <div *ngIf="loading" class="flex justify-center my-10">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
     </div>
 
-    <table *ngIf="!loading && sales.length > 0" class="w-full text-left border-collapse">
-      <thead class="bg-gray-100 text-gray-600 uppercase text-sm font-semibold">
-        <tr>
-          <th class="p-4 border-b">ID Venta</th>
-          <th class="p-4 border-b">Fecha y Hora</th>
-          <th class="p-4 border-b">Método Pago</th>
-          <th class="p-4 border-b">Total</th>
-          </tr>
-      </thead>
-      <tbody class="text-gray-700">
-        <tr *ngFor="let sale of sales" class="hover:bg-gray-50 border-b last:border-0 transition">
-          <td class="p-4 font-bold text-teal-600">#{{ sale.id }}</td>
-          
-          <td class="p-4">{{ sale.created_at | date:'medium' }}</td>
-          
-          <td class="p-4">
-            <span [ngClass]="{
-              'bg-green-100 text-green-800': sale.payment_method === 'CASH',
-              'bg-blue-100 text-blue-800': sale.payment_method === 'CARD',
-              'bg-purple-100 text-purple-800': sale.payment_method === 'TRANSFER'
-            }" class="px-2 py-1 rounded text-xs font-bold">
-              {{ sale.payment_method }}
-            </span>
-          </td>
+    <div *ngIf="!loading">
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        
+        <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-green-500">
+          <p class="text-gray-500 text-sm font-bold uppercase">Ingresos Totales</p>
+          <h3 class="text-3xl font-extrabold text-gray-800 mt-2">{{ totalRevenue | currency }}</h3>
+        </div>
 
-          <td class="p-4 font-bold">{{ sale.total_amount | currency }}</td>
-          
-          </tr>
-      </tbody>
-    </table>
+        <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-blue-500">
+          <p class="text-gray-500 text-sm font-bold uppercase">Ventas Realizadas</p>
+          <h3 class="text-3xl font-extrabold text-gray-800 mt-2">{{ countSales }}</h3>
+        </div>
 
-    <div *ngIf="!loading && sales.length === 0" class="p-8 text-center text-gray-500">
-      No hay ventas registradas todavía.
-    </div>
+        <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-purple-500">
+          <p class="text-gray-500 text-sm font-bold uppercase">Ticket Promedio</p>
+          <h3 class="text-3xl font-extrabold text-gray-800 mt-2">
+            {{ countSales > 0 ? (totalRevenue / countSales | currency) : '$0.00' }}
+          </h3>
+        </div>
+      </div>
 
-    <div *ngIf="totalRecords > 0" class="bg-gray-50 px-4 py-3 border-t flex items-center justify-between">
-      <span class="text-sm text-gray-600">
-        Página <strong>{{ currentPage }}</strong> de <strong>{{ totalPages }}</strong>
-      </span>
-      <div class="flex gap-2">
-        <button (click)="loadSales(currentPage - 1)" 
-                [disabled]="currentPage === 1"
-                class="px-3 py-1 border rounded bg-white hover:bg-gray-100 disabled:opacity-50">
-          Anterior
-        </button>
-        <button (click)="loadSales(currentPage + 1)" 
-                [disabled]="currentPage >= totalPages"
-                class="px-3 py-1 border rounded bg-white hover:bg-gray-100 disabled:opacity-50">
-          Siguiente
+      <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100">
+        <div class="px-6 py-4 bg-gray-50 border-b border-gray-200">
+          <h3 class="font-bold text-gray-700">Historial Detallado</h3>
+        </div>
+      <div class="flex justify-between items-center mb-6 border-b-2 border-indigo-600 pb-4">
+        <h1 class="text-3xl font-bold text-gray-800">Reporte de Ventas</h1>
+        
+        <button (click)="downloadPDF()" 
+                class="flex items-center px-4 py-2 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-700 transition duration-300">
+          <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 2v3a1 1 0 001 1h3m-3 7H7a1 1 0 110-2h4a1 1 0 110 2zm0-4H7a1 1 0 110-2h4a1 1 0 110 2z"/>
+          </svg>
+          Descargar PDF
         </button>
       </div>
-    </div>
+        
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="text-xs text-gray-500 uppercase bg-gray-100 border-b border-gray-200 tracking-wider">
+                <th class="px-6 py-3 font-semibold">Fecha / Hora</th>
+                <th class="px-6 py-3 font-semibold">Método Pago</th>
+                <th class="px-6 py-3 font-semibold w-1/3">Productos Vendidos</th>
+                <th class="px-6 py-3 font-semibold text-right">Total Venta</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100">
+              <tr *ngFor="let sale of sales" class="hover:bg-gray-50 transition duration-150">
+                
+                <td class="px-6 py-4">
+                  <div class="text-sm font-medium text-gray-900">
+                    {{ sale.sale_date | date:'dd MMM yyyy' }}
+                  </div>
+                  <div class="text-xs text-gray-500">
+                    {{ sale.sale_date | date:'h:mm a' }}
+                  </div>
+                  <div class="text-[10px] text-gray-400 font-mono mt-1">ID: {{ sale.id | slice:0:8 }}...</div>
+                </td>
 
+                <td class="px-6 py-4 text-sm text-gray-600">
+                  <span class="px-2 py-1 rounded text-xs font-semibold border"
+                    [ngClass]="{
+                      'bg-green-50 text-green-700 border-green-200': sale.payment_method === 'Efectivo',
+                      'bg-blue-50 text-blue-700 border-blue-200': sale.payment_method !== 'Efectivo'
+                    }">
+                    {{ sale.payment_method }}
+                  </span>
+                </td>
+
+                <td class="px-6 py-4">
+                  <ul class="text-sm text-gray-600 space-y-1">
+                    <li *ngFor="let item of sale.items" class="flex justify-between items-center">
+                      <span>
+                        <span class="font-bold text-gray-800">{{ item.quantity }}x</span> 
+                        {{ item.product_name }}
+                      </span>
+                      <span class="text-xs text-gray-400 ml-2">({{ item.subtotal | currency }})</span>
+                    </li>
+                  </ul>
+                </td>
+
+                <td class="px-6 py-4 text-right">
+                  <span class="text-base font-bold text-gray-900">
+                    {{ sale.total | currency }}
+                  </span>
+                </td>
+
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div *ngIf="sales.length === 0" class="p-12 text-center">
+          <div class="inline-block p-4 rounded-full bg-gray-100 mb-3">
+             <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+          </div>
+          <h3 class="text-lg font-medium text-gray-900">No hay ventas registradas</h3>
+          <p class="text-gray-500">Realiza una venta nueva para verla aquí.</p>
+        </div>
+      </div>
+
+    </div>
   </div>
-</div>
+</main>

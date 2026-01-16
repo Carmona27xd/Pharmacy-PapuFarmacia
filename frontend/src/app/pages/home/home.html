@@ -43,6 +43,7 @@
       </div>
     </div>
 
+    @if (isUserAdmin){
     <div class="bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden group cursor-pointer"
          routerLink="/admin/home">
       <div class="h-2 bg-teal-600"></div>
@@ -59,9 +60,9 @@
         </button>
       </div>
     </div>
-
+  }
     <div class="bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden group cursor-pointer"
-         routerLink="/products">
+         routerLink="/productsv2/list">
       <div class="h-2 bg-orange-500"></div>
       <div class="p-8 flex flex-col items-center text-center">
         <div class="bg-orange-100 p-4 rounded-full mb-4 group-hover:bg-orange-500 transition-colors duration-300">
@@ -78,7 +79,7 @@
     </div>
 
     <div class="bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden group cursor-pointer"
-         routerLink="/sales">
+         routerLink="/salesv2/sale">
       <div class="h-2 bg-emerald-600"></div>
       <div class="p-8 flex flex-col items-center text-center">
         <div class="bg-emerald-100 p-4 rounded-full mb-4 group-hover:bg-emerald-600 transition-colors duration-300">
@@ -93,10 +94,11 @@
         </button>
       </div>
     </div>
-
+    @if (isUserAdmin){
     <div class="bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden group cursor-pointer"
      routerLink="/sales/list">
   <div class="h-2 bg-blue-600"></div>
+  
   
   <div class="p-8 flex flex-col items-center text-center">
     <div class="bg-blue-100 p-4 rounded-full mb-4 group-hover:bg-blue-600 transition-colors duration-300">
@@ -113,11 +115,10 @@
       Panel de Ventas
     </button>
   </div>
-  </div>
 
   </div>
 
-  <footer class="mt-12 text-gray-400 text-sm">
+    }</div><footer class="mt-12 text-gray-400 text-sm">
     &copy; 2026 PapuFarmacia System v1.0
   </footer>
 </div>

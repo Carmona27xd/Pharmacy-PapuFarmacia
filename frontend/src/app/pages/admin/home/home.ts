@@ -2,13 +2,13 @@ import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 import { ServiceAdmmin } from '../../../services/admin/admin';
 import { InterfaceUser } from '../../../interfaces/user/user';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'home',
   standalone: true,
   templateUrl: './home.html',
-  imports: [CommonModule]
+  imports: [CommonModule, RouterLink]
 })
 export class AdminPage implements OnInit {
 
@@ -16,11 +16,12 @@ export class AdminPage implements OnInit {
   loading = false;
   error = '';
 
-  private cd = inject(ChangeDetectorRef)
+  
 
   constructor(
     private adminService: ServiceAdmmin,
-    private router: Router
+    private router: Router,
+    private cd: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -33,6 +34,8 @@ export class AdminPage implements OnInit {
       next: (resp: any) => {
         this.users = resp.users ?? resp;
         this.loading = false;
+
+        this.cd.detectChanges();
       },
       error: () => {
         this.error = 'Could not load users';
@@ -44,7 +47,7 @@ export class AdminPage implements OnInit {
   banUser(user_id: number) {
     this.adminService.patchDataBan(user_id).subscribe({
       next: () => this.loadUsers(),
-      error: () => alert('Failed to ban user')
+      error: () => alert('No te puedes banear a ti mismo')
     });
   }
 

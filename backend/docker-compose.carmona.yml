@@ -6,16 +6,16 @@ services:
   # ======================================================================
   # TU BASE DE DATOS PERSONALIZADA
   # ======================================================================
-  carmona_mongo:  # <--- CAMBIO 1: Nombre del servicio nuevo
+  carmona_mongo:
     image: mongo:6.0
-    container_name: carmona_mongo # <--- CAMBIO 2: Nombre del contenedor único para ti
+    container_name: carmona_mongo
     env_file: .env
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER_INITDB_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_USER_INITDB_ROOT_PASSWORD}
       MONGO_INITDB_DATABASE: ${MONGO_USER_DB}
     ports:
-      - "27017:27017" # Puerto abierto para tu Python Local
+      - "27017:27017"
     volumes:
       - carmona_vol_mongo:/data/db
     networks:
@@ -24,20 +24,19 @@ services:
   # ======================================================================
   # TUS SERVICIOS
   # ======================================================================
-  # Recuerda comentarlos si corres Python en terminal
+  # Recuerda comentarlos si vas a correrlos manualmente con Python (uvicorn)
   
   supplier_service:
     build: ./supplier-service
     container_name: pharma_supplier_service
     env_file: .env
     environment:
-      # CAMBIO 3: Ahora apuntamos a 'carmona_mongo' en lugar de 'user_db_mongo'
       - DATABASE_URL=mongodb://${MONGO_USER_INITDB_ROOT_USERNAME}:${MONGO_USER_INITDB_ROOT_PASSWORD}@carmona_mongo:27017/pharma_suppliers?authSource=admin
     ports:
       - "8084:8084"
     command: "uvicorn app.main:app --host 0.0.0.0 --port 8084"
     depends_on:
-      carmona_mongo: # <--- CAMBIO 4: Dependemos del nuevo nombre
+      carmona_mongo:
         condition: service_started
     networks:
       - carmona_network
@@ -47,19 +46,54 @@ services:
     container_name: pharma_purchase_order_service
     env_file: .env
     environment:
-      # CAMBIO 5: Apuntamos a 'carmona_mongo'
       - DATABASE_URL=mongodb://${MONGO_USER_INITDB_ROOT_USERNAME}:${MONGO_USER_INITDB_ROOT_PASSWORD}@carmona_mongo:27017/pharma_orders?authSource=admin
     ports:
       - "8085:8085"
     command: "uvicorn app.main:app --host 0.0.0.0 --port 8085"
     depends_on:
-      carmona_mongo: # <--- CAMBIO 6: Dependencia actualizada
+      carmona_mongo:
+        condition: service_started
+    networks:
+      - carmona_network
+
+  # ======================================================================
+  # NUEVO SERVICIO: PRODUCTOS
+  # ======================================================================
+  product_service:
+    # Asegúrate de que tu carpeta se llame exactamente así:
+    build: ./productv2-service 
+    container_name: pharma_product_service
+    env_file: .env
+    environment:
+      # Nota que la BD se llama 'pharma_products' para separar los datos
+      - DATABASE_URL=mongodb://${MONGO_USER_INITDB_ROOT_USERNAME}:${MONGO_USER_INITDB_ROOT_PASSWORD}@carmona_mongo:27017/pharma_products?authSource=admin
+    ports:
+      - "8086:8086" # Usamos el 8086 para no chocar con los otros
+    command: "uvicorn app.main:app --host 0.0.0.0 --port 8086"
+    depends_on:
+      carmona_mongo:
+        condition: service_started
+    networks:
+      - carmona_network
+  
+  sales_service:
+    build: ./salesv2-service
+    container_name: pharma_sales_service
+    env_file: .env
+    environment:
+      # Apunta a la misma BD pero usará la base 'pharma_sales' definida en el código
+      - DATABASE_URL=mongodb://${MONGO_USER_INITDB_ROOT_USERNAME}:${MONGO_USER_INITDB_ROOT_PASSWORD}@carmona_mongo:27017/?authSource=admin
+    ports:
+      - "8087:8087"
+    command: "uvicorn app.main:app --host 0.0.0.0 --port 8087"
+    depends_on:
+      carmona_mongo:
         condition: service_started
     networks:
       - carmona_network
 
 volumes:
-  carmona_vol_mongo: # Volumen propio para no mezclar datos con el equipo
+  carmona_vol_mongo:
 
 networks:
   carmona_network:

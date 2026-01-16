@@ -1,63 +1,99 @@
-import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
-import { CommonModule } from '@angular/common'; 
-import { RouterModule } from '@angular/router';
-import { SaleResponse, SaleFilters } from '../../interfaces/sales/sales';
-import { SalesService } from '../../services/sales/sales';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { CommonModule, DatePipe, CurrencyPipe } from '@angular/common';
+import { InterfaceSale } from '../../interfaces/sales-history/sale';
+import { SalesService } from '../../services/salesv2/sales';
+
+// Importaciones para el PDF
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 @Component({
-  selector: 'app-sales-list',
+  selector: 'app-sales-history',
   standalone: true,
-  imports: [CommonModule, RouterModule],
-  templateUrl: './sales-list.html',
+  imports: [CommonModule, DatePipe, CurrencyPipe],
+  templateUrl: './sales-list.html'
 })
-export class SalesListComponent implements OnInit {
-  
-  private salesService = inject(SalesService);
-  
-  // 1. Inyectamos el detector (Ya lo tenías, perfecto)
-  private cd = inject(ChangeDetectorRef);
+export class SalesHistoryPage implements OnInit {
 
-  sales: SaleResponse[] = [];
-  totalRecords = 0;
-  currentPage = 1;
-  pageSize = 10;
-  loading = false;
-  errorMessage = '';
+  sales: InterfaceSale[] = [];
+  loading: boolean = true;
+  
+  // Estadísticas
+  totalRevenue: number = 0;
+  countSales: number = 0;
+
+  constructor(
+    private salesService: SalesService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.loadSales();
   }
 
-  loadSales(page: number = 1) {
+  loadSales() {
     this.loading = true;
-    this.currentPage = page;
-
-    const filters: SaleFilters = {
-      page: this.currentPage,
-      size: this.pageSize
-    };
-
-    this.salesService.getSales(filters).subscribe({
-      next: (resp) => {
-        this.sales = resp.sales;
-        this.totalRecords = resp.total;
+    this.salesService.getHistory().subscribe({
+      next: (data) => {
+        this.sales = data;
+        this.calculateStats();
         this.loading = false;
-        
-        // 2. ¡MAGIA AQUÍ! Forzamos la actualización visual
-        this.cd.detectChanges();
+        this.cdr.detectChanges();
       },
       error: (err) => {
-        console.error(err);
-        this.errorMessage = 'Error al cargar el historial de ventas.';
+        console.error('Error al obtener ventas', err);
         this.loading = false;
-        
-        // 3. También aquí por si falla, para quitar el "Cargando..."
-        this.cd.detectChanges();
+        this.cdr.detectChanges();
       }
     });
   }
 
-  get totalPages(): number {
-    return Math.ceil(this.totalRecords / this.pageSize);
+  calculateStats() {
+    this.countSales = this.sales.length;
+    // Sumamos el total de todas las ventas
+    this.totalRevenue = this.sales.reduce((acc, sale) => acc + sale.total, 0);
+  }
+
+  // --- NUEVA FUNCIÓN PARA DESCARGAR EL PDF ---
+  downloadPDF() {
+    const doc = new jsPDF();
+
+    // 1. Configuración de encabezado
+    doc.setFontSize(18);
+    doc.text('Reporte de Ventas - PapuFarmacia', 14, 20);
+    
+    doc.setFontSize(11);
+    doc.setTextColor(100);
+    doc.text(`Fecha de generación: ${new Date().toLocaleString()}`, 14, 30);
+    doc.text(`Total de ventas: ${this.countSales}`, 14, 37);
+    doc.text(`Ingresos totales: $${this.totalRevenue.toLocaleString()}`, 14, 44);
+
+    // 2. Mapeo de datos para la tabla
+    // Usamos tus campos: id, sale_date, payment_method, items y total
+    const tableBody = this.sales.map(sale => [
+      new Date(sale.sale_date).toLocaleString(),
+      sale.id.substring(sale.id.length - 6).toUpperCase(), // Mostramos solo los últimos 6 caracteres del ID de Mongo
+      sale.payment_method,
+      // Listamos los productos del array 'items'
+      sale.items.map(i => `${i.quantity}x ${i.product_name}`).join('\n'),
+      `$${sale.total.toLocaleString()}`
+    ]);
+
+    // 3. Generación de la tabla
+    autoTable(doc, {
+      startY: 50,
+      head: [['Fecha', 'ID (Ref)', 'Método', 'Productos', 'Total']],
+      body: tableBody,
+      theme: 'striped',
+      headStyles: { fillColor: [79, 70, 229] }, // Color Índigo acorde a tu UI
+      styles: { fontSize: 9, cellPadding: 3 },
+      columnStyles: {
+        3: { cellWidth: 80 } // Damos más espacio a la columna de productos
+      }
+    });
+
+    // 4. Guardar archivo
+    const fileName = `Reporte_Ventas_${new Date().toISOString().slice(0,10)}.pdf`;
+    doc.save(fileName);
   }
 }

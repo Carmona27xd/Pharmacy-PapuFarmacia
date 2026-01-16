@@ -1,31 +1,35 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { ComponentInputField } from '../../../shared/inputs/input-field/input-field';
+// Servicios e Interfaces
 import { ServiceAuth } from '../../../services/auth/auth';
-import { ServiceShowCustomDialog } from '../../../shared/dialogs/service-dialog';
 import { InterfaceLogin } from '../../../interfaces/user/login';
 import { InterfaceApiError } from '../../../interfaces/http/HTTPError';
 
 @Component({
   selector: 'login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ComponentInputField],
+  // NOTA: Quitamos ComponentInputField de aquí porque el nuevo HTML usa inputs nativos con Tailwind
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './login.html',
 })
 export class PageLogin implements OnInit {
+  
   loginForm: FormGroup;
-  token: any = null;
+  
+  // VARIABLE NUEVA: Controla la visibilidad del Modal en el HTML
+  isErrorModalOpen: boolean = false;
 
   constructor(
     private fb: FormBuilder,
     private serviceAuth: ServiceAuth,
     private router: Router,
-    private customDialogService: ServiceShowCustomDialog
+    private cd: ChangeDetectorRef
   ) {
     this.loginForm = this.fb.group({
+      // Mantenemos tus validadores
       identifier: ['', [Validators.required, Validators.minLength(5)]],
       password: ['', [Validators.required, Validators.minLength(6)]],
     });
@@ -46,20 +50,25 @@ export class PageLogin implements OnInit {
 
     this.serviceAuth.login(loginData).subscribe({
       next: () => {
-        this.router.navigate(['/']);
+        // Redirigir a inicio si todo sale bien
+        this.router.navigate(['/inicio']);
       },
       error: (err: InterfaceApiError) => {
         console.error('Error en login:', err);
 
-        if (err.status === 401) {
-          this.customDialogService.error(
-            'Error de autenticación',
-            'Crdenciales inválidas. Intenta nuevamente.'
-          );
-        } else {
-          this.customDialogService.error('Error de servidor', err.message);
-        }
+        // AQUÍ ACTIVAMOS EL MODAL DEL HTML
+        // No importa si es 401 u otro error, mostramos el modal de "Credenciales inválidas"
+        // o podrías personalizar el mensaje si quisieras.
+        this.isErrorModalOpen = true;
+
+        this.cd.detectChanges();
       },
     });
+  }
+
+  // FUNCIÓN NUEVA: Cierra el modal cuando el usuario hace clic en el botón
+  closeErrorModal() {
+    this.isErrorModalOpen = false;
+    this.cd.detectChanges();
   }
 }

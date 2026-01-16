@@ -7,6 +7,7 @@ import { InterfaceLogin } from '../../interfaces/user/login';
 import { InterfacePostUser } from '../../interfaces/user/post-user';
 import { InterfaceLoginResponse } from '../../interfaces/user/login-response';
 import { InterfaceTokenVerified } from '../../interfaces/user/token-verified';
+import { InterfaceRegister } from '../../interfaces/user/userv2';
 
 @Injectable({
   providedIn: 'root',
@@ -49,5 +50,31 @@ export class ServiceAuth {
 
   postUser(userData: InterfacePostUser): Observable<any> {
     return this.httpClient.post<any>(`${this.authServiceURL}/register`, userData);
+  }
+
+
+  register(userData: InterfaceRegister): Observable<any> {
+    return this.httpClient.post<any>(`${this.authServiceURL}/register`, userData);
+  }
+
+  getDecodedToken(): any {
+    const token = this.getToken();
+    if (!token) {
+      return null;
+    }
+
+    try {
+      const payload = token.split('.')[1];
+      const decodedJson = atob(payload);
+      return JSON.parse(decodedJson);
+    } catch (e) {
+      console.error('Error decodificando token', e);
+      return null;
+    }
+  }
+
+  isAdmin(): boolean {
+    const data = this.getDecodedToken();
+    return data && data.role_id === 1;
   }
 }

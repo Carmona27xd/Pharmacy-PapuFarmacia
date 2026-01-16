@@ -18,7 +18,12 @@ import { EditSupplierComponent } from './pages/suppliers/edit-supplier/edit-supp
 import { ViewMyProfile } from './pages/users/view-my-profile/view-my-profile/view-my-profile';
 import { AdminPage } from './pages/admin/home/home';
 import { PosComponent } from './pages/sales/sales';
-import { SalesListComponent } from './pages/sales-list/sales-list';
+
+import { ProductListComponent } from './productsv2/product-list/product-list';
+import { ProductFormComponent } from './productsv2/product-form/product-form';
+import { SalesComponent } from './salesv2/register-sale/register-sale';
+import { PageRegister } from './userv2/user-form/user-form';
+import { SalesHistoryPage } from './pages/sales-list/sales-list';
 
 export const routes: Routes = [
   {
@@ -88,7 +93,27 @@ export const routes: Routes = [
   },
   {
     path: 'sales/list',
-    component: SalesListComponent
+    component: SalesHistoryPage
+  },
+  {
+    path: 'productsv2/list',
+    component: ProductListComponent
+  },
+  {
+    path: 'productsv2/create',
+    component: ProductFormComponent
+  },
+  {
+    path: 'productsv2/edit/:sku',
+    component: ProductFormComponent
+  },
+  {
+    path: 'salesv2/sale',
+    component: SalesComponent
+  },
+  {
+    path: 'registerv2/form',
+    component: PageRegister
   },
   { path: '**', component: PageNotFound },
 

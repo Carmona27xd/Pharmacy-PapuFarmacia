@@ -132,62 +132,11 @@ services:
   # --------------------------------------------------------------------------------------
   # PRODUCT DATABASE (POSTGRES)
   # --------------------------------------------------------------------------------------
-  product_db_postgres:
-    image: postgres:15
-    container_name: product_db_postgres
-    env_file:
-      - .env
-    environment:
-      POSTGRES_USER: ${POSTGRES_PRODUCT_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PRODUCT_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_PRODUCT_DB}
-      POSTGRES_HOST: ${POSTGRES_PRODUCT_HOST}
-    expose:
-      - "5432"
-    volumes:
-      - product_vol_postgres:/var/lib/postgresql/data
-    networks:
-      - internal_network
-    # healthcheck:
-    # test:
-    # [
-    # "CMD-SHELL",
-    # "pg_isready -h ${POSTGRES_PRODUCT_HOST} -U ${POSTGRES_PRODUCT_USER}",
-    # ]
-    # interval: 10s
-    # timeout: 5s
-    # retries: 10
-
+ 
   # --------------------------------------------------------------------------------------
   # PRODUCT SERVICE
   # --------------------------------------------------------------------------------------
-  product_service:
-    build: ./product-service
-    container_name: product_service
-    env_file:
-      - .env
-    environment:
-      DATABASE_URL: postgresql://${POSTGRES_PRODUCT_USER}:${POSTGRES_PRODUCT_PASSWORD}@${POSTGRES_PRODUCT_HOST}:${POSTGRES_PRODUCT_PORT}/${POSTGRES_PRODUCT_DB}
-      SECRET_KEY: ${SECRET_KEY}
-    expose:
-      - "8080"
-    command: >
-      sh -c "uvicorn app.main:app --host 0.0.0.0 --port 8080"
-    depends_on:
-      product_db_postgres:
-        condition: service_started
-    networks:
-      - internal_network
-    # healthcheck:
-    # test:
-    # [
-    # "CMD-SHELL",
-    # "python - << 'EOF'\nimport requests\nprint(requests.get('http://product_service:8080/health').status_code)\nEOF",
-    # ]
-    # interval: 10s
-    # timeout: 5s
-    # retries: 10
-
+  
   # --------------------------------------------------------------------------------------
   # ADMIN SERVICE
   # --------------------------------------------------------------------------------------
@@ -210,53 +159,10 @@ services:
   # --------------------------------------------------------------------------------------
   # SALES SERVICE (POSTGRES)
   # --------------------------------------------------------------------------------------
-  sales_db_postgres:
-    image: postgres:15-alpine
-    container_name: sales_db_postgres
-    env_file:
-      - .env
-    environment:
-      POSTGRES_USER: ${POSTGRES_SALES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_SALES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_SALES_DB}
-      POSTGRES_HOST: ${POSTGRES_SALES_HOST}
-    expose:
-      - "5432"
-    volumes:
-      - sales_vol_postgres:/var/lib/postgresql/data
-    networks:
-      - internal_network
-    # healtcheck:
 
   # --------------------------------------------------------------------------------------
   # SALES SERVICE
   # --------------------------------------------------------------------------------------
-  sales_service:
-    build: ./sales-service
-    container_name: sales_service
-    env_file:
-      - .env
-    environment:
-      DATABASE_URL: postgresql://${POSTGRES_SALES_USER}:${POSTGRES_SALES_PASSWORD}@${POSTGRES_SALES_HOST}:${POSTGRES_SALES_PORT}/${POSTGRES_SALES_DB}
-      SECRET_KEY: ${SECRET_KEY}
-    expose:
-      - "8080"
-    command: >
-      sh -c "
-      set -e;
-      until pg_isready -h ${POSTGRES_SALES_HOST} -U ${POSTGRES_SALES_USER} -d ${POSTGRES_SALES_DB}; do
-        echo 'Esperando a PostgreSQL...';
-        sleep 2;
-      done;
-      alembic upgrade head && 
-      uvicorn app.main:app --host 0.0.0.0 --port 8080
-      "
-    depends_on:
-      sales_db_postgres:
-        condition: service_started
-    networks:
-      - internal_network
-    # healthcheck:
 
   # --------------------------------------------------------------------------------------
   # API GATEWAY
@@ -271,11 +177,7 @@ services:
         condition: service_started
       user_service:
         condition: service_started
-      product_service:
-        condition: service_started
       admin_service:
-        condition: service_started
-      sales_service:
         condition: service_started
     networks:
       - internal_network
