@@ -24,6 +24,9 @@ import { ProductFormComponent } from './productsv2/product-form/product-form';
 import { SalesComponent } from './salesv2/register-sale/register-sale';
 import { PageRegister } from './userv2/user-form/user-form';
 import { SalesHistoryPage } from './pages/sales-list/sales-list';
+import { CreateOrderComponentV2 } from './ordersv2/create-order';
+import { Component } from '@angular/core';
+import { OrderListV2Component } from './order-listv2/new-order-list';
 
 export const routes: Routes = [
   {
@@ -115,6 +118,15 @@ export const routes: Routes = [
     path: 'registerv2/form',
     component: PageRegister
   },
+  {
+  path: 'ordersV2/create/:id', 
+  component: CreateOrderComponentV2
+  },
+  {
+    path: 'ordersv2',
+    component: OrderListV2Component
+  },
+
   { path: '**', component: PageNotFound },
 
 ];
