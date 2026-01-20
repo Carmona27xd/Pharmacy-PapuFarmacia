@@ -2,296 +2,299 @@
   <div class="container mx-auto px-4 max-w-7xl">
     <!-- Loading State -->
     @if (isLoading) {
-    <div class="flex items-center justify-center min-h-[400px]">
-      <div class="text-center">
-        <div
-          class="animate-spin rounded-full h-16 w-16 border-b-2 border-indigo-600 mx-auto mb-4"
-        ></div>
-        <p class="text-gray-600 text-lg">Cargando producto...</p>
+      <div class="flex items-center justify-center min-h-[400px]">
+        <div class="text-center">
+          <div
+            class="animate-spin rounded-full h-16 w-16 border-b-2 border-indigo-600 mx-auto mb-4"
+          ></div>
+          <p class="text-gray-600 text-lg">Cargando producto...</p>
+        </div>
       </div>
-    </div>
     }
 
     <!-- Error State -->
     @else if (error) {
-    <div class="max-w-md mx-auto mt-8">
-      <div class="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
-        <svg
-          class="w-16 h-16 text-red-500 mx-auto mb-4"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-          ></path>
-        </svg>
-        <h2 class="text-xl font-bold text-red-800 mb-2">Error</h2>
-        <p class="text-red-600 mb-4">{{ error }}</p>
-        <div class="flex gap-3 justify-center">
-          <button
-            (click)="retry()"
-            class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+      <div class="max-w-md mx-auto mt-8">
+        <div class="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
+          <svg
+            class="w-16 h-16 text-red-500 mx-auto mb-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
           >
-            Reintentar
-          </button>
-          <button
-            (click)="goBack()"
-            class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400"
-          >
-            Volver
-          </button>
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            ></path>
+          </svg>
+          <h2 class="text-xl font-bold text-red-800 mb-2">Error</h2>
+          <p class="text-red-600 mb-4">{{ error }}</p>
+          <div class="flex gap-3 justify-center">
+            <button
+              (click)="retry()"
+              class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+            >
+              Reintentar
+            </button>
+            <button
+              (click)="goBack()"
+              class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400"
+            >
+              Volver
+            </button>
+          </div>
         </div>
       </div>
-    </div>
     }
 
     <!-- Form Content -->
     @else if (currentProduct) {
-    <form [formGroup]="productForm" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      <!-- Sección de Imagen y Descripción -->
-      <section class="lg:col-span-2 bg-white rounded-xl shadow-md overflow-hidden">
-        <!-- Imagen del producto -->
-        <div class="bg-gradient-to-br from-gray-100 to-gray-200 p-8">
-          <div class="max-w-2xl mx-auto">
-            @if (currentProduct?.chemicalName) {
-            <img
-              [src]="
-                'https://placehold.co/600x400/4F46E5/FFFFFF/png?text=' + currentProduct.chemicalName
-              "
-              [alt]="currentProduct.chemicalName"
-              class="w-full h-auto rounded-lg shadow-lg"
-            />
-            } @else {
-            <img
-              [src]="
-                'https://placehold.co/600x400/4F46E5/FFFFFF/png?text=' +
-                currentProduct.comercialName
-              "
-              [alt]="currentProduct.comercialName"
-              class="w-full h-auto rounded-lg shadow-lg"
-            />
-            }
+      <form [formGroup]="productForm" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Sección de Imagen y Descripción -->
+        <section class="lg:col-span-2 bg-white rounded-xl shadow-md overflow-hidden">
+          <!-- Imagen del producto -->
+          <div class="bg-linear-to-br from-gray-100 to-gray-200 p-8">
+            <div class="max-w-2xl mx-auto">
+              @if (currentProduct.chemicalName) {
+                <img
+                  [src]="
+                    'https://placehold.co/600x400/4F46E5/FFFFFF/png?text=' +
+                    currentProduct.chemicalName
+                  "
+                  [alt]="currentProduct.chemicalName"
+                  class="w-full h-auto rounded-lg shadow-lg"
+                />
+              } @else {
+                <img
+                  [src]="
+                    'https://placehold.co/600x400/4F46E5/FFFFFF/png?text=' +
+                    currentProduct.comercialName
+                  "
+                  [alt]="currentProduct.comercialName"
+                  class="w-full h-auto rounded-lg shadow-lg"
+                />
+              }
+            </div>
           </div>
-        </div>
 
-        <!-- Descripción EDITABLE -->
-        <div class="p-6 md:p-8">
-          <app-input-field
-            fieldType="textarea"
-            label="Descripción del Producto"
-            placeholder="Ingrese una descripción detallada..."
-            [rows]="6"
-            [maxLength]="500"
-            formControlName="description"
-          ></app-input-field>
-        </div>
-      </section>
+          <!-- Descripción EDITABLE -->
+          <div class="p-6 md:p-8">
+            <app-input-field
+              fieldType="textarea"
+              label="Descripción del Producto"
+              placeholder="Ingrese una descripción detallada..."
+              [rows]="6"
+              [maxLength]="500"
+              formControlName="description"
+            ></app-input-field>
+          </div>
+        </section>
 
-      <!-- Sección de Detalles EDITABLES -->
-      <section class="bg-white rounded-xl shadow-md p-6 md:p-8 h-fit sticky top-8">
-        <h1 class="text-2xl font-bold text-gray-800 mb-6 pb-4 border-b-2 border-indigo-600">
-          Editar Producto
-        </h1>
+        <!-- Sección de Detalles EDITABLES -->
+        <section class="bg-white rounded-xl shadow-md p-6 md:p-8 h-fit sticky top-8">
+          <h1 class="text-2xl font-bold text-gray-800 mb-6 pb-4 border-b-2 border-indigo-600">
+            Editar Producto
+          </h1>
 
-        <div class="space-y-4">
-          <!-- Tipo de producto (SELECT) -->
-          <app-input-field
-            fieldType="select"
-            label="Tipo de Producto *"
-            [options]="productTypeOptions"
-            emptyOptionText="Seleccione un tipo"
-            formControlName="productTypeId"
-          ></app-input-field>
+          <div class="space-y-4">
+            <!-- Tipo de producto (SELECT) -->
+            <app-input-field
+              fieldType="select"
+              label="Tipo de Producto *"
+              [options]="productTypeOptions"
+              emptyOptionText="Seleccione un tipo"
+              formControlName="productTypeId"
+            ></app-input-field>
 
-          <!-- Nombre químico (condicional) -->
-          @if (shouldShowChemicalName()) {
-          <app-input-field
-            fieldType="input"
-            type="text"
-            label="Nombre Químico"
-            placeholder="Ej: Acetaminofén"
-            formControlName="chemicalName"
-          ></app-input-field>
+            <!-- Nombre químico (condicional) -->
+            @if (shouldShowChemicalName()) {
+              <app-input-field
+                fieldType="input"
+                type="text"
+                label="Nombre Químico"
+                placeholder="Ej: Acetaminofén"
+                formControlName="chemicalName"
+              ></app-input-field>
+            }
+
+            <!-- Nombre comercial -->
+            <app-input-field
+              fieldType="input"
+              type="text"
+              label="Nombre Comercial *"
+              placeholder="Ej: Paracetamol 500mg"
+              formControlName="comercialName"
+            ></app-input-field>
+
+            <!-- Precio -->
+            <app-input-field
+              fieldType="input"
+              type="number"
+              label="Precio *"
+              placeholder="0.00"
+              formControlName="price"
+            ></app-input-field>
+
+            <!-- Stock -->
+            <app-input-field
+              fieldType="input"
+              type="number"
+              label="Stock *"
+              placeholder="0"
+              formControlName="stock"
+            ></app-input-field>
+
+            <!-- Lote -->
+            <app-input-field
+              fieldType="input"
+              type="text"
+              label="Lote *"
+              placeholder="LT-2024-001"
+              formControlName="batch"
+            ></app-input-field>
+
+            <!-- Fecha de vencimiento -->
+            <app-input-field
+              fieldType="input"
+              type="date"
+              label="Fecha de Vencimiento *"
+              formControlName="outdate"
+            ></app-input-field>
+
+            <!-- Laboratorio -->
+            <app-input-field
+              fieldType="input"
+              type="text"
+              label="Laboratorio Farmacéutico"
+              placeholder="Ej: Johnson & Johnson"
+              formControlName="pharmaceutical"
+            ></app-input-field>
+
+            <!-- Proveedor -->
+            <app-input-field
+              fieldType="input"
+              type="text"
+              label="Proveedor"
+              placeholder="Ej: Distribuidora Médica S.A."
+              formControlName="provider"
+            ></app-input-field>
+
+            <!-- URL Imagen -->
+            <app-input-field
+              fieldType="input"
+              type="url"
+              label="URL de Imagen"
+              placeholder="https://ejemplo.com/imagen.jpg"
+              formControlName="image"
+            ></app-input-field>
+          </div>
+
+          <!-- Validation Message -->
+          @if (productForm.invalid && productForm.touched) {
+            <div class="mt-4 bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+              <p class="text-yellow-800 text-sm">
+                <strong>Atención:</strong> Completa todos los campos requeridos (*)
+              </p>
+            </div>
           }
 
-          <!-- Nombre comercial -->
-          <app-input-field
-            fieldType="input"
-            type="text"
-            label="Nombre Comercial *"
-            placeholder="Ej: Paracetamol 500mg"
-            formControlName="comercialName"
-          ></app-input-field>
+          <!-- Botones de acción -->
+          <div class="mt-6 pt-6 border-t border-gray-200 space-y-3">
+            <!-- Guardar -->
+            <button
+              type="button"
+              (click)="onSave()"
+              [disabled]="productForm.invalid || isSaving"
+              class="w-full py-3 px-6 rounded-lg font-semibold text-white transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-md disabled:transform-none disabled:cursor-not-allowed"
+              [ngClass]="{
+                'bg-green-600 hover:bg-green-700 hover:shadow-lg': !isSaving && productForm.valid,
+                'bg-gray-400': productForm.invalid || isSaving,
+              }"
+            >
+              <span class="flex items-center justify-center gap-2">
+                @if (isSaving) {
+                  <svg class="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
+                    <circle
+                      class="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      stroke-width="4"
+                    ></circle>
+                    <path
+                      class="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                  Guardando...
+                } @else {
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M5 13l4 4L19 7"
+                    ></path>
+                  </svg>
+                  Guardar Cambios
+                }
+              </span>
+            </button>
 
-          <!-- Precio -->
-          <app-input-field
-            fieldType="input"
-            type="number"
-            label="Precio *"
-            placeholder="0.00"
-            formControlName="price"
-          ></app-input-field>
+            <!-- Descartar -->
+            <button
+              type="button"
+              (click)="onDiscard()"
+              [disabled]="!productForm.dirty"
+              class="w-full py-3 px-6 rounded-lg font-semibold text-white transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-md bg-yellow-600 hover:bg-yellow-700 hover:shadow-lg disabled:bg-gray-400 disabled:transform-none disabled:cursor-not-allowed"
+            >
+              <span class="flex items-center justify-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                  ></path>
+                </svg>
+                Descartar Cambios
+              </span>
+            </button>
 
-          <!-- Stock -->
-          <app-input-field
-            fieldType="input"
-            type="number"
-            label="Stock *"
-            placeholder="0"
-            formControlName="stock"
-          ></app-input-field>
+            <!-- Eliminar -->
+            <button
+              type="button"
+              (click)="onDelete()"
+              class="w-full py-3 px-6 rounded-lg font-semibold text-white transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-md bg-red-600 hover:bg-red-700 hover:shadow-lg"
+            >
+              <span class="flex items-center justify-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                  ></path>
+                </svg>
+                Eliminar Producto
+              </span>
+            </button>
 
-          <!-- Lote -->
-          <app-input-field
-            fieldType="input"
-            type="text"
-            label="Lote *"
-            placeholder="LT-2024-001"
-            formControlName="batch"
-          ></app-input-field>
-
-          <!-- Fecha de vencimiento -->
-          <app-input-field
-            fieldType="input"
-            type="date"
-            label="Fecha de Vencimiento *"
-            formControlName="outdate"
-          ></app-input-field>
-
-          <!-- Laboratorio -->
-          <app-input-field
-            fieldType="input"
-            type="text"
-            label="Laboratorio Farmacéutico"
-            placeholder="Ej: Johnson & Johnson"
-            formControlName="pharmaceutical"
-          ></app-input-field>
-
-          <!-- Proveedor -->
-          <app-input-field
-            fieldType="input"
-            type="text"
-            label="Proveedor"
-            placeholder="Ej: Distribuidora Médica S.A."
-            formControlName="provider"
-          ></app-input-field>
-
-          <!-- URL Imagen -->
-          <app-input-field
-            fieldType="input"
-            type="url"
-            label="URL de Imagen"
-            placeholder="https://ejemplo.com/imagen.jpg"
-            formControlName="image"
-          ></app-input-field>
-        </div>
-
-        <!-- Validation Message -->
-        @if (productForm.invalid && productForm.touched) {
-        <div class="mt-4 bg-yellow-50 border border-yellow-200 rounded-lg p-3">
-          <p class="text-yellow-800 text-sm">
-            <strong>Atención:</strong> Completa todos los campos requeridos (*)
-          </p>
-        </div>
-        }
-
-        <!-- Botones de acción -->
-        <div class="mt-6 pt-6 border-t border-gray-200 space-y-3">
-          <!-- Guardar -->
-          <button
-            type="button"
-            (click)="onSave()"
-            [disabled]="productForm.invalid || isSaving"
-            class="w-full py-3 px-6 rounded-lg font-semibold text-white transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-md disabled:transform-none disabled:cursor-not-allowed"
-            [ngClass]="{
-              'bg-green-600 hover:bg-green-700 hover:shadow-lg': !isSaving && productForm.valid,
-              'bg-gray-400': productForm.invalid || isSaving
-            }"
-          >
-            <span class="flex items-center justify-center gap-2">
-              @if (isSaving) {
-              <svg class="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
-                <circle
-                  class="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  stroke-width="4"
-                ></circle>
-                <path
-                  class="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                ></path>
-              </svg>
-              Guardando... } @else {
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M5 13l4 4L19 7"
-                ></path>
-              </svg>
-              Guardar Cambios }
-            </span>
-          </button>
-
-          <!-- Descartar -->
-          <button
-            type="button"
-            (click)="onDiscard()"
-            [disabled]="!productForm.dirty"
-            class="w-full py-3 px-6 rounded-lg font-semibold text-white transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-md bg-yellow-600 hover:bg-yellow-700 hover:shadow-lg disabled:bg-gray-400 disabled:transform-none disabled:cursor-not-allowed"
-          >
-            <span class="flex items-center justify-center gap-2">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                ></path>
-              </svg>
-              Descartar Cambios
-            </span>
-          </button>
-
-          <!-- Eliminar -->
-          <button
-            type="button"
-            (click)="onDelete()"
-            class="w-full py-3 px-6 rounded-lg font-semibold text-white transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-md bg-red-600 hover:bg-red-700 hover:shadow-lg"
-          >
-            <span class="flex items-center justify-center gap-2">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                ></path>
-              </svg>
-              Eliminar Producto
-            </span>
-          </button>
-
-          <!-- Cancelar / Volver -->
-          <button
-            type="button"
-            (click)="goBack()"
-            class="w-full py-3 px-6 rounded-lg font-semibold text-gray-700 bg-gray-200 hover:bg-gray-300 transition-colors"
-          >
-            Volver a la lista
-          </button>
-        </div>
-      </section>
-    </form>
+            <!-- Cancelar / Volver -->
+            <button
+              type="button"
+              (click)="goBack()"
+              class="w-full py-3 px-6 rounded-lg font-semibold text-gray-700 bg-gray-200 hover:bg-gray-300 transition-colors"
+            >
+              Volver a la lista
+            </button>
+          </div>
+        </section>
+      </form>
     }
   </div>
 </main>
