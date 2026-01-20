@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core'; 
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router'; 
+import { Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
 // Asegúrate de que estas rutas sean las correctas en tu proyecto
@@ -9,6 +9,7 @@ import { Product } from '../../interfaces/productv2/product';
 import { Sale, SaleItem } from '../../interfaces/salesv2/sales';
 import { ProductService } from '../../services/productv2/product';
 import { SalesService } from '../../services/salesv2/sales';
+import jsPDF from 'jspdf';
 
 @Component({
   selector: 'app-sales',
@@ -18,33 +19,37 @@ import { SalesService } from '../../services/salesv2/sales';
   // styleUrls: ['./sales.component.css']
 })
 export class SalesComponent implements OnInit {
-
   // --- FILTROS DE BÚSQUEDA ---
   searchFilters = {
     sku: '',
     name: '',
-    ingredient: ''
+    ingredient: '',
   };
 
   // --- DATOS ---
-  allProducts: Product[] = [];      // Todos los productos (caché)
-  foundProducts: Product[] = [];    // Los resultados de la búsqueda
-  cart: SaleItem[] = [];            // El carrito de compras
-  
+  allProducts: Product[] = []; // Todos los productos (caché)
+  foundProducts: Product[] = []; // Los resultados de la búsqueda
+  cart: SaleItem[] = []; // El carrito de compras
+
   // --- UI ---
   isLoading: boolean = false;
   total: number = 0;
   paymentMethod: string = 'Efectivo';
-  
+
   categories: string[] = [
-    'Analgesico', 'Antibiotico', 'Antiinflamatorio', 
-    'Antihistaminico', 'Antipiretico', 'Suplemento', 'Material de Curacion'
+    'Analgesico',
+    'Antibiotico',
+    'Antiinflamatorio',
+    'Antihistaminico',
+    'Antipiretico',
+    'Suplemento',
+    'Material de Curacion',
   ];
 
   constructor(
     private productService: ProductService,
     private salesService: SalesService,
-    private router: Router
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -53,8 +58,8 @@ export class SalesComponent implements OnInit {
 
   loadProducts() {
     this.productService.getProducts().subscribe({
-      next: (data) => this.allProducts = data,
-      error: (err) => console.error('Error cargando inventario', err)
+      next: (data) => (this.allProducts = data),
+      error: (err) => console.error('Error cargando inventario', err),
     });
   }
 
@@ -69,7 +74,7 @@ export class SalesComponent implements OnInit {
     const fName = this.searchFilters.name.toLowerCase();
     const fIng = this.searchFilters.ingredient.toLowerCase();
 
-    this.foundProducts = this.allProducts.filter(p => {
+    this.foundProducts = this.allProducts.filter((p) => {
       const matchSku = fSku ? p.SKU.toLowerCase().includes(fSku) : true;
       const matchName = fName ? p.comercial_name.toLowerCase().includes(fName) : true;
       const matchIng = fIng ? p.active_ingredient.toLowerCase().includes(fIng) : true;
@@ -95,7 +100,7 @@ export class SalesComponent implements OnInit {
       return;
     }
 
-    const existingItem = this.cart.find(item => item.sku === product.SKU);
+    const existingItem = this.cart.find((item) => item.sku === product.SKU);
 
     if (existingItem) {
       if (existingItem.quantity + qty > product.stock) {
@@ -110,7 +115,7 @@ export class SalesComponent implements OnInit {
         product_name: product.comercial_name,
         quantity: qty,
         unit_price: product.price,
-        subtotal: product.price * qty
+        subtotal: product.price * qty,
       };
       this.cart.push(newItem);
     }
@@ -141,30 +146,32 @@ export class SalesComponent implements OnInit {
     const saleData: Sale = {
       items: this.cart,
       payment_method: this.paymentMethod,
-      total: this.total
+      total: this.total,
     };
 
     this.salesService.createSale(saleData).subscribe({
       next: (res) => {
-        console.log('✅ Venta registrada en Mongo. Iniciando actualización de stock en Postgres...');
-        
+        console.log(
+          '✅ Venta registrada en Mongo. Iniciando actualización de stock en Postgres...',
+        );
+
         // IMPORTANTE: No borramos el carrito todavía. Llamamos a actualizar el stock.
-        this.updateStock(); 
+        this.updateStock();
       },
       error: (err) => {
         console.error(err);
         alert('❌ Error al procesar venta.');
         this.isLoading = false;
-      }
+      },
     });
   }
 
   // PASO 2: Actualizar Inventario
   updateStock() {
     // Usamos el carrito para generar las peticiones de actualización
-    const requests = this.cart.map(item => {
-      const originalProduct = this.allProducts.find(p => p.SKU === item.sku);
-      
+    const requests = this.cart.map((item) => {
+      const originalProduct = this.allProducts.find((p) => p.SKU === item.sku);
+
       if (originalProduct) {
         // Restamos lo vendido al stock original
         const finalStock = originalProduct.stock - item.quantity;
@@ -172,10 +179,10 @@ export class SalesComponent implements OnInit {
         return this.productService.updateStock(item.sku, finalStock);
       }
       return null;
-    }); 
+    });
 
     // Filtramos los nulos para evitar errores en forkJoin
-    const validRequests = requests.filter(r => r !== null);
+    const validRequests = requests.filter((r) => r !== null);
 
     if (validRequests.length === 0) {
       this.finishTransaction();
@@ -187,22 +194,89 @@ export class SalesComponent implements OnInit {
       next: () => {
         console.log('✅ Stock actualizado correctamente.');
         this.finishTransaction(); // Vamos al paso final
-      }, 
+      },
       error: (err) => {
         console.error('Error al actualizar stock', err);
         // Aunque falle el stock, la venta ya se cobró.
         alert('⚠️ Venta cobrada, pero hubo un error actualizando el inventario.');
         this.finishTransaction();
-      }
+      },
     });
   }
 
   // PASO 3: Limpieza y Redirección
   finishTransaction() {
-    alert("¡Venta completada con éxito!");
-    this.cart = [];          // Ahora sí vaciamos el carrito
+    this.generateTicket();
+    alert('¡Venta completada con éxito!');
+    this.cart = [];
     this.calculateTotal();
     this.isLoading = false;
-    this.router.navigate(["/inicio"]); // Nos vamos a inicio
+    this.reload();
+  }
+
+  reload() {
+    const url = this.router.url;
+    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+      this.router.navigate([url]);
+    });
+  }
+
+  generateTicket() {
+    const doc = new jsPDF({
+      orientation: 'portrait',
+      unit: 'mm',
+      format: [80, 200], // ticket 80mm
+    });
+
+    let y = 10;
+
+    // HEADER
+    doc.setFontSize(12);
+    doc.text('PapuFarmacia', 40, y, { align: 'center' });
+    y += 6;
+
+    doc.setFontSize(8);
+    doc.text('RFC: PAPUFARMHZP', 40, y, { align: 'center' });
+    y += 4;
+
+    doc.text(`Fecha: ${new Date().toLocaleString()}`, 40, y, { align: 'center' });
+    y += 6;
+
+    doc.line(5, y, 75, y);
+    y += 4;
+
+    // ITEMS
+    doc.setFontSize(8);
+    this.cart.forEach((item) => {
+      doc.text(item.product_name, 5, y);
+      y += 4;
+
+      doc.text(`${item.quantity} x $${item.unit_price.toFixed(2)}`, 5, y);
+
+      doc.text(`$${item.subtotal.toFixed(2)}`, 75, y, { align: 'right' });
+
+      y += 5;
+    });
+
+    doc.line(5, y, 75, y);
+    y += 5;
+
+    // TOTAL
+    doc.setFontSize(10);
+    doc.text('TOTAL:', 5, y);
+    doc.text(`$${this.total.toFixed(2)}`, 75, y, { align: 'right' });
+    y += 6;
+
+    doc.setFontSize(8);
+    doc.text(`Pago: ${this.paymentMethod}`, 5, y);
+    y += 6;
+
+    doc.text('¡Gracias por su compra!', 40, y, { align: 'center' });
+
+    // DESCARGAR
+    doc.save(`ticket_${Date.now()}.pdf`);
+
+    doc.autoPrint();
+    window.open(doc.output('bloburl'));
   }
 }

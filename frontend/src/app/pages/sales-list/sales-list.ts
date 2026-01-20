@@ -7,6 +7,7 @@ import { SalesService } from '../../services/sales/sales'
 // Importaciones para el PDF
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { ComponentInputField } from '../../shared/inputs/input-field/input-field';
 
 @Component({
   selector: 'app-sales-history',
