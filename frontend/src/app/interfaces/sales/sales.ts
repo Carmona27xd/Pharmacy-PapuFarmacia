@@ -40,3 +40,15 @@ export interface SaleFilters {
   min_total?: number;
   max_total?: number;
 }
+
+export interface SaleViewModel {
+  id: string;
+  sale_date: string;
+  payment_method: string;
+  total: number;
+  items: {
+    product_name: string;
+    quantity: number;
+    subtotal: number;
+  }[];
+}
