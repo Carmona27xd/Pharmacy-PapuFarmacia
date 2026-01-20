@@ -1,12 +1,11 @@
 import { Component, HostListener } from '@angular/core';
 import { NgClass, CommonModule } from '@angular/common';
 import { NavigationEnd, RouterLink, Router, RouterLinkActive } from '@angular/router';
-import { ComponentSearchBox } from '../../inputs/search-box/search-box';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [RouterLink, NgClass, CommonModule, ComponentSearchBox, RouterLinkActive],
+  imports: [RouterLink, NgClass, CommonModule, RouterLinkActive],
   templateUrl: './nav-bar.html',
 })
 export class ComponentNavBar {
