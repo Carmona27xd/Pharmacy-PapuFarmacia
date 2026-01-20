@@ -6,11 +6,12 @@ import { SalesService } from '../../services/salesv2/sales';
 // Importaciones para el PDF
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { ComponentInputField } from '../../shared/inputs/input-field/input-field';
 
 @Component({
   selector: 'app-sales-history',
   standalone: true,
-  imports: [CommonModule, DatePipe, CurrencyPipe],
+  imports: [CommonModule, DatePipe, CurrencyPipe, ComponentInputField],
   templateUrl: './sales-list.html'
 })
 export class SalesHistoryPage implements OnInit {
